@@ -1,0 +1,21 @@
+spring:
+  liquibase:
+    enabled: false
+  security:
+    user:
+      name: user
+      password: user
+  application:
+    name: Property accountant service
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/things
+    username: things_service
+    password: things12345
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
