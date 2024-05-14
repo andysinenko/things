@@ -1,7 +1,7 @@
 package ua.com.sinenko.things.rest.dto;
 
 public record BookDto(
-    String bookId,
+    String id,
     String title,
     String author,
     String genre,

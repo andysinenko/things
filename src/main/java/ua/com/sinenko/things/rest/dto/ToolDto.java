@@ -5,5 +5,5 @@ public record ToolDto(
     String name,
     String brand,
     String year,
-    String placeId,
+    String addressId,
     String description) {}
