@@ -3,14 +3,16 @@ import AppHeader from './app-header';
 import Books from './books';
 import Tools from './tools';
 import Places from './places';
+import Dashboard from './dashboard/dashbard';
 
 function App() {
   return (
-    <div className="App">
+    <div className="container-fluid">
       <AppHeader />
-      <Places></Places>
-      <Books></Books>
-      <Tools></Tools>
+      <Dashboard />
+      <Places />
+      <Books />
+      <Tools />
     </div>
   );
 }

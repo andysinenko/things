@@ -1,0 +1,26 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  liquibase:
+    enabled: false
+  security:
+    user:
+      name: user
+      password: user
+  application:
+    name: Property accountant service test profile
+  datasource:
+    url: jdbc:h2:file:./things
+    username: things
+    password: things
+    driver-class-name: org.h2.Driver
+    platform: org.hibernate.dialect.H2Dialect
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+

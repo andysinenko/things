@@ -1,4 +1,10 @@
 spring:
+  profiles:
+    active: test
+  docker:
+    compose:
+      profiles:
+        active: dev
   liquibase:
     enabled: false
   security:
@@ -12,6 +18,7 @@ spring:
     username: things_service
     password: things12345
     driver-class-name: org.postgresql.Driver
+    initialization-mode: always
   sql:
     init:
       mode: always
@@ -19,3 +26,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
+application:
+  security:
+    jwt-key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
+    jwt-header: Authorization
+

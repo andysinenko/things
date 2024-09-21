@@ -20,8 +20,11 @@ export default class Tools extends React.Component {
 
     render() {
         const { tools } = this.state;
-
+        //console.table(this.state);
+        console.log('log:', this);
+        console.table('table:', this);
         return (
+        
             <div className='container'>
                 <h1 className='h2'>Tools component</h1>
                 <table className="table">
