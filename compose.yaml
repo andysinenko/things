@@ -1,10 +1,1 @@
-services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=things'
-      - 'POSTGRES_PASSWORD=things12345'
-      - 'POSTGRES_USER=things_service'
-    ports:
-      - '5432:5432'
 
