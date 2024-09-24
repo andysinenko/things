@@ -3,19 +3,19 @@ spring:
     activate:
       on-profile: test
   liquibase:
-    enabled: false
+    enabled: true
+    change-log: db/changelog/db.changelog-master.xml
   application:
     name: Property accountant service test profile
   datasource:
-    url: jdbc:h2:file:./things-test
+    url: jdbc:h2:file:~/things;init=create schema if not exists things
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
-    platform: org.hibernate.dialect.H2Dialect
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
+      default_schema: things
+      ddl-auto: none
   h2:
     console:
       enabled: true

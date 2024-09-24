@@ -23,7 +23,6 @@ spring:
     init:
       mode: always
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
 application:

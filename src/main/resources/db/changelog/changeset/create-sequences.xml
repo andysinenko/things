@@ -1,0 +1,32 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro
+        http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet  author="liquibase-docs"  id="001">
+        <createSequence catalogName="things"
+                     schemaName="things"
+                     sequenceName="places_sequence" ordered="true" startValue="1" incrementBy="1"/>
+
+        <createSequence catalogName="things"
+                        schemaName="things"
+                        sequenceName="user_sequence" ordered="true" startValue="1" incrementBy="1"/>
+
+        <createSequence catalogName="things"
+                        schemaName="things"
+                        sequenceName="authority_sequence" ordered="true" startValue="1" incrementBy="1"/>
+
+        <createSequence catalogName="things"
+                        schemaName="things"
+                        sequenceName="token_sequence" ordered="true" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>
+

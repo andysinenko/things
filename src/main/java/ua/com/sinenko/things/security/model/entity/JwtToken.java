@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
 @Entity
 @Table(name = "things_tokens")
 @Data
@@ -14,7 +16,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JwtToken {
     @Id
-    @GeneratedValue
+    @SequenceGenerator(
+            name = "token_sequence",
+            sequenceName = "token_sequence",
+            allocationSize = 1)
+    @GeneratedValue(
+            strategy = SEQUENCE,
+            generator = "token_sequence")
     public Integer id;
 
     @Column(unique = true)

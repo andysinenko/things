@@ -25,7 +25,7 @@ public class ThingsUser {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "username")
+    @Column(name = "user_name")
     private String username;
 
     @Column(name = "password")

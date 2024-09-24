@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.GenerationType.AUTO;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity

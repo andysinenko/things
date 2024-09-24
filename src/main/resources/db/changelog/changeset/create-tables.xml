@@ -1,0 +1,71 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro
+        http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet  author="Andrew Sinenko"  id="002">
+        <createTable catalogName="things"
+                     schemaName="things"
+                     tableName="things_users">
+            <column  name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_things_users"/>
+            </column>
+            <column  name="user_name" type="varchar2(255)"/>
+            <column  name="password" type="varchar2(255)"/>
+            <column  name="authorities" type="bigint" >
+                <constraints nullable="false" foreignKeyName="fk_authorities_things_users"/>
+            </column>
+            <column  name="email" type="varchar2(255)"/>
+            <column  name="first_name" type="varchar2(255)"/>
+            <column  name="last_name" type="varchar2(255)"/>
+            <column  name="phone_number" type="varchar2(255)"/>
+            <column  name="is_account_non_expired" type="boolean"/>
+            <column  name="is_account_non_locked" type="boolean"/>
+            <column  name="is_credentials_non_expired" type="boolean" />
+            <column  name="is_enabled" type="boolean"/>
+            <column  name="create_date" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="authorities" catalogName="things"
+                     schemaName="things">
+            <column  name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authorities"/>
+            </column>
+            <column name="name" type="varchar2(255)"/>
+            <column name="role" type="varchar(255)"/>
+            <column name="things_user" type="bigint" >
+                <constraints nullable="true" foreignKeyName="fk_things_users_authorities"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="things_tokens" catalogName="things"
+                     schemaName="things">
+            <column  name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tokens"/>
+            </column>
+            <column name="token" type="varchar2(512)"/>
+            <column name="revoked" type="boolean"/>
+            <column name="expired" type="boolean"/>
+            <column name="things_user" type="bigint" >
+                <constraints nullable="true" foreignKeyName="fk_things_users_tokens"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="places" catalogName="things"
+                     schemaName="things">
+            <column  name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_places"/>
+            </column>
+            <column name="name" type="varchar2(512)"/>
+            <column name="description" type="varchar2(512)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
