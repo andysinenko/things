@@ -66,6 +66,32 @@
             <column name="name" type="varchar2(512)"/>
             <column name="description" type="varchar2(512)"/>
         </createTable>
+
+        <createTable tableName="authors" catalogName="things"
+                     schemaName="things">
+            <column  name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authors"/>
+            </column>
+            <column name="author_name" type="varchar2(512)"/>
+        </createTable>
+
+        <createTable tableName="books" catalogName="things"
+                     schemaName="things">
+            <column  name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_books"/>
+            </column>
+            <column name="author_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="fk_authors_books"/>
+            </column>
+            <column name="genre" type="varchar2(512)"/>
+            <column name="publisher" type="varchar2(512)"/>
+            <column name="year" type="varchar2(512)"/>
+            <column name="name" type="varchar2(512)"/>
+            <column name="series" type="varchar2(512)"/>
+            <column name="description" type="varchar2(512)"/>
+        </createTable>
     </changeSet>
+
+
 
 </databaseChangeLog>

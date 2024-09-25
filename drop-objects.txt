@@ -1,0 +1,15 @@
+drop table DATABASECHANGELOG;
+drop table DATABASECHANGELOGLOCK;
+drop table THINGS.AUTHORITIES  ;
+drop table THINGS.PLACES ;
+drop table THINGS.BOOKS ;
+drop table THINGS.AUTHORS ;
+drop table THINGS.THINGS_TOKENS ;
+drop table THINGS.THINGS_USERS ;
+
+drop sequence THINGS.authority_sequence;
+drop sequence THINGS. user_sequence;
+drop sequence THINGS.token_sequence;
+drop sequence THINGS.places_sequence;
+drop sequence THINGS.author_sequence;
+drop sequence THINGS.book_sequence;
