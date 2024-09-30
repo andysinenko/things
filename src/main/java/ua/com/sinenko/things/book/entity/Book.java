@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.com.sinenko.things.common.entity.StorageUnit;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -13,7 +12,7 @@ import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
-@MappedSuperclass
+//@MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,7 +20,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Entity
 @Table(name = "books")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Book extends StorageUnit {
+public class Book {
     @Id
     @SequenceGenerator(
             name = "book_sequence",
@@ -62,4 +61,5 @@ public class Book extends StorageUnit {
 
     @Column(name = "description")
     private String description;
+
 }

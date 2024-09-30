@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
-@MappedSuperclass
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -27,9 +30,20 @@ public class Author {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "author_name")
-    private String authorName;
+    @Column(name = "name")
+    private String name;
 
-    @ManyToMany(mappedBy = "authors")
-    private Book book;
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "condition")
+    private String condition;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "books_authors",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<Book> books = new HashSet<>();
 }

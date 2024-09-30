@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.com.sinenko.things.book.entity.Book;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -14,9 +15,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByPublisher(String publisher);
 
-    List<Book> findByYear(String year);
+    List<Book> findByYear(Date year);
 
-    List<Book> findByPlaceId(String placeId);
+    List<Book> findByName(String name);
 
-    List<Book> findByNamer(String name);
 }

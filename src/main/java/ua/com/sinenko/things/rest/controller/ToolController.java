@@ -13,7 +13,6 @@ import ua.com.sinenko.things.tool.dto.ToolMapper;
 import ua.com.sinenko.things.tool.service.ToolService;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/api/v1/tools")
@@ -35,13 +34,13 @@ public class ToolController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> addNewPlaces() {
-        return new ResponseEntity<String>("new place", HttpStatus.OK);
+    public ResponseEntity<String> addNewTool() {
+        return new ResponseEntity<String>("new tool", HttpStatus.OK);
     }
 
-    @GetMapping("/{placeId}")
+    @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<String> getPlaceById(@PathParam("placeId") String placeId) {
-        return new ResponseEntity<String>("place " + placeId, HttpStatus.OK);
+    public ResponseEntity<String> getToolById(@PathParam("id") String id) {
+        return new ResponseEntity<String>("tool " + id, HttpStatus.OK);
     }
 }

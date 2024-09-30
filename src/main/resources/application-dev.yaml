@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: dev
   liquibase:
     enabled: true
     change-log: db/changelog/db.changelog-master.xml

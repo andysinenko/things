@@ -25,16 +25,16 @@ import java.util.Map;
 
 @Service
 public class JwtTokenService {
-    @Value("${thigs.jwt.key}")
+    @Value("${things.jwt.key}")
     private String jwtKey;
 
-    @Value("${thigs.jwt.header}")
+    @Value("${things.jwt.header}")
     private String header;
 
-    @Value("${thigs.jwt.expiration}")
+    @Value("${things.jwt.expiration}")
     private long expiration;
 
-    @Value("${thigs.jwt.refresh-token-expiration}")
+    @Value("${things.jwt.refresh-token-expiration}")
     private long refreshExpiration;
 
     private ThingsUserRepository userRepository;
@@ -70,7 +70,7 @@ public class JwtTokenService {
     }
 
     private void revokeAllUserTokens(ThingsUser user) {
-        var validUserTokens = jwtTokenRepository.findAllValidTokenByUserAndRevokedFalseAndExpiredFalse(user.getId());
+        var validUserTokens = jwtTokenRepository.findAllValidTokenByUserAndRevokedFalseAndExpiredFalse(user);
 
         if (validUserTokens != null && !validUserTokens.isEmpty()) {
             validUserTokens.forEach(token -> {

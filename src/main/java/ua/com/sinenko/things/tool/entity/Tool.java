@@ -5,21 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.com.sinenko.things.common.entity.StorageUnit;
 
 import java.util.Date;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
-@MappedSuperclass
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tools")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Tool extends StorageUnit {
+@Entity
+public class Tool {
     @Id
     @SequenceGenerator(
             name = "book_sequence",
@@ -50,3 +47,4 @@ public class Tool extends StorageUnit {
     @Column(name = "description")
     private String description;
 }
+

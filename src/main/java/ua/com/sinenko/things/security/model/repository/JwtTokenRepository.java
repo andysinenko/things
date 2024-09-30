@@ -12,6 +12,6 @@ public interface JwtTokenRepository extends JpaRepository<JwtTokenEntity, Long> 
 
     JwtTokenEntity findByUser(ThingsUser user);
 
-    List<JwtTokenEntity> findAllValidTokenByUserAndRevokedFalseAndExpiredFalse(Long userId);
+    List<JwtTokenEntity> findAllValidTokenByUserAndRevokedFalseAndExpiredFalse(ThingsUser user);
 
 }

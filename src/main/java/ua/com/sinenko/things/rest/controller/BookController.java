@@ -28,7 +28,7 @@ public class BookController {
 
     @GetMapping(value = "/{bookId}")
     @ResponseBody
-    public ResponseEntity<String> getBookById(@PathParam("placeId") String placeId) {
-        return new ResponseEntity<String>("place " + placeId, HttpStatus.OK);
+    public ResponseEntity<String> getBookById(@PathParam("id") String id) {
+        return new ResponseEntity<String>("place " + id, HttpStatus.OK);
     }
 }

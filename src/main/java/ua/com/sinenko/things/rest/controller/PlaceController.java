@@ -26,9 +26,9 @@ public class PlaceController {
         return new ResponseEntity<String>("new place " + placeDto, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{placeId}")
+    @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<String> getPlaceById(@PathParam("placeId") String placeId) {
-        return new ResponseEntity<String>("place " + placeId, HttpStatus.OK);
+    public ResponseEntity<String> getPlaceById(@PathParam("id") String id) {
+        return new ResponseEntity<String>("place " + id, HttpStatus.OK);
     }
 }

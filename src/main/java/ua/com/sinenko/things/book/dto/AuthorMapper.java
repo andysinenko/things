@@ -9,14 +9,14 @@ public class AuthorMapper {
     public static Author mapDtoToEntity(AuthorDto dto) {
         return Author.builder()
                 .id(dto.id())
-                .authorName(dto.authorName())
+                .name(dto.name())
                 .build();
     }
 
     public static AuthorDto mapEntityToDto(Author author) {
         return AuthorDto.builder()
                 .id(author.getId())
-                .authorName(author.getAuthorName())
+                .name(author.getName())
                 .build();
     }
 

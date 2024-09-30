@@ -6,12 +6,14 @@ import ua.com.sinenko.things.tool.entity.Tool;
 import ua.com.sinenko.things.tool.repository.ToolsRepository;
 
 import java.util.List;
-import java.util.Set;
 
-@AllArgsConstructor
 @Service
 public class ToolService {
     private ToolsRepository toolsRepository;
+
+    public ToolService(ToolsRepository toolsRepository) {
+        this.toolsRepository = toolsRepository;
+    }
 
     public List<Tool> getAllTools() {
         return toolsRepository.findAll();

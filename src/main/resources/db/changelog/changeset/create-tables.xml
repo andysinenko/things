@@ -73,7 +73,9 @@
             <column  name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authors"/>
             </column>
-            <column name="author_name" type="varchar2(512)"/>
+            <column name="name" type="varchar2(512)"/>
+            <column name="note" type="varchar2(512)"/>
+            <column name="condition" type="varchar2(512)"/>
         </createTable>
 
         <createTable tableName="books" catalogName="things"
@@ -86,8 +88,9 @@
             </column>
             <column name="genre" type="varchar2(512)"/>
             <column name="publisher" type="varchar2(512)"/>
-            <column name="year" type="varchar2(512)"/>
+            <column name="year" type="date"/>
             <column name="name" type="varchar2(512)"/>
+            <column name="volume_number" type="varchar2(512)"/>
             <column name="series" type="varchar2(512)"/>
             <column name="description" type="varchar2(512)"/>
         </createTable>

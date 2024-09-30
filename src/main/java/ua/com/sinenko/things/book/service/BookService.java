@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.repository.BookRepository;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -33,7 +35,7 @@ public class BookService {
     }
 
     public List<Book> getBooksByName(String name) {
-        return bookRepository.findByNamer(name);
+        return bookRepository.findByName(name);
     }
 
     public List<Book> getBooksByAuthorName(String name) {
@@ -48,11 +50,11 @@ public class BookService {
         return bookRepository.findByPublisher(publisher);
     }
 
-    public List<Book> getBooksByYear(String year) {
+    public List<Book> getBooksByYear(Date year) {
         return bookRepository.findByYear(year);
     }
 
-    public List<Book> getBooksByPlaceId(String placeId) {
-        return bookRepository.findByPlaceId(placeId);
+    public Book getBooksById(Long id) {
+        return bookRepository.findById(id).orElse(new Book());
     }
 }
