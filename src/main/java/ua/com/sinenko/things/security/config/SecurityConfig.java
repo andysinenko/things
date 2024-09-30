@@ -38,17 +38,10 @@ import java.util.stream.Collectors;
 @Profile("stage")
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private static final String[] PERMITTED_URLS = {"/auth/**",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html"};
-
     private ThingsUserRepository thingsUserRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
-
         return (username) -> {
             var thingsUser = thingsUserRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             List<GrantedAuthority> authorities = thingsUser.getAuthorities().stream().map(e -> new SimpleGrantedAuthority(e.getName()))
