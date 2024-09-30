@@ -32,7 +32,7 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
         if (null != authentication) {
             SecretKey key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
             String jwt = Jwts.builder()
-                    .issuer("Sinenko.com.ua")
+                    .issuer("sinenko.com.ua")
                     .subject("JWT Token")
                     .claim("username", authentication.getName())
                     .claim("authorities", populateAuthorities(authentication.getAuthorities()))

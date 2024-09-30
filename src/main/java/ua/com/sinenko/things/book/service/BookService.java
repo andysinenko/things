@@ -1,0 +1,58 @@
+package ua.com.sinenko.things.book.service;
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import ua.com.sinenko.things.book.entity.Book;
+import ua.com.sinenko.things.book.repository.BookRepository;
+
+import java.util.List;
+
+@AllArgsConstructor
+@Service
+public class BookService {
+    private BookRepository bookRepository;
+
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id).orElse(null);
+    }
+
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    public void saveBook(Book book) {
+        bookRepository.save(book);
+    }
+
+    public void updateBook(Book book) {
+        bookRepository.save(book);
+    }
+
+    public List<Book> getBooksByName(String name) {
+        return bookRepository.findByNamer(name);
+    }
+
+    public List<Book> getBooksByAuthorName(String name) {
+        return bookRepository.findByAuthorsName(name);
+    }
+
+    public List<Book> getBooksByGenre(String genre) {
+        return bookRepository.findByGenre(genre);
+    }
+
+    public List<Book> getBooksByPublisher(String publisher) {
+        return bookRepository.findByPublisher(publisher);
+    }
+
+    public List<Book> getBooksByYear(String year) {
+        return bookRepository.findByYear(year);
+    }
+
+    public List<Book> getBooksByPlaceId(String placeId) {
+        return bookRepository.findByPlaceId(placeId);
+    }
+}

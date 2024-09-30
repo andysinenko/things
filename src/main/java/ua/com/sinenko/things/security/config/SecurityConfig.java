@@ -21,6 +21,11 @@ import java.util.Collections;
 @Configuration
 @Profile("dev")
 public class SecurityConfig {
+    private static final String[] PERMITTED_URLS = {"/auth/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"};
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

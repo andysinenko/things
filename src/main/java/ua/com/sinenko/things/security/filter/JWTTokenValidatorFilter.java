@@ -14,7 +14,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -24,17 +23,17 @@ public class JWTTokenValidatorFilter  extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(Constants.JWT_HEADER);
-        if (null != jwt) {
+        if (jwt != null) {
             try {
-                SecretKey key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
+                var key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
 
-                Claims claims = Jwts.parser()
+                var claims = Jwts.parser()
                         .verifyWith(key)
                         .build()
                         .parseSignedClaims(jwt)
                         .getPayload();
-                String username = String.valueOf(claims.get("username"));
-                String authorities = (String) claims.get("authorities");
+                var username = String.valueOf(claims.get("username"));
+                var authorities = (String) claims.get("authorities");
                 Authentication auth = new UsernamePasswordAuthenticationToken(username, null,
                         AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
                 SecurityContextHolder.getContext().setAuthentication(auth);

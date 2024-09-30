@@ -2,35 +2,37 @@ package ua.com.sinenko.things.security.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.io.Serializable;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "authorities")
+@Table(name = "things_tokens")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Authority implements Serializable {
+public class JwtTokenEntity {
     @Id
     @SequenceGenerator(
-            name = "authority_sequence",
-            sequenceName = "authority_sequence",
+            name = "token_sequence",
+            sequenceName = "token_sequence",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "authority_sequence")
-    @Column(name = "id", updatable = false)
-    private Long id;
+            generator = "token_sequence")
+    public Long id;
 
-    @Column(name = "name", updatable = false)
-    private String name;
+    @Column(unique = true)
+    public String token;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    public boolean revoked;
+
+    public boolean expired;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private ThingsUser thingsUser;
+    private ThingsUser user;
 }

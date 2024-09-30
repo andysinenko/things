@@ -25,8 +25,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-application:
-  security:
-    jwt-key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
-    jwt-header: Authorization
+things:
+  jwt:
+    key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
+    header: Authorization
+    expiration: 86400000 # a day
+    refresh-token-expiration: 604800000 # 7 days
 

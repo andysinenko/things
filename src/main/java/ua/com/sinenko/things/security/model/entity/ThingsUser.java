@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class ThingsUser {
     private boolean isEnabled;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<JwtToken> tokens;
+    private List<JwtTokenEntity> tokens;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
