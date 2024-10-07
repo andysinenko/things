@@ -49,6 +49,7 @@ public class JwtTokenService {
         this.authenticationManager = authenticationManager;
     }
 
+
     private String buildToken(Map<String, Object> additionalClaims, ThingsUser user, long expiration) {
         return Jwts
                 .builder()
