@@ -19,9 +19,9 @@
             </column>
             <column  name="user_name" type="varchar2(255)"/>
             <column  name="password" type="varchar2(255)"/>
-            <column  name="authorities" type="bigint" >
+            <!--<column  name="authorities" type="bigint" >
                 <constraints nullable="false" foreignKeyName="fk_authorities_things_users"/>
-            </column>
+            </column>-->
             <column  name="email" type="varchar2(255)"/>
             <column  name="first_name" type="varchar2(255)"/>
             <column  name="last_name" type="varchar2(255)"/>
@@ -40,8 +40,17 @@
             </column>
             <column name="name" type="varchar2(255)"/>
             <column name="role" type="varchar(255)"/>
-            <column name="things_user" type="bigint" >
+            <!--<column name="things_user" type="bigint" >
                 <constraints nullable="true" foreignKeyName="fk_things_users_authorities"/>
+            </column>-->
+        </createTable>
+
+        <createTable tableName="user_roles" catalogName="things" schemaName="things">
+            <column  name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="pk_user_role"/>
+            </column>
+            <column  name="role_id" type="bigint">
+                <constraints nullable="false" foreignKeyName ="pk_role_user"/>
             </column>
         </createTable>
 

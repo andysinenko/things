@@ -18,13 +18,14 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Builder
 @Entity
-@Table(name = "books")
+@Table(name = "books", schema="things")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Book {
     @Id
     @SequenceGenerator(
             name = "book_sequence",
             sequenceName = "book_sequence",
+            schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,

@@ -26,7 +26,7 @@ public class UserDto implements Serializable {
 
     private String email;
 
-    private List<Authority> authorities = new ArrayList<>();
+    private List<AuthorityDto> authorities = new ArrayList<>();
 
     private String firstName;
 

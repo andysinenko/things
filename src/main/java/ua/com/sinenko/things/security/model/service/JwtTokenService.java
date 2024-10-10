@@ -3,6 +3,7 @@ package ua.com.sinenko.things.security.model.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,17 +12,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.security.model.dto.UserDto;
+import ua.com.sinenko.things.security.model.entity.Authority;
 import ua.com.sinenko.things.security.model.entity.JwtTokenEntity;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
+import ua.com.sinenko.things.security.model.repository.AuthorityRepository;
 import ua.com.sinenko.things.security.model.repository.JwtTokenRepository;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 import ua.com.sinenko.things.security.model.rest.AuthenticationRequest;
 import ua.com.sinenko.things.security.model.rest.AuthenticationResponse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtTokenService {
@@ -41,16 +48,20 @@ public class JwtTokenService {
 
     private JwtTokenRepository jwtTokenRepository;
 
+    private AuthorityRepository authorityRepository;
+
     private AuthenticationManager authenticationManager;
 
-    public JwtTokenService(ThingsUserRepository thingsUserRepository, JwtTokenRepository jwtTokenRepository, AuthenticationManager authenticationManager) {
+    public JwtTokenService(ThingsUserRepository thingsUserRepository, JwtTokenRepository jwtTokenRepository, AuthorityRepository authorityRepository, AuthenticationManager authenticationManager) {
         this.userRepository = thingsUserRepository;
         this.jwtTokenRepository = jwtTokenRepository;
+        this.authorityRepository = authorityRepository;
         this.authenticationManager = authenticationManager;
     }
 
 
     private String buildToken(Map<String, Object> additionalClaims, ThingsUser user, long expiration) {
+        Key secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
         return Jwts
                 .builder()
                 .claims(additionalClaims)
@@ -58,7 +69,7 @@ public class JwtTokenService {
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, jwtKey)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -127,13 +138,26 @@ public class JwtTokenService {
     }
 
     public AuthenticationResponse register(UserDto userDto) {
+        List<String> authList = userDto.getAuthorities()
+                .stream()
+                .map(e -> e.getName())
+                .collect(Collectors.toList());
+        List<Authority> authorities = authorityRepository.findAllByNameIn(authList);
         var user = ThingsUser.builder()
                 .firstName(userDto.getUsername())
+                .username(userDto.getUsername())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
-                .authorities(userDto.getAuthorities())
+                .authorities(authorities)
+                .isAccountNonExpired(true)
+                .isAccountNonLocked(true)
+                .isCredentialsNonExpired(true)
+                .phoneNumber(userDto.getPhoneNumber())
+                .isEnabled(true)
+                .createDate(new Date())
                 .build();
+
         var savedUser = userRepository.save(user);
         var jwtToken = generateToken(savedUser);
         var refreshToken = generateRefreshToken(user);

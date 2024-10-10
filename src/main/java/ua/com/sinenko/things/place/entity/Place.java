@@ -11,7 +11,7 @@ import java.util.List;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "places")
+@Table(name = "places", schema="things")
 @Data
 @Builder
 @AllArgsConstructor
@@ -22,6 +22,7 @@ public class Place {
     @SequenceGenerator(
             name = "places_sequence",
             sequenceName = "places_sequence",
+            schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,

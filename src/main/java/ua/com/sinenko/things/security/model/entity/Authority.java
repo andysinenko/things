@@ -2,21 +2,26 @@ package ua.com.sinenko.things.security.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "authorities")
+@Table(name = "authorities", schema="things")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Authority implements Serializable {
     @Id
     @SequenceGenerator(
             name = "authority_sequence",
             sequenceName = "authority_sequence",
+            schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
@@ -27,10 +32,12 @@ public class Authority implements Serializable {
     @Column(name = "name", updatable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private ThingsUser thingsUser;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"),
+            schema = "things"
+    )
+    private List<ThingsUser> thingsUser;
 }

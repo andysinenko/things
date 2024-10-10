@@ -12,14 +12,17 @@ import java.util.List;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "things_users")
+@Table(name = "things_users", schema="things")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThingsUser {
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "user_sequence",
+            sequenceName = "user_sequence",
+            schema = "things",
+            allocationSize = 1)
     @GeneratedValue(strategy = SEQUENCE, generator = "user_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
@@ -33,8 +36,13 @@ public class ThingsUser {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "granted_authority")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            schema = "things"
+    )
     private List<Authority> authorities;
 
     @Column(name="first_name")

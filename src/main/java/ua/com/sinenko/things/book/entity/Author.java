@@ -17,12 +17,13 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Builder
 @Entity
-@Table(name = "authors")
+@Table(name = "authors", schema="things")
 public class Author {
     @Id
     @SequenceGenerator(
             name = "author_sequence",
             sequenceName = "author_sequence",
+            schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,

@@ -10,12 +10,21 @@
         http://www.liquibase.org/xml/ns/pro
         http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet id="0000" author="andreq sinenko">
-        <tagDatabase tag="init" />
+    <changeSet  author="Andrew Sinenko"  id="003">
+
+        <insert tableName="authorities" schemaName="things">
+            <column name="id" value="1" />
+            <column name="name" value="ADMIN" />
+            <column name="role" value="ADMIN" />
+        </insert>
+        <insert tableName="authorities" schemaName="things">
+            <column name="id" value="2" />
+            <column name="name" value="USER" />
+            <column name="role" value="USER" />
+        </insert>
+
     </changeSet>
 
-    <include file="changeset/create-sequences.xml" relativeToChangelogFile="true" />
-    <include file="changeset/create-tables.xml" relativeToChangelogFile="true" />
-    <include file="changeset/insert-data.xml" relativeToChangelogFile="true" />
+
 
 </databaseChangeLog>

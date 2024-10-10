@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 import ua.com.sinenko.things.security.model.service.JwtTokenService;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 public class LoginController {
 
     @Autowired
@@ -42,7 +44,16 @@ public class LoginController {
 
         return storedUser.map(thingsUser -> UserDto.builder().id(thingsUser.getId())
                 .username(thingsUser.getUsername())
-                .authorities(thingsUser.getAuthorities())
+                .authorities(thingsUser.getAuthorities().stream()
+                        .map(e -> {
+                                    AuthorityDto dto = AuthorityDto
+                                            .builder()
+                                            .name(e.getName())
+                                            .id(e.getId())
+                                            .build();
+                                    return dto;
+                                })
+                        .collect(Collectors.toList()))
                 .build()).orElseThrow();
 
     }

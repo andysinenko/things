@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "things_tokens")
+@Table(name = "things_tokens", schema="things")
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,6 +19,7 @@ public class JwtTokenEntity {
     @SequenceGenerator(
             name = "token_sequence",
             sequenceName = "token_sequence",
+            schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
@@ -33,6 +34,6 @@ public class JwtTokenEntity {
     public boolean expired;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "things_user")
     private ThingsUser user;
 }

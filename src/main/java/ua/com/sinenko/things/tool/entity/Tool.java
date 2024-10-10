@@ -14,13 +14,14 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tools")
+@Table(name = "tools", schema="things")
 @Entity
 public class Tool {
     @Id
     @SequenceGenerator(
             name = "book_sequence",
             sequenceName = "book_sequence",
+            schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
