@@ -1,4 +1,4 @@
-package ua.com.sinenko.things.security.model.rest;
+package ua.com.sinenko.things.security.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-  private String userName;
+public class AuthenticationResponse {
+  private String accessToken;
 
-  private String password;
+  private String refreshToken;
 }

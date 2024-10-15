@@ -1,10 +1,7 @@
 package ua.com.sinenko.things.security.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -14,6 +11,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"id", "user"})
 public class JwtTokenEntity {
     @Id
     @SequenceGenerator(

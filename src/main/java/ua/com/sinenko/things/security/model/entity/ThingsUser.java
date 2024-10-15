@@ -1,10 +1,8 @@
 package ua.com.sinenko.things.security.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +15,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"authorities", "id"})
 public class ThingsUser {
     @Id
     @SequenceGenerator(name = "user_sequence",

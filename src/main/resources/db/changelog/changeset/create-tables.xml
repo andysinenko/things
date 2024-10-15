@@ -17,12 +17,13 @@
             <column  name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_things_users"/>
             </column>
-            <column  name="user_name" type="varchar2(255)"/>
+            <column  name="user_name" type="varchar2(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_things_users_name"/>
+            </column>
             <column  name="password" type="varchar2(255)"/>
-            <!--<column  name="authorities" type="bigint" >
-                <constraints nullable="false" foreignKeyName="fk_authorities_things_users"/>
-            </column>-->
-            <column  name="email" type="varchar2(255)"/>
+            <column  name="email" type="varchar2(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_things_users_email"/>
+            </column>
             <column  name="first_name" type="varchar2(255)"/>
             <column  name="last_name" type="varchar2(255)"/>
             <column  name="phone_number" type="varchar2(255)"/>

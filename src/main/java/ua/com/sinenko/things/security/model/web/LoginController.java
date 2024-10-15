@@ -1,4 +1,4 @@
-package ua.com.sinenko.things.security.model.rest;
+package ua.com.sinenko.things.security.model.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
+import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;

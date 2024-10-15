@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +19,10 @@ import ua.com.sinenko.things.security.model.entity.ThingsUser;
 import ua.com.sinenko.things.security.model.repository.AuthorityRepository;
 import ua.com.sinenko.things.security.model.repository.JwtTokenRepository;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
-import ua.com.sinenko.things.security.model.rest.AuthenticationRequest;
-import ua.com.sinenko.things.security.model.rest.AuthenticationResponse;
+import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
+import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -137,6 +139,7 @@ public class JwtTokenService {
         }
     }
 
+    @Transactional
     public AuthenticationResponse register(UserDto userDto) {
         List<String> authList = userDto.getAuthorities()
                 .stream()
@@ -168,15 +171,17 @@ public class JwtTokenService {
                 .build();
     }
 
-    private boolean isTokenValid(String userName, String token) {
+    public boolean isTokenValid(String userName, String token) {
         final var user = userRepository.findByUsername(userName);
         return (userName.equals(user.get().getUsername())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
         return Jwts.parser()
+                .verifyWith(secretKey)
                 .build()
-                .parseClaimsJws(token)
+                .parseSignedClaims(token)
                 .getPayload()
                 .getExpiration().before(new Date());
     }
@@ -198,5 +203,21 @@ public class JwtTokenService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public void setJwtKey(String jwtKey) {
+        this.jwtKey = jwtKey;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public void setExpiration(long expiration) {
+        this.expiration = expiration;
+    }
+
+    public void setRefreshExpiration(long refreshExpiration) {
+        this.refreshExpiration = refreshExpiration;
     }
 }

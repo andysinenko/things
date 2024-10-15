@@ -1,0 +1,30 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  liquibase:
+    enabled: false
+    change-log: db/changelog/db.changelog-master.xml
+  application:
+    name: Property accountant service test profile
+  datasource:
+    url: jdbc:h2:file:~/things;init=create schema if not exists things
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.H2Dialect
+      default_schema: things
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+
+things:
+  jwt:
+    secret-key: secretkeyforjwttokenyforjwttoken
+    expiration: 86400000 # a day
+    refresh-token:
+      expiration: 604800000 # 7 days

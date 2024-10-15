@@ -1,4 +1,4 @@
-package ua.com.sinenko.things.rest.controller;
+package ua.com.sinenko.things.tool.web;
 
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
