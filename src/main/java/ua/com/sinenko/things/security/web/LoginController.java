@@ -1,4 +1,4 @@
-package ua.com.sinenko.things.security.model.web;
+package ua.com.sinenko.things.security.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +40,7 @@ public class LoginController {
         return ResponseEntity.ok(jwtTokenService.register(request));
     }
 
-    @RequestMapping("/user")
+    @PostMapping("/user")
     public UserDto getUserDetailsAfterLogin(Authentication authentication) {
         var storedUser = customerRepository.findByEmail(authentication.getName());
 
