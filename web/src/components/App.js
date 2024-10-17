@@ -1,18 +1,21 @@
 import './App.css';
 import AppHeader from './app-header';
-import Books from './books';
+/*import Books from './books';
 import Tools from './tools';
 import Places from './places';
-import Dashboard from './dashboard/dashbard';
+import Dashboard from './dashboard/dashbard';*/
+import Admin from './admin';
 
 function App() {
   return (
-    <div className="container-fluid">
-      <AppHeader />
+    <div className="Container">
+        <AppHeader />
+        <Admin />
+      {/*
       <Dashboard />
       <Places />
       <Books />
-      <Tools />
+      <Tools />*/}
     </div>
   );
 }

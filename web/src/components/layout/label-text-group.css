@@ -1,0 +1,19 @@
+.text-field {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.text-field .required-field-indicator {
+    color: #fa4e09;
+    padding-left: 5px;
+}
+
+.text-field .form-label {
+    padding-left: 5px;
+    padding-top:  5px;
+    font-weight:  normal;
+    font-size-adjust: 0.5;
+    font-family: sans-serif;
+}

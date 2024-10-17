@@ -48,7 +48,7 @@ export default class Tools extends React.Component {
                                 <td>{e.address}</td>
                                 <td>{e.description}</td>
                                 <td><button type="button" className="btn btn btn-warning"></button></td>
-                                <td><a href="#" onClick={this.test}>
+                                <td><a href="bbb" onClick={this.test}>
                                     <i className="fa fa-trash" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
