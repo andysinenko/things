@@ -9,17 +9,17 @@ export default class Admin extends React.Component {
         return (
             <div className="Container">
                 <Tabs defaultActiveKey="home" id="fill-tab-example" className="mb-4" fill>
-                    <Tab eventKey="home" title="Add user">
+                    <Tab eventKey="home" title="Add user" >
                         <UserManagement/>
                     </Tab>
                     <Tab eventKey="profile" title="Grant right">
                         Tab content for Profile
                     </Tab>
                     <Tab eventKey="longer-tab" title="Delete User">
-                        Tab content for Loooonger Tab
+                        Tab content for Delete Tab
                     </Tab>
                     <Tab eventKey="contact" title="Change User">
-                        Tab content for Contact
+                        Tab content for Change User
                     </Tab>
                 </Tabs>
             </div>
