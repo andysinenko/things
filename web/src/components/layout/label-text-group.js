@@ -5,6 +5,29 @@ import './label-text-group.css';
 
 
 export default class LabelTextGroup extends React.Component {
+    state = {
+        border: this.props.minlength == 0 ? "black" : "red",
+        borderShadow: "rgba(13, 110, 253, 0.25) 0px 0px 0px 0.25rem"
+    };
+
+    onChange = (event) => {
+        if(!this.props.readonly) {
+            let length = event.target.value.length;
+            if (length > 0 && length < this.props.minlength) {
+                this.setState((state) => {
+                    return {
+                        border: "red"
+                    }
+                });
+            } else {
+                this.setState((state) => {
+                    return {
+                        border: "black"
+                    }
+                });
+            }
+        }
+    };
 
     render() {
         const {
@@ -13,7 +36,6 @@ export default class LabelTextGroup extends React.Component {
             disabled,
             placeholder,
             minlength,
-            onChange,
             readonly,
             required,
             value,
@@ -21,6 +43,11 @@ export default class LabelTextGroup extends React.Component {
             label_size,
             input_size
         } = this.props;
+
+        let newStyle = {
+            border: "2px solid " + this.state.border,
+            boxShadow: this.state.borderShadow
+        };
 
         return (
             <Row>
@@ -36,10 +63,11 @@ export default class LabelTextGroup extends React.Component {
                             id={id}
                             type={type}
                             value={value}
-                            onChange={onChange}
+                            onChange={this.onChange}
                             minLength={minlength}
                             placeholder={placeholder}
                             disabled={disabled}
+                            style={newStyle}
                         />
                     </Col>
                 </FormGroup>

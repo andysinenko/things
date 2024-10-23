@@ -1,0 +1,17 @@
+.user-change {
+    padding: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    border: aliceblue 5px solid;
+}
+
+.form-select {
+    width: 40%;
+}
+
+.button-container {
+    width: 40%;
+}

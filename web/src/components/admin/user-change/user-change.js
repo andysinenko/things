@@ -1,17 +1,16 @@
 import React from 'react';
 import {Button, Col, Form, Row} from "react-bootstrap";
 import LabelTextGroup from "../../layout/label-text-group";
-import './user-management.css';
+import './user-change.css';
 
 
-
-export default class UserManagement extends React.Component {
-
+export default class UserChange extends React.Component {
     render() {
         return (
-            <div className="Container user-mgmnt">
+            <div className="Container user-change">
             <Row>
                 <Form >
+                    <LabelTextGroup type="text" label="Id" placeholder="" label_size={1} input_size={3} minlength={0} readonly={true}/>
                     <LabelTextGroup type="text" label="User name" placeholder="" label_size={1} input_size={3} minlength={2}/>
                     <LabelTextGroup type="password" label="Password" placeholder="" label_size={1} input_size={3} minlength={6}/>
                     <LabelTextGroup type="text" label="First name" placeholder="" label_size={1} input_size={3} minlength={2}/>
@@ -20,7 +19,7 @@ export default class UserManagement extends React.Component {
                     <LabelTextGroup type="text" label="Phone number" placeholder="" label_size={1} input_size={3} minlength={0}/>
                     <Form.Group as={Row} className="mb-3">
                         <Col sm={{ span: 10, offset: 2 }}>
-                            <Button variant="primary" type="submit">Create</Button>
+                            <Button variant="primary" type="submit">Store</Button>
                         </Col>
                     </Form.Group>
                 </Form>

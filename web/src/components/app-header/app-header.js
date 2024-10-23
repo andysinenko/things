@@ -4,7 +4,7 @@ export default class AppHeader extends React.Component {
 
     render() {
         return (
-            <header className="p-3 bg-dark text-white">
+            <header className="p-3 bg-dark text-white mymargin" style={{marginBottom: '5px'}}>
                 <div className="Container">
                     <div
                         className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
