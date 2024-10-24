@@ -1,4 +1,5 @@
 import React from 'react';
+import AppHeader from "../app-header";
 
 export default class Places extends React.Component {
     constructor (props) {
@@ -15,7 +16,8 @@ export default class Places extends React.Component {
         const { places } = this.state;
 
         return (
-            <div className='container'>
+            <div className='Container'>
+                <AppHeader/>
                 <h1>Places component</h1>
                 <table className="table">
                     <thead>

@@ -1,9 +1,8 @@
 import React from 'react';
+import './user-delete.css';
 import {Button, Col, Form, Row} from "react-bootstrap";
-import './user-rights.css';
 
-
-export default class UserRights extends React.Component {
+export default class UserDelete extends React.Component {
     render() {
         return (
             <div className="Container user-change">
@@ -17,17 +16,8 @@ export default class UserRights extends React.Component {
                         </Form.Select>
                     </Row>
                     <br/>
-                    <Row md={5}>
-                        <Form.Select aria-label="Grant right" size="sm">
-                            <option>Grant right</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </Form.Select>
-                    </Row>
-                    <br/>
                     <div className="text-center button-container">
-                        <Button className="w-25" variant="primary" type="submit">Assign</Button>
+                        <Button className="w-25" variant="danger" type="submit">Delete</Button>
                     </div>
                 </Col>
             </div>

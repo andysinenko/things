@@ -1,17 +1,19 @@
 import React from 'react';
 import {Button, Col, Form, Row} from "react-bootstrap";
 import LabelTextGroup from "../../layout/label-text-group";
-import './user-management.css';
+import './user-creation.css';
 
 
 
-export default class UserManagement extends React.Component {
+export default class UserCreation extends React.Component {
 
     render() {
         return (
             <div className="Container user-mgmnt">
             <Row>
                 <Form >
+                    <Form.Check type="switch" id="enabled-switch" label="Enabled" defaultChecked={true}/>
+                    <br/>
                     <LabelTextGroup type="text" label="User name" placeholder="" label_size={1} input_size={3} minlength={2}/>
                     <LabelTextGroup type="password" label="Password" placeholder="" label_size={1} input_size={3} minlength={6}/>
                     <LabelTextGroup type="text" label="First name" placeholder="" label_size={1} input_size={3} minlength={2}/>

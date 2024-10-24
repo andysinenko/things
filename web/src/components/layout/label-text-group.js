@@ -6,7 +6,7 @@ import './label-text-group.css';
 
 export default class LabelTextGroup extends React.Component {
     state = {
-        border: this.props.minlength == 0 ? "black" : "red",
+        border: this.props.minlength === 0 ? "black" : "red",
         borderShadow: "rgba(13, 110, 253, 0.25) 0px 0px 0px 0.25rem"
     };
 

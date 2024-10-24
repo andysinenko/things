@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 export default class AppHeader extends React.Component {
 
@@ -12,11 +13,12 @@ export default class AppHeader extends React.Component {
                             <svg className="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"></svg>
                         </a>
                         <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                            <li className="li-header"><a href="/" className="nav-link px-2 text-secondary">Home</a></li>
-                            <li className="li-header"><a href="/" className="nav-link px-2 text-white">Books</a></li>
-                            <li className="li-header"><a href="/" className="nav-link px-2 text-white">Tools</a></li>
-                            <li className="li-header"><a href="/" className="nav-link px-2 text-white">Places</a></li>
-                            <li className="li-header"><a href="/" className="nav-link px-2 text-white">Admin</a></li>
+                            <li className="li-header"><Link to="/" className="nav-link px-2 text-white">Home</Link></li>
+                            <li className="li-header"><Link to="/dashboard" className="nav-link px-2 text-white">Dashboard</Link></li>
+                            <li className="li-header"><Link to="/books" className="nav-link px-2 text-white">Books</Link></li>
+                            <li className="li-header"><Link to="/tools" className="nav-link px-2 text-white">Tools</Link></li>
+                            <li className="li-header"><Link to="/places" className="nav-link px-2 text-white">Places</Link></li>
+                            <li className="li-header"><Link to="/admin" className="nav-link px-2 text-white">Admin</Link></li>
                         </ul>
                         <div className="text-end">
                             <form className="d-flex">

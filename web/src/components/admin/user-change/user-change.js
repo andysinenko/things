@@ -8,8 +8,18 @@ export default class UserChange extends React.Component {
     render() {
         return (
             <div className="Container user-change">
+                <Row md={5} className="selector">
+                    <Form.Select aria-label="Select user" size="sm">
+                        <option>Select user</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </Form.Select>
+                </Row>
             <Row>
                 <Form >
+                    <Form.Check type="switch" id="enabled-switch" label="Enabled" defaultChecked={true}/>
+                    <br/>
                     <LabelTextGroup type="text" label="Id" placeholder="" label_size={1} input_size={3} minlength={0} readonly={true}/>
                     <LabelTextGroup type="text" label="User name" placeholder="" label_size={1} input_size={3} minlength={2}/>
                     <LabelTextGroup type="password" label="Password" placeholder="" label_size={1} input_size={3} minlength={6}/>

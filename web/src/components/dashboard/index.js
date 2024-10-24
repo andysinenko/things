@@ -1,3 +1,3 @@
-import Dashboard from './dashbard';
+import Dashboard from './dashboard';
 
 export default Dashboard;

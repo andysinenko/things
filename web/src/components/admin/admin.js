@@ -1,18 +1,21 @@
 import React from 'react';
-import UserManagement from "./user-management/user-management";
+import UserCreation from "./user-creation/user-creation";
 import './admin.css';
 import {Tab, Tabs} from "react-bootstrap";
 import UserChange from "./user-change/user-change";
 import UserRights from "./user-rights/user-rights";
+import UserDelete from "./user-delete/user-delete";
+import AppHeader from "../app-header";
 
 export default class Admin extends React.Component {
 
     render() {
         return (
             <div className="Container">
+                <AppHeader/>
                 <Tabs defaultActiveKey="home" id="fill-tab-example" className="mb-4" fill>
                     <Tab eventKey="home" title="Add user" >
-                        <UserManagement/>
+                        <UserCreation/>
                     </Tab>
                     <Tab eventKey="contact" title="Change User">
                         <UserChange/>
@@ -21,7 +24,7 @@ export default class Admin extends React.Component {
                         <UserRights/>
                     </Tab>
                     <Tab eventKey="longer-tab" title="Delete User">
-                        Tab content for Delete Tab
+                        <UserDelete/>
                     </Tab>
 
                 </Tabs>
