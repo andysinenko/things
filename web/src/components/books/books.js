@@ -84,37 +84,39 @@ export default class Books extends React.Component {
         return (
             <div className='Container'>
                 <AppHeader/>
-                <h1>Books component</h1>
-                <table className="table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Genre</th>
-                        <th>Publisher</th>
-                        <th>Year</th>
-                        <th>Place</th>
-                        <th>Series</th>
-                        <th>Description</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {books.map((e) =>
-                        <tr key={e.id}>
-                            <td>{e.id}</td>
-                            <td>{e.title}</td>
-                            <td>{e.author}</td>
-                            <td>{e.genre}</td>
-                            <td>{e.publisher}</td>
-                            <td>{e.year}</td>
-                            <td>{e.name}</td>
-                            <td>{e.series}</td>
-                            <td>{e.description}</td>
+                <div className="main-container">
+                    <h1>Books component</h1>
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Publisher</th>
+                            <th>Year</th>
+                            <th>Place</th>
+                            <th>Series</th>
+                            <th>Description</th>
                         </tr>
-                    )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {books.map((e) =>
+                            <tr key={e.id}>
+                                <td>{e.id}</td>
+                                <td>{e.title}</td>
+                                <td>{e.author}</td>
+                                <td>{e.genre}</td>
+                                <td>{e.publisher}</td>
+                                <td>{e.year}</td>
+                                <td>{e.name}</td>
+                                <td>{e.series}</td>
+                                <td>{e.description}</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     };

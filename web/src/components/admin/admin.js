@@ -14,7 +14,7 @@ export default class Admin extends React.Component {
             <div className="Container">
                 <AppHeader/>
                 <Tabs defaultActiveKey="home" id="fill-tab-example" className="mb-4" fill>
-                    <Tab eventKey="home" title="Add user" >
+                    <Tab eventKey="home" title="Add user">
                         <UserCreation/>
                     </Tab>
                     <Tab eventKey="contact" title="Change User">
@@ -26,7 +26,6 @@ export default class Admin extends React.Component {
                     <Tab eventKey="longer-tab" title="Delete User">
                         <UserDelete/>
                     </Tab>
-
                 </Tabs>
             </div>
         );

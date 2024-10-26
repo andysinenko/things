@@ -3,14 +3,12 @@ import {Button, Col, Form, Row} from "react-bootstrap";
 import LabelTextGroup from "../../layout/label-text-group";
 import './user-creation.css';
 
-
-
 export default class UserCreation extends React.Component {
 
     render() {
         return (
-            <div className="Container user-mgmnt">
-            <Row>
+            <div className="main-container">
+                <Row>
                 <Form >
                     <Form.Check type="switch" id="enabled-switch" label="Enabled" defaultChecked={true}/>
                     <br/>
