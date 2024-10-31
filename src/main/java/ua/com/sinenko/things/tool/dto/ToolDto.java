@@ -8,7 +8,7 @@ import java.util.Date;
 public record ToolDto(
         Long id,
         String type,
-        String vendor,
+        VendorDto vendorDto,
         Date dateOfPurchasing,
         String name,
         String serialNumber,

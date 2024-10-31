@@ -1,8 +1,9 @@
 package ua.com.sinenko.things.tool.service;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.tool.entity.Tool;
+import ua.com.sinenko.things.tool.entity.ToolType;
+import ua.com.sinenko.things.tool.entity.Vendor;
 import ua.com.sinenko.things.tool.repository.ToolsRepository;
 
 import java.util.List;
@@ -43,11 +44,11 @@ public class ToolService {
         return toolsRepository.findByName(name);
     }
 
-    public List<Tool> getToolsByVendor(String vendor) {
+    public List<Tool> getToolsByVendor(Vendor vendor) {
         return toolsRepository.findByVendor(vendor);
     }
 
     public List<Tool> getToolsByType(String type) {
-        return toolsRepository.findByType(type);
+        return toolsRepository.findByType(ToolType.valueOf(type));
     }
 }

@@ -23,13 +23,13 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 public class Book {
     @Id
     @SequenceGenerator(
-            name = "book_sequence",
-            sequenceName = "book_sequence",
+            name = "books_sequence",
+            sequenceName = "books_sequence",
             schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "book_sequence")
+            generator = "books_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
 

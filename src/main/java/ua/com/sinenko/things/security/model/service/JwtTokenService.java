@@ -7,11 +7,13 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import ua.com.sinenko.things.common.exception.UserExistsException;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.entity.Authority;
 import ua.com.sinenko.things.security.model.entity.JwtTokenEntity;
@@ -33,6 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Setter
 public class JwtTokenService {
     @Value("${things.jwt.key}")
     private String jwtKey;
@@ -141,11 +144,18 @@ public class JwtTokenService {
 
     @Transactional
     public AuthenticationResponse register(UserDto userDto) {
+        var userCheck = userRepository.findByUsername(userDto.getUsername());
+
+        if (userCheck.isPresent()) {
+            throw new UserExistsException(userCheck.get().getUsername());
+        }
+
         List<String> authList = userDto.getAuthorities()
                 .stream()
                 .map(e -> e.getName())
                 .collect(Collectors.toList());
         List<Authority> authorities = authorityRepository.findAllByNameIn(authList);
+
         var user = ThingsUser.builder()
                 .firstName(userDto.getUsername())
                 .username(userDto.getUsername())
@@ -205,19 +215,4 @@ public class JwtTokenService {
                 .build();
     }
 
-    public void setJwtKey(String jwtKey) {
-        this.jwtKey = jwtKey;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public void setExpiration(long expiration) {
-        this.expiration = expiration;
-    }
-
-    public void setRefreshExpiration(long refreshExpiration) {
-        this.refreshExpiration = refreshExpiration;
-    }
 }

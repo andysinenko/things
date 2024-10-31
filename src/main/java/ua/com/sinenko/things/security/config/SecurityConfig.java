@@ -25,6 +25,8 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import ua.com.sinenko.things.security.filter.CsrfCookieFilter;
+import ua.com.sinenko.things.security.filter.JWTTokenGeneratorFilter;
+import ua.com.sinenko.things.security.filter.JWTTokenValidatorFilter;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 
 import java.util.Collections;
@@ -81,11 +83,13 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/api/v1/contact", "/api/v1/auth/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                //.addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                //.addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests)->requests
-                        .requestMatchers("/api/v1/books", "/api/v1/places", "/api/v1/tools")
-                        .authenticated()
-                        .requestMatchers("/api/v1/notices", "/api/v1/contact", "/api/v1/register")
-                        .permitAll())
+                        .requestMatchers("/api/v1/notices", "/api/v1/contact", "/api/v1/auth/register")
+                        .permitAll()
+                        //.requestMatchers("/api/v1/books", "/api/v1/places", "/api/v1/tools")
+                        .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();

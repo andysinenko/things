@@ -10,30 +10,45 @@
         http://www.liquibase.org/xml/ns/pro
         http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet  author="liquibase-docs"  id="001">
+    <changeSet  author="Andrew Sinenko"  id="001">
         <createSequence catalogName="things"
                      schemaName="things"
-                     sequenceName="places_sequence" ordered="true" startValue="1" incrementBy="1"/>
-
+                     sequenceName="places_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet  author="Andrew Sinenko"  id="002">
         <createSequence catalogName="things"
                         schemaName="things"
-                        sequenceName="user_sequence" ordered="true" startValue="1" incrementBy="1"/>
-
+                        sequenceName="user_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet  author="Andrew Sinenko"  id="003">
         <createSequence catalogName="things"
                         schemaName="things"
-                        sequenceName="authority_sequence" ordered="true" startValue="1" incrementBy="1"/>
-
+                        sequenceName="authority_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet  author="Andrew Sinenko"  id="004">
         <createSequence catalogName="things"
                         schemaName="things"
-                        sequenceName="token_sequence" ordered="true" startValue="1" incrementBy="1"/>
-
+                        sequenceName="token_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet  author="Andrew Sinenko"  id="005">
         <createSequence catalogName="things"
                         schemaName="things"
-                        sequenceName="author_sequence" ordered="true" startValue="1" incrementBy="1"/>
-
+                        sequenceName="author_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet  author="Andrew Sinenko"  id="006">
         <createSequence catalogName="things"
                         schemaName="things"
-                        sequenceName="book_sequence" ordered="true" startValue="1" incrementBy="1"/>
+                        sequenceName="books_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet  author="Andrew Sinenko"  id="007">
+        <createSequence catalogName="things"
+                        schemaName="things"
+                        sequenceName="vendors_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet  author="Andrew Sinenko"  id="008">
+        <createSequence catalogName="things"
+                        schemaName="things"
+                        sequenceName="tools_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
 
 </databaseChangeLog>

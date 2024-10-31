@@ -1,4 +1,4 @@
 package ua.com.sinenko.things.tool.dto;
 
-public record Vendor(Long id, String name) {
+public record VendorDto(Long id, String name) {
 }

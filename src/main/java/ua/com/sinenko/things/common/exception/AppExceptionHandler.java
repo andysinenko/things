@@ -43,6 +43,17 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UserExistsException.class)
+    public ResponseEntity<?> userExistsException(UserExistsException userExistsException, HttpServletRequest request) {
+        ErrorDescription errorDescription = new ErrorDescription();
+        errorDescription.setTimestamp(String.valueOf(new Date()));
+        errorDescription.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDescription.setTitle(userExistsException.getMessage());
+        errorDescription.setDetail(userExistsException.getMessage());
+
+        return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({SQLIntegrityConstraintViolationException.class})
     public ResponseEntity<?> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException, HttpServletRequest request) {
         ErrorDescription errorDescription = new ErrorDescription();

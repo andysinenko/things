@@ -19,21 +19,23 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 public class Tool {
     @Id
     @SequenceGenerator(
-            name = "book_sequence",
-            sequenceName = "book_sequence",
+            name = "tools_sequence",
+            sequenceName = "tools_sequence",
             schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "book_sequence")
+            generator = "tools_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "tool_type")
+    @Enumerated(EnumType.STRING)
+    private ToolType type;
 
-    @Column(name = "vendor")
-    private String vendor;
+    @JoinColumn(name = "vendor")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Vendor vendor;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_purchasing")
