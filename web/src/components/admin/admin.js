@@ -9,10 +9,13 @@ import AppHeader from "../app-header";
 
 export default class Admin extends React.Component {
 
+
     render() {
+
         return (
             <div className="Container">
                 <AppHeader/>
+                <div className="main-container">
                 <Tabs defaultActiveKey="home" id="fill-tab-example" className="mb-4" fill>
                     <Tab eventKey="home" title="Add user">
                         <UserCreation/>
@@ -27,6 +30,7 @@ export default class Admin extends React.Component {
                         <UserDelete/>
                     </Tab>
                 </Tabs>
+                </div>
             </div>
         );
     }

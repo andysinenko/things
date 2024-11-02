@@ -1,7 +1,7 @@
 import React from 'react';
 import {Col, FormGroup, Form, Row} from 'react-bootstrap';
 
-import './label-text-group.css';
+import classes from "./label-text-group.module.css";
 
 
 export default class LabelTextGroup extends React.Component {
@@ -51,14 +51,14 @@ export default class LabelTextGroup extends React.Component {
 
         return (
             <Row>
-                <FormGroup className="text-field">
+                <FormGroup className={classes.textField}>
                     <Col md={label_size}>
                         <Form.Label className="form-label">{label}{required && (
-                            <span className="required-field-indicator">*</span>)}:</Form.Label>
+                            <span className={classes.requiredFieldIndicator}>*</span>)}:</Form.Label>
                     </Col>
                     <Col md={input_size}>
                         <Form.Control
-                            className="text-field"
+                            className={classes.textField}
                             readOnly={readonly}
                             id={id}
                             type={type}

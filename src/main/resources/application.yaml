@@ -1,3 +1,4 @@
+debug: true
 spring:
   profiles:
     active: dev
@@ -29,8 +30,9 @@ spring:
       ddl-auto: none
 things:
   jwt:
-    key: jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4
     header: Authorization
+    secret-key: secretkeyforjwttokenyforjwttoken
     expiration: 86400000 # a day
-    refresh-token-expiration: 604800000 # 7 days
+    refresh-token:
+      expiration: 604800000 # 7 days
 

@@ -1,5 +1,7 @@
 .nav-fill {
     width: 40%;
+    box-sizing: border-box;
+    box-shadow: antiquewhite 0 0 5px;
 }
 
 .nav-link:hover {

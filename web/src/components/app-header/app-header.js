@@ -1,23 +1,32 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-
+import logo from './Design.png';
 export default class AppHeader extends React.Component {
 
     render() {
+        const logoStyle = {
+            width: '50px',  // Adjust as needed
+            height: 'auto',
+            marginRight: '10px',
+        };
         return (
-            <header className="p-3 bg-dark text-white mymargin" style={{marginBottom: '5px'}}>
+            <header className="p-3 bg-dark text-white mymargin" >
                 <div className="Container">
                     <div
                         className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                        <a href="/" className="d-flex align-items-center mb-2 mb-lg-0 text-black text-decoration-none">
-                            <svg className="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"></svg>
-                        </a>
+                        <img src={logo}
+                             alt="Logo"
+                             style={logoStyle}/>
                         <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                             <li className="li-header"><Link to="/" className="nav-link px-2 text-white">Home</Link></li>
-                            <li className="li-header"><Link to="/books" className="nav-link px-2 text-white">Books</Link></li>
-                            <li className="li-header"><Link to="/tools" className="nav-link px-2 text-white">Tools</Link></li>
-                            <li className="li-header"><Link to="/places" className="nav-link px-2 text-white">Places</Link></li>
-                            <li className="li-header"><Link to="/admin" className="nav-link px-2 text-white">Admin</Link></li>
+                            <li className="li-header"><Link to="/books"
+                                                            className="nav-link px-2 text-white">Books</Link></li>
+                            <li className="li-header"><Link to="/tools"
+                                                            className="nav-link px-2 text-white">Tools</Link></li>
+                            <li className="li-header"><Link to="/places"
+                                                            className="nav-link px-2 text-white">Places</Link></li>
+                            <li className="li-header"><Link to="/admin"
+                                                            className="nav-link px-2 text-white">Admin</Link></li>
                         </ul>
                         <div className="text-end">
                             <form className="d-flex">

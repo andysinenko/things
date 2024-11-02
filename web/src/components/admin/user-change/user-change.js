@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Col, Form, Row} from "react-bootstrap";
-import LabelTextGroup from "../../layout/label-text-group";
+import LabelTextGroup from "../../layout/input_group/label-text-group";
 import './user-change.css';
 
 

@@ -79,7 +79,7 @@ export default class Books extends React.Component {
     }
 
     render() {
-        const {books} = this.state;
+        const {books, setBooks} = this.state;
 
         return (
             <div className='Container'>

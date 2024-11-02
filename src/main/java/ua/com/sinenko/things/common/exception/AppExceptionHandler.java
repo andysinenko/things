@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,6 +53,17 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setDetail(userExistsException.getMessage());
 
         return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({BadCredentialsException.class})
+    public ResponseEntity<?> handleSQLIntegrityConstraintViolationException(BadCredentialsException badCredentialsException, HttpServletRequest request) {
+        ErrorDescription errorDescription = new ErrorDescription();
+        errorDescription.setTimestamp(String.valueOf(new Date()));
+        errorDescription.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDescription.setTitle("Username or password is incorrect");
+        errorDescription.setDetail(badCredentialsException.getMessage());
+
+        return new ResponseEntity<>(errorDescription, null, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({SQLIntegrityConstraintViolationException.class})

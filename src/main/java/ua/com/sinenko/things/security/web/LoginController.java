@@ -15,6 +15,7 @@ import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
+import ua.com.sinenko.things.security.model.service.AuthService;
 import ua.com.sinenko.things.security.model.service.JwtTokenService;
 
 import java.io.IOException;
@@ -33,16 +34,21 @@ public class LoginController {
     @Autowired
     private JwtTokenService jwtTokenService;
 
+    @Autowired
+    private AuthService authService;
+
+
+
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody UserDto request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
-        return ResponseEntity.ok(jwtTokenService.register(request));
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/user")
     public UserDto getUserDetailsAfterLogin(Authentication authentication) {
-        var storedUser = customerRepository.findByEmail(authentication.getName());
+        var storedUser = customerRepository.findByUsername(authentication.getName());
 
         return storedUser.map(thingsUser -> UserDto.builder().id(thingsUser.getId())
                 .username(thingsUser.getUsername())
@@ -62,11 +68,11 @@ public class LoginController {
 
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        jwtTokenService.refreshToken(request, response);
+        authService.refreshToken(request, response);
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(jwtTokenService.authenticate(request));
+        return ResponseEntity.ok(authService.authenticate(request));
     }
 }

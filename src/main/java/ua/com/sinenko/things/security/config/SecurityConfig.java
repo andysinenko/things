@@ -1,24 +1,18 @@
 package ua.com.sinenko.things.security.config;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -27,35 +21,27 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import ua.com.sinenko.things.security.filter.CsrfCookieFilter;
 import ua.com.sinenko.things.security.filter.JWTTokenGeneratorFilter;
 import ua.com.sinenko.things.security.filter.JWTTokenValidatorFilter;
-import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
+@EnableWebSecurity
 @Profile("stage")
-@RequiredArgsConstructor
 public class SecurityConfig {
-    private ThingsUserRepository thingsUserRepository;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return (username) -> {
-            var thingsUser = thingsUserRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            List<GrantedAuthority> authorities = thingsUser.getAuthorities().stream().map(e -> new SimpleGrantedAuthority(e.getName()))
-                    .collect(Collectors.toUnmodifiableList());
-            return new User(thingsUser.getUsername(), thingsUser.getPassword(), authorities);
-        };
+    private final JWTTokenValidatorFilter jwtTokenValidatorFilter;
+    private final JWTTokenGeneratorFilter jwtTokenGeneratorFilter;
+    private final UserDetailsService userDetailsService;
+
+
+    public SecurityConfig(UserDetailsService userDetailsService, JWTTokenValidatorFilter jwtTokenValidatorFilter, JWTTokenGeneratorFilter jwtTokenGeneratorFilter) {
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenValidatorFilter = jwtTokenValidatorFilter;
+        this.jwtTokenGeneratorFilter = jwtTokenGeneratorFilter;
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -68,7 +54,6 @@ public class SecurityConfig {
         requestHandler.setCsrfRequestAttributeName("_csrf");
 
         http.securityContext((context) -> context.requireExplicitSave(false))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -80,23 +65,27 @@ public class SecurityConfig {
                         config.setMaxAge(3600L);
                         return config;
                 }}))
-                .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/api/v1/contact", "/api/v1/auth/register")
+                .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-                //.addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
-                //.addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests)->requests
-                        .requestMatchers("/api/v1/notices", "/api/v1/contact", "/api/v1/auth/register")
+                        .requestMatchers("/api/v1/auth/register","/api/v1/auth/authenticate")
                         .permitAll()
-                        //.requestMatchers("/api/v1/books", "/api/v1/places", "/api/v1/tools")
-                        .anyRequest().authenticated())
+                        .anyRequest()
+                        .authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .addFilterAfter(jwtTokenGeneratorFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenValidatorFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 }
