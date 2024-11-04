@@ -4,6 +4,7 @@ import ua.com.sinenko.things.place.entity.Place;
 
 public class PlaceMapper {
     public static Place mapDtoToEntity(PlaceDto dto) {
+        if (dto == null) return null;
         return Place.builder()
                 .id(dto.id())
                 .name(dto.name())
@@ -12,12 +13,13 @@ public class PlaceMapper {
                 .build();
     }
 
-    public static PlaceDto mapDtoToEntity(Place entity) {
+    public static PlaceDto mapEntityToDto(Place entity) {
+        if (entity == null) return null;
         return PlaceDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
-                .parent(PlaceMapper.mapDtoToEntity(entity.getParent()))
+                .parent(PlaceMapper.mapEntityToDto(entity.getParent()))
                 .build();
     }
 }

@@ -1,38 +1,20 @@
 package ua.com.sinenko.things.security.model.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-import ua.com.sinenko.things.common.exception.UserExistsException;
-import ua.com.sinenko.things.security.model.dto.UserDto;
-import ua.com.sinenko.things.security.model.entity.Authority;
-import ua.com.sinenko.things.security.model.entity.JwtTokenEntity;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
-import ua.com.sinenko.things.security.model.repository.AuthorityRepository;
-import ua.com.sinenko.things.security.model.repository.JwtTokenRepository;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
-import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
-import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
 
 import javax.crypto.SecretKey;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Setter
@@ -81,8 +63,19 @@ public class JwtTokenService {
                 .getExpiration().before(new Date());
     }
 
-    public boolean isTokenValid(String userName, String token, ThingsUserRepository userRepository) {
-        final var user = userRepository.findByUsername(userName);
-        return (userName.equals(user.get().getUsername())) && !isTokenExpired(token);
+    public String getSubjectFromToken(String token) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+
+    }
+
+    public boolean isTokenValid(String userName, String token) {
+        var subject =getSubjectFromToken(token);
+        return (userName.equals(subject)) && !isTokenExpired(token);
     }
 }

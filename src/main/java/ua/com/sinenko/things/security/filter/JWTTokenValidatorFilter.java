@@ -29,13 +29,11 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final JwtTokenService jwtTokenService;
     private final JwtTokenRepository jwtTokenRepository;
-    private final ThingsUserRepository thingsUserRepository;
 
-    public JWTTokenValidatorFilter(UserDetailsService userDetailsService, JwtTokenService jwtTokenService, JwtTokenRepository jwtTokenRepository, ThingsUserRepository thingsUserRepository) {
+    public JWTTokenValidatorFilter(UserDetailsService userDetailsService, JwtTokenService jwtTokenService, JwtTokenRepository jwtTokenRepository) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenService = jwtTokenService;
         this.jwtTokenRepository = jwtTokenRepository;
-        this.thingsUserRepository = thingsUserRepository;
     }
 
     @Override
@@ -65,7 +63,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             var tokenRecord = jwtTokenRepository.findByToken(jwt);
-            var isTokenValid = jwtTokenService.isTokenValid(username, tokenRecord.token, thingsUserRepository);
+            var isTokenValid = jwtTokenService.isTokenValid(username, tokenRecord.token);
 
             if (isTokenValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

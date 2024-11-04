@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.common.exception.UserExistsException;
 import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
@@ -94,7 +93,7 @@ public class AuthService {
             var thingsUser = userRepository
                     .findByUsername(userName)
                     .orElseThrow();
-            if (jwtTokenService.isTokenValid(userName, refreshToken, userRepository)) {
+            if (jwtTokenService.isTokenValid(userName, refreshToken)) {
                 var accessToken = jwtTokenService.generateToken(thingsUser);
                 revokeAllUserTokens(thingsUser);
                 saveToken(thingsUser, accessToken);
