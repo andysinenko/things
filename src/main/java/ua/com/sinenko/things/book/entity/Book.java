@@ -12,7 +12,6 @@ import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
-//@MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -3,11 +3,11 @@ package ua.com.sinenko.things.security.model.service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
-import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class JwtTokenService {
     @Value("${things.jwt.secret-key}")
     private String jwtKey;
@@ -30,7 +31,6 @@ public class JwtTokenService {
 
     @Value("${things.jwt.refresh-token.expiration}")
     private long refreshExpiration;
-
 
     private String buildToken(Map<String, Object> additionalClaims, ThingsUser user, long expiration) {
         Key secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
@@ -46,7 +46,17 @@ public class JwtTokenService {
     }
 
     public String generateToken(ThingsUser thingsUser) {
-        return buildToken(new HashMap<>(), thingsUser, expiration);
+        Key secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
+        String token = Jwts
+                .builder()
+                .claims(new HashMap<>())
+                .issuer("Sinenko.com.ua")
+                .subject(thingsUser.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .compact();
+        return token;
     }
 
     public String generateRefreshToken(ThingsUser thingsUser) {

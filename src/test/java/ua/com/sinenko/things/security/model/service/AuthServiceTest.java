@@ -1,5 +1,3 @@
-/*
-
 package ua.com.sinenko.things.security.model.service;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,8 +14,10 @@ import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.entity.Authority;
+import ua.com.sinenko.things.security.model.entity.JwtTokenEntity;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
 import ua.com.sinenko.things.security.model.repository.AuthorityRepository;
+import ua.com.sinenko.things.security.model.repository.JwtTokenRepository;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 
 import java.util.*;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
 class AuthServiceTest {
-    @InjectMocks
+
     private AuthService authService;
 
     private final String secretKey = "secretkeyforjwttokenyforjwttoken";
@@ -38,11 +39,10 @@ class AuthServiceTest {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @Mock
     private JwtTokenService jwtTokenService;
 
     @Mock
-    private AuthenticationManager authenticationManager;
+    private JwtTokenRepository jwtTokenRepository;
 
     @Mock
     ThingsUserRepository userRepository;
@@ -53,11 +53,8 @@ class AuthServiceTest {
 
     @BeforeEach
     void setDataBeforeTests() {
-        jwtTokenService = new JwtTokenService();
-        jwtTokenService.setJwtKey(secretKey);
-        jwtTokenService.setHeader(header);
-        jwtTokenService.setExpiration(expiration);
-        jwtTokenService.setRefreshExpiration(refreshExpiration);
+        jwtTokenService = new JwtTokenService("secretkeyforjwttokenyforjwttoken", "Authorization", 86400000L, 604800000L);
+        authService = new AuthService(jwtTokenService, userRepository, authorityRepository, null, jwtTokenRepository);
     }
 
     @Test
@@ -82,6 +79,7 @@ class AuthServiceTest {
         assertTrue( parts.get("body").contains("test"));
     }
 
+
     @Test
     void register() {
         UserDto userDto = UserDto.builder()
@@ -94,8 +92,13 @@ class AuthServiceTest {
                 .authorities(List.of(AuthorityDto.builder().id(2L).name("ROLE_USER").build()))
                 .build();
 
-
         when(userRepository.save(any(ThingsUser.class))).thenReturn(getUser());
+        when(jwtTokenRepository.save(any(JwtTokenEntity.class))).thenReturn(JwtTokenEntity.builder()
+                        .user(getUser())
+                        .expired(false)
+                        .revoked(false)
+                        .token("eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTaW5lbmtvLmNvbS51YSIsInN1YiI6InRlc3R1c2VyIiwiaWF0IjoxNzMxMjUyMDI1LCJleHAiOjE3MzEzMzg0MjV9.TjjE3DgIipNJ9bOljsfc8yYojdPERK_sEw74dVROILc")
+                .build());
 
         var registredUser = authService.register(userDto);
 
@@ -107,13 +110,13 @@ class AuthServiceTest {
         assertTrue( parts.get("body").contains("test"));
     }
 
-    @Test
+    /*@Test
     void authenticate() {
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(getUser()));
         var response = authService.authenticate(new AuthenticationRequest("test", "test"));
         assertNotNull(response.getAccessToken());
         assertNotNull(response.getRefreshToken());
-    }
+    }*/
 
     private Map<String, String> getTokenParts(String token) {
         var parts = token.split("\\.");
@@ -143,4 +146,4 @@ class AuthServiceTest {
                 .build();
     }
 }
-*/
+

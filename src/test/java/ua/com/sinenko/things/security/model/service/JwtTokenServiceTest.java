@@ -1,37 +1,41 @@
 package ua.com.sinenko.things.security.model.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
 
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class JwtTokenServiceTest {
-    JwtTokenService jwtTokenService = new JwtTokenService();
+    JwtTokenService jwtTokenService;
 
     @BeforeEach
     void setDataBeforeTests() {
-        jwtTokenService.setJwtKey("secretkeyforjwttokenyforjwttoken");
-        jwtTokenService.setHeader("Authorization");
-        jwtTokenService.setExpiration(86400000L);
-        jwtTokenService.setRefreshExpiration(604800000L);
+        jwtTokenService = new JwtTokenService("secretkeyforjwttokenyforjwttoken", "Authorization", 86400000L, 604800000L);
     }
 
     @Test
+    @DisplayName("Token generation")
     void generateToken() {
         ThingsUser thingsUser = new ThingsUser();
         thingsUser.setUsername("test");
-
+        Collections.synchronizedCollection(new ArrayList<>());
         String token = jwtTokenService.generateToken(thingsUser);
         String[] parts = token.split("\\.");
 
-        assertEquals("{\"alg\":\"HS256\"}", new String(Base64.getDecoder().decode(parts[0])));
-        assertTrue(new String(Base64.getDecoder().decode(parts[1])).contains("test"));
+        assertAll("Assertion for generateToken()",
+                () -> assertEquals("{\"alg\":\"HS256\"}", new String(Base64.getDecoder().decode(parts[0]))),
+                () -> assertTrue(new String(Base64.getDecoder().decode(parts[1])).contains("test"))
+        );
     }
 
     @Test
+    @DisplayName("Refresh token generation")
     void generateRefreshToken() {
         ThingsUser thingsUser = new ThingsUser();
         thingsUser.setUsername("test");
@@ -39,14 +43,15 @@ class JwtTokenServiceTest {
         String refreshToken = jwtTokenService.generateRefreshToken(thingsUser);
         String[] parts = refreshToken.split("\\.");
 
-        assertEquals("{\"alg\":\"HS256\"}", new String(Base64.getDecoder().decode(parts[0])));
-        assertTrue(new String(Base64.getDecoder().decode(parts[1])).contains("test"));
+        assertAll("Assertion for generateRefreshToken()",
+            () -> assertEquals("{\"alg\":\"HS256\"}", new String(Base64.getDecoder().decode(parts[0]))),
+            () -> assertTrue(new String(Base64.getDecoder().decode(parts[1])).contains("test"))
+        );
     }
 
     @Test
+    @DisplayName("Token expiration")
     void isTokenExpired() {
-        jwtTokenService.setJwtKey("secretkeyforjwttokenyforjwttoken");
-        jwtTokenService.setExpiration(86400000L);
 
         ThingsUser thingsUser = new ThingsUser();
         thingsUser.setUsername("test");
@@ -57,6 +62,7 @@ class JwtTokenServiceTest {
     }
 
     @Test
+    @DisplayName("Token validation")
     void isTokenValid() {
         ThingsUser thingsUser = new ThingsUser();
         thingsUser.setUsername("test");
