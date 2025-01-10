@@ -1,21 +1,26 @@
 import React from 'react';
 import AppHeader from "../app-header";
+import {fetchAllPlaces, fetchPlace} from "./reducer/placeAction";
+import store from "../../store/storeConfig";
+import {connect} from "react-redux";
+import placeReducer from "./reducer/placeReducer";
 
-export default class Places extends React.Component {
+
+class PlacesClass extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            places: [
-                {id: 1, name: 'house', description: 'dacha', address: 'dacha'},
-                {id: 2, name: 'house', description: 'dacha', address: 'dacha'},
-                {id: 3, name: 'house', description: 'dacha', address: 'dacha'},
-            ]
-        }
+
+    }
+
+    componentDidMount() {
+        //let places = this.props.fetchAllPlaces();
+        let places = this.props.fetchPlace(1);
+        console.log("places", places)
     }
 
     render() {
-        const {places} = this.state;
-
+        //const {places} = this.state;
+        console.log("store.places", this.props.places.placeReducer.places.places)
         return (
             <div className='Container'>
                 <AppHeader/>
@@ -31,7 +36,7 @@ export default class Places extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {places.map((e) =>
+                        {this.props.places.placeReducer.places.places?.map((e) =>
                             <tr key={e.id}>
                                 <td>{e.id}</td>
                                 <td>{e.name}</td>
@@ -46,3 +51,16 @@ export default class Places extends React.Component {
         );
     };
 }
+
+function mapStateToProps(state) {
+    return {
+        places: placeReducer(state, "places"),
+    };
+}
+
+const Places = connect(mapStateToProps, {
+    fetchAllPlaces,
+    fetchPlace
+})(PlacesClass);
+
+export default Places;

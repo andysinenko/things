@@ -21,6 +21,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import ua.com.sinenko.things.security.filter.CsrfCookieFilter;
 import ua.com.sinenko.things.security.filter.JWTTokenGeneratorFilter;
 import ua.com.sinenko.things.security.filter.JWTTokenValidatorFilter;
+import ua.com.sinenko.things.security.model.service.ThingsAccessDeniedHandler;
+import ua.com.sinenko.things.security.model.service.ThingsAuthenticationEntryPoint;
 
 import java.util.Collections;
 
@@ -34,9 +36,13 @@ public class SecurityConfig {
     private final JWTTokenValidatorFilter jwtTokenValidatorFilter;
     private final JWTTokenGeneratorFilter jwtTokenGeneratorFilter;
     private final UserDetailsService userDetailsService;
+    private final ThingsAuthenticationEntryPoint authenticationEntryPoint;
+    private final ThingsAccessDeniedHandler accessDeniedHandler;
 
-
-    public SecurityConfig(UserDetailsService userDetailsService, JWTTokenValidatorFilter jwtTokenValidatorFilter, JWTTokenGeneratorFilter jwtTokenGeneratorFilter) {
+    public SecurityConfig(UserDetailsService userDetailsService, JWTTokenValidatorFilter jwtTokenValidatorFilter, JWTTokenGeneratorFilter jwtTokenGeneratorFilter,
+                          ThingsAuthenticationEntryPoint authenticationEntryPoint, ThingsAccessDeniedHandler accessDeniedHandler) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
         this.userDetailsService = userDetailsService;
         this.jwtTokenValidatorFilter = jwtTokenValidatorFilter;
         this.jwtTokenGeneratorFilter = jwtTokenGeneratorFilter;
@@ -58,7 +64,7 @@ public class SecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                        config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
@@ -76,6 +82,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .addFilterAfter(jwtTokenGeneratorFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtTokenValidatorFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exception) -> exception.authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();

@@ -21,11 +21,12 @@ export default class ThSelect extends React.Component {
                         <Row md={5}>
                             <Form.Select size={inputSize} onChange={onChange} defaultChecked={defaultChecked}>
                                 <option>{label}</option>
-                                {values.map((value, index) => {
-                                    return (
-                                        <option value={value.title}>{value.innerText}</option>
-                                    );
-                                })
+                                {
+                                    values.map((value, index) => {
+                                        return (
+                                            <option key={value.id} value={value.title}>{value.innerText}</option>
+                                        );
+                                    })
                                 }
                             </Form.Select>
                         </Row>

@@ -1,3 +1,3 @@
-import Places from './places';
+import Places from './placesClass';
 
 export default Places;

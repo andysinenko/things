@@ -80,7 +80,7 @@ const INITIAL_STATE = {
     name: '',
     series: '',
     description: '',
-    sortMenu: [{id: 1, value: 'id', innerText: 'id'}, {id: 2, value: 'title', innerText: 'Title'}, {id: 3, value: 'author', innerText: 'Author'}, {id: 4, value: 'genre', innerText: 'Genre'}]
+    sortMenu: [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {id: 2, value: 'title', innerText: 'Title', key: 'id'}, {id: 3, value: 'author', innerText: 'Author', key: 'id'}, {id: 4, value: 'genre', innerText: 'Genre', key: 'id'}]
 };
 
 export default class Books extends React.Component {
