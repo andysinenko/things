@@ -1,6 +1,5 @@
 package ua.com.sinenko.things.place.web;
 
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +20,24 @@ public class PlaceController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<String>> getAllPlaces() {
-        return new ResponseEntity<List<String>>(Arrays.asList("all places", "all places", "all places"), HttpStatus.OK);
+    public ResponseEntity<List<PlaceDto>> getAllPlaces() {
+        var places = placeService.getAllPlaces();
+        var placesDto = PlaceMapper.mapEntitiesToDtos(places);
+        return new ResponseEntity<>(placesDto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseBody
+    public ResponseEntity<List<PlaceDto>> getPlaceById(@PathVariable("id") Long id) {
+        var place = placeService.getPlaceById(id);
+        var placeDto = PlaceMapper.mapEntityToDto(place);
+        return new ResponseEntity<>(List.of(placeDto), HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseBody
     public ResponseEntity<String> addNewPlaces(@RequestBody PlaceDto placeDto) {
-        return new ResponseEntity<String>("new place " + placeDto, HttpStatus.OK);
+        return null;
     }
 
-    @GetMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<List<PlaceDto>> getPlaceById(@PathParam("id") Long id) {
-        var place = placeService.getPlaceById(id);
-        var placeDto = PlaceMapper.mapEntityToDto(place);
-        return new ResponseEntity<List<PlaceDto>>(List.of(placeDto), HttpStatus.OK);
-    }
 }

@@ -40,7 +40,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(Constants.JWT_HEADER);
-        if (request.getServletPath().contains("/api/v1/auth")) {
+        if (request.getServletPath().contains("/api/v1/auth") || request.getServletPath().contains("/api/v1/places")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -87,7 +87,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         return request.getServletPath().equals("/api/v1/auth/authenticate") ||
-                request.getServletPath().equals("/api/v1/auth/register");
+                request.getServletPath().equals("/api/v1/auth/register") || request.getServletPath().equals("/api/v1/places/*");
     }
 
 }

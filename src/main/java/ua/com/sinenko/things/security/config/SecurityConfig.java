@@ -75,7 +75,7 @@ public class SecurityConfig {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests)->requests
-                        .requestMatchers("/api/v1/auth/register","/api/v1/auth/authenticate")
+                        .requestMatchers("/api/v1/auth/register","/api/v1/auth/authenticate", "/api/v1/places", "/api/v1/places/*")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

@@ -6,22 +6,19 @@ spring:
   liquibase:
     enabled: true
     change-log: db/changelog/db.changelog-master.xml
-  application:
-    name: Property accountant service test profile
   datasource:
-    url: jdbc:h2:file:~/things;init=create schema if not exists things
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/things
+    username: things_service
+    password: things12345
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
   jpa:
     show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      dialect: org.hibernate.dialect.H2Dialect
-      default_schema: things
       ddl-auto: none
-  h2:
-    console:
-      enabled: true
 
 things:
   jwt:
