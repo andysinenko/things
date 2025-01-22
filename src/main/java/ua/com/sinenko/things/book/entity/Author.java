@@ -43,6 +43,7 @@ public class Author {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "books_authors",
+            schema = "things",
             joinColumns = @JoinColumn(name = "author_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )

@@ -12,8 +12,6 @@ const Places = () => {
         dispatch(fetchAllPlaces());
     }, [dispatch]);
 
-    console.log("from Places: ", typeof places); //.map(e => e.name + " " + e.description + " " + e.address));
-
     return (
         <div className='Container'>
             <AppHeader/>

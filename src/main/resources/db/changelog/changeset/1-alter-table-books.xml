@@ -10,14 +10,9 @@
         http://www.liquibase.org/xml/ns/pro
         http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet id="0000" author="andreq sinenko">
-        <tagDatabase tag="init" />
+    <changeSet author="Andrew Sinenko" id="009">
+        <addColumn tableName="books" catalogName="things" schemaName="things">
+            <column name="title" type="varchar(255)"/>
+        </addColumn>
     </changeSet>
-
-    <include file="changeset/create-schema.xml" relativeToChangelogFile="true" />
-    <include file="changeset/create-sequences.xml" relativeToChangelogFile="true" />
-    <include file="changeset/create-tables.xml" relativeToChangelogFile="true" />
-    <include file="changeset/insert-data.xml" relativeToChangelogFile="true" />
-    <include file="changeset/1-alter-table-books.xml" relativeToChangelogFile="true" />
-
 </databaseChangeLog>

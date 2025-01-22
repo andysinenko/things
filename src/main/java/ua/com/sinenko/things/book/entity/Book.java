@@ -18,7 +18,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @Entity
 @Table(name = "books", schema="things")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Book {
     @Id
     @SequenceGenerator(
@@ -35,6 +34,7 @@ public class Book {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "books_authors",
+            schema = "things",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )

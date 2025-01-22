@@ -33,7 +33,7 @@ export const fetchPlace = (placeId) => {
 };
 
 export const fetchAllPlaces = () => {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(placesLoading());
         return axios
             .get('http://localhost:8080/api/v1/places')
@@ -47,11 +47,11 @@ export const fetchAllPlaces = () => {
     };
 };
 
-const fetchPlacesSuccess = places => ({
+const fetchPlacesSuccess = places => { return {
     type: FETCH_PLACE_SUCCESS,
     //payload: [...places]
     payload: places
-});
+}};
 
 const placesLoading = (state) => ({
     type: API_LOADING,
