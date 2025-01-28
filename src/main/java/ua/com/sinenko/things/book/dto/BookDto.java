@@ -10,11 +10,10 @@ public record BookDto(
     Long id,
     String title,
     Set<AuthorDto> authors,
-    String genre,
+    GenreDto genre,
+    SeriesDto series,
     String publisher,
     Date year,
     String placeId,
-    String name,
-    String series,
     String volumeNumber,
     String description) {}

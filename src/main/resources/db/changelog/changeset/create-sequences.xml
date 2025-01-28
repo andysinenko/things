@@ -15,37 +15,56 @@
                      schemaName="things"
                      sequenceName="places_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
+
     <changeSet  author="Andrew Sinenko"  id="002">
         <createSequence catalogName="things"
                         schemaName="things"
                         sequenceName="user_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
+
     <changeSet  author="Andrew Sinenko"  id="003">
         <createSequence catalogName="things"
                         schemaName="things"
                         sequenceName="authority_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
+
     <changeSet  author="Andrew Sinenko"  id="004">
         <createSequence catalogName="things"
                         schemaName="things"
                         sequenceName="token_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
+
     <changeSet  author="Andrew Sinenko"  id="005">
         <createSequence catalogName="things"
                         schemaName="things"
                         sequenceName="author_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
+
     <changeSet  author="Andrew Sinenko"  id="006">
+        <createSequence catalogName="things"
+                        schemaName="things"
+                        sequenceName="series_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet  author="Andrew Sinenko"  id="007">
+        <createSequence catalogName="things"
+                        schemaName="things"
+                        sequenceName="genre_sequence"  startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet  author="Andrew Sinenko"  id="008">
         <createSequence catalogName="things"
                         schemaName="things"
                         sequenceName="books_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
-    <changeSet  author="Andrew Sinenko"  id="007">
+
+    <changeSet  author="Andrew Sinenko"  id="009">
         <createSequence catalogName="things"
                         schemaName="things"
                         sequenceName="vendors_sequence"  startValue="1" incrementBy="1"/>
     </changeSet>
-    <changeSet  author="Andrew Sinenko"  id="008">
+
+    <changeSet  author="Andrew Sinenko"  id="010">
         <createSequence catalogName="things"
                         schemaName="things"
                         sequenceName="tools_sequence"  startValue="1" incrementBy="1"/>

@@ -33,7 +33,7 @@ public class Tool {
     @Enumerated(EnumType.STRING)
     private ToolType type;
 
-    @JoinColumn(name = "vendor")
+    @JoinColumn(name = "vendor", nullable = true)
     @ManyToOne(fetch = FetchType.EAGER)
     private Vendor vendor;
 

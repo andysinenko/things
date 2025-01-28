@@ -41,10 +41,6 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authorities"/>
             </column>
             <column name="name" type="varchar2(255)"/>
-            <column name="role" type="varchar(255)"/>
-            <!--<column name="things_user" type="bigint" >
-                <constraints nullable="true" foreignKeyName="fk_things_users_authorities"/>
-            </column>-->
         </createTable>
     </changeSet>
     <changeSet author="Andrew Sinenko" id="011">
@@ -64,8 +60,12 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tokens"/>
             </column>
             <column name="token" type="varchar2(512)"/>
-            <column name="revoked" type="boolean"/>
-            <column name="expired" type="boolean"/>
+            <column name="revoked" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expired" type="boolean">
+                <constraints nullable="false"/>
+            </column>
             <column name="things_user" type="bigint">
                 <constraints nullable="true" foreignKeyName="fk_things_users_tokens"/>
             </column>
@@ -90,36 +90,59 @@
             </column>
             <column name="name" type="varchar2(512)"/>
             <column name="note" type="varchar2(512)"/>
-            <column name="condition" type="varchar2(512)"/>
         </createTable>
     </changeSet>
     <changeSet author="Andrew Sinenko" id="015">
+        <createTable tableName="genre" catalogName="things"
+                     schemaName="things">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_genre"/>
+            </column>
+            <column name="name" type="varchar2(512)"/>
+            <column name="note" type="varchar2(512)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Andrew Sinenko" id="016">
+        <createTable tableName="series" catalogName="things"
+                     schemaName="things">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_series"/>
+            </column>
+            <column name="name" type="varchar2(512)"/>
+            <column name="note" type="varchar2(512)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Andrew Sinenko" id="017">
         <createTable tableName="books" catalogName="things"
                      schemaName="things">
             <column name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_books"/>
             </column>
-            <column name="author_id" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_authors_books"/>
-            </column>
-            <column name="genre" type="varchar2(512)"/>
+            <column name="title" type="varchar(255)"/>
             <column name="publisher" type="varchar2(512)"/>
             <column name="year" type="date"/>
-            <column name="name" type="varchar2(512)"/>
             <column name="volume_number" type="varchar2(512)"/>
-            <column name="series" type="varchar2(512)"/>
+            <column name="genre_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_genre_type"/>
+            </column>
+            <column name="series_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_series_type"/>
+            </column>
             <column name="description" type="varchar2(512)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Andrew Sinenko" id="016">
+
+    <changeSet author="Andrew Sinenko" id="018">
         <createTable tableName="vendors" schemaName="things" catalogName="things">
             <column name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_vendors"/>
             </column>
-            <column name="type" type="varchar2(512)"/>
+            <column name="name" type="varchar2(512)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Andrew Sinenko" id="017">
+
+    <changeSet author="Andrew Sinenko" id="019">
         <createTable tableName="tools" catalogName="things"
                      schemaName="things">
             <column name="id" type="bigint">
@@ -127,12 +150,24 @@
             </column>
             <column name="tool_type" type="varchar2(512)"/>
             <column name="vendor" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_vendor_type"/>
+                <constraints nullable="true" foreignKeyName="fk_vendor_type"/>
             </column>
             <column name="date_of_purchasing" type="date"/>
             <column name="name" type="varchar2(512)"/>
             <column name="serial_number" type="varchar2(512)"/>
-            <column name="series" type="varchar2(512)"/>
+            <column name="description" type="varchar2(512)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Andrew Sinenko" id="020">
+        <createTable tableName="books_authors" catalogName="things"
+                     schemaName="things">
+            <column name="book_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_books_authors1_type"/>
+            </column>
+            <column name="author_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_books_authors2_type" />
+            </column>
             <column name="description" type="varchar2(512)"/>
         </createTable>
     </changeSet>

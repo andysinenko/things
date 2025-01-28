@@ -3,6 +3,8 @@ package ua.com.sinenko.things.book.dto;
 import org.junit.jupiter.api.Test;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
+import ua.com.sinenko.things.book.entity.Genre;
+import ua.com.sinenko.things.book.entity.Series;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,9 +20,9 @@ class BookMapperTest {
         //given
         var bookDto = BookDto.builder()
                 .id(1L)
-                .name("Book Name")
-                .genre("Fiction")
-                .series("Series Name")
+                .title("Book Name")
+                .genre(new GenreDto(1L, "Fiction"))
+                .series(new SeriesDto(1L, "Series Name"))
                 .year(dateFormat.parse("2021"))
                 .description("Description")
                 .volumeNumber("1")
@@ -33,7 +35,7 @@ class BookMapperTest {
         //then
         assertNotNull(book);
         assertEquals(bookDto.id(), book.getId());
-        assertEquals(bookDto.name(), book.getName());
+        assertEquals(bookDto.title(), book.getTitle());
         assertEquals(bookDto.genre(), book.getGenre());
         assertEquals(bookDto.series(), book.getSeries());
         assertEquals(bookDto.year(), book.getYear());
@@ -47,9 +49,9 @@ class BookMapperTest {
         //given
         var book = Book.builder()
                 .id(1L)
-                .name("Book Name")
-                .genre("Fiction")
-                .series("Series Name")
+                .title("Book Name")
+                .genre(Genre.builder().id(1L).name("Fiction").build())
+                .series(Series.builder().id(1L).name("Series Name").build())
                 .year(dateFormat.parse("2021"))
                 .description("Description")
                 .volumeNumber("1")
@@ -62,7 +64,7 @@ class BookMapperTest {
         //then
         assertNotNull(bookDto);
         assertEquals(book.getId(), bookDto.id());
-        assertEquals(book.getName(), bookDto.name());
+        assertEquals(book.getTitle(), bookDto.title());
         assertEquals(book.getGenre(), bookDto.genre());
         assertEquals(book.getSeries(), bookDto.series());
         assertEquals(book.getYear(), bookDto.year());

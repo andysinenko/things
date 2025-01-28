@@ -1,17 +1,18 @@
 package ua.com.sinenko.things.book.dto;
 
-import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class BookMapper {
     public static Book mapDtoToEntity(BookDto dto) {
         return Book
                 .builder()
                 .id(dto.id())
-                .genre(dto.genre())
-                .series(dto.series())
+                .genre(GenreMapper.mapDtoToEntity(dto.genre()))
+                .series(SeriesMapper.mapDtoToEntity(dto.series()))
                 .year(dto.year())
-                .name(dto.name())
                 .description(dto.description())
                 .volumeNumber(dto.volumeNumber())
                 .authors(AuthorMapper.mapDtosToEntities(dto.authors()))
@@ -22,13 +23,25 @@ public class BookMapper {
         return BookDto
                 .builder()
                 .id(entity.getId())
-                .genre(entity.getGenre())
-                .series(entity.getSeries())
+                .genre(GenreMapper.mapEntityToDto(entity.getGenre()))
+                .series(SeriesMapper.mapEntityToDto(entity.getSeries()))
                 .year(entity.getYear())
-                .name(entity.getName())
                 .description(entity.getDescription())
                 .volumeNumber(entity.getVolumeNumber())
                 .authors(AuthorMapper.mapEntitiesToDtos(entity.getAuthors()))
                 .build();
+    }
+
+
+    public static Collection<Book> mapDtosToEntities(Collection<BookDto> dtos) {
+        return dtos.stream()
+                .map(dto -> mapDtoToEntity(dto))
+                .collect(Collectors.toList());
+    }
+
+    public static Collection<BookDto> mapEntitiesToDtos(Collection<Book> entities) {
+        return entities.stream()
+                .map(entity -> mapEntityToDto(entity))
+                .collect(Collectors.toList());
     }
 }

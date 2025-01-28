@@ -1,4 +1,4 @@
-debug: true
+debug: false
 spring:
   profiles:
     active: dev
@@ -28,6 +28,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
+  main:
+    banner-mode: off
 things:
   jwt:
     header: Authorization
@@ -35,4 +37,10 @@ things:
     expiration: 86400000 # a day
     refresh-token:
       expiration: 604800000 # 7 days
-
+logging:
+  level:
+    ua.com.sinenko.things: TRACE
+    root: WARN
+    org.springframework: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

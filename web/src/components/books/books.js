@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import AppHeader from "../app-header";
 import ThSelect from "../layout/select/th-select";
+import "./books.css";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {fetchBooksFailure, fetchBooksStart, fetchBooksSuccess} from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
+
 
 const sortMenu = [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {
     id: 2,
@@ -106,44 +108,46 @@ export const Books = () => {
                     <ThSelect onChange={onSortSelect} defaultChecked={sortType} values={sortMenu}
                               label="Sort by" label_size={1} input_size={2} required={false}/>
                 </div>
-                <table className="table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Genre</th>
-                        <th>Publisher</th>
-                        <th>Year</th>
-                        <th>Place</th>
-                        <th>Series</th>
-                        <th>Description</th>
-                        <th>Delete</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {books.length !== 0 ? books.map((e) =>
-                        <tr key={e.id}>
-                            <td>{e.id}</td>
-                            <td>{e.title}</td>
-                            <td>{e.author}</td>
-                            <td>{e.genre}</td>
-                            <td>{e.publisher}</td>
-                            <td>{e.year}</td>
-                            <td>{e.name}</td>
-                            <td>{e.series}</td>
-                            <td>{e.description}</td>
-                            <td>
-                                <button onClick={() => handleDelete(e)}
-                                        style={{cursor: 'pointer', border: 'none', background: 'none'}}>
-                                    <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
-                                </button>
-                            </td>
+                <div className="tableContainer">
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Publisher</th>
+                            <th>Year</th>
+                            <th>Place</th>
+                            <th>Series</th>
+                            <th>Description</th>
+                            <th>Delete</th>
                         </tr>
-                    ) : <div><h3>book list is empty</h3></div>
-                    }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {books.length !== 0 ? books.map((e) =>
+                            <tr key={e.id}>
+                                <td>{e.id}</td>
+                                <td>{e.title}</td>
+                                <td>{e.author}</td>
+                                <td>{e.genre}</td>
+                                <td>{e.publisher}</td>
+                                <td>{e.year}</td>
+                                <td>{e.name}</td>
+                                <td>{e.series}</td>
+                                <td>{e.description}</td>
+                                <td>
+                                    <button onClick={() => handleDelete(e)}
+                                            style={{cursor: 'pointer', border: 'none', background: 'none'}}>
+                                        <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
+                                    </button>
+                                </td>
+                            </tr>
+                        ) : <div><h3>book list is empty</h3></div>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

@@ -1,10 +1,7 @@
 package ua.com.sinenko.things.book.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -31,6 +28,23 @@ public class Book {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "publisher")
+    private String publisher;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "year")
+    private Date year;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "volume_number")
+    private String volumeNumber;
+
+    @Column(name = "description")
+    private String description;
+
+    @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "books_authors",
@@ -40,26 +54,12 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
-    @Column(name = "genre")
-    private String genre;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
 
-    @Column(name = "publisher")
-    private String publisher;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "year")
-    private Date year;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "volume_number")
-    private String volumeNumber;
-
-    @Column(name = "series")
-    private String series; //todo: convert to @ManyToOne -> BookSeries entity
-
-    @Column(name = "description")
-    private String description;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "series_id")
+    private Series series;
 
 }

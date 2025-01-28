@@ -14,33 +14,24 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Builder
 @Entity
-@Table(name = "authors", schema="things")
-public class Author {
+@Table(name = "series", schema="things")
+public class Series {
     @Id
     @SequenceGenerator(
-            name = "author_sequence",
-            sequenceName = "author_sequence",
+            name = "series_sequence",
+            sequenceName = "series_sequence",
             schema = "things",
             allocationSize = 1)
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "author_sequence")
+            generator = "series_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "note")
-    private String note;
-
     @EqualsAndHashCode.Exclude
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "books_authors",
-            schema = "things",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
 }

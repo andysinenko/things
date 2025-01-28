@@ -3,6 +3,7 @@ package ua.com.sinenko.things.book.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.book.entity.Book;
+import ua.com.sinenko.things.book.entity.Genre;
 import ua.com.sinenko.things.book.repository.BookRepository;
 
 import java.util.ArrayList;
@@ -34,15 +35,15 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    public List<Book> getBooksByName(String name) {
-        return bookRepository.findByName(name);
+    public List<Book> getBooksByTitle(String title) {
+        return bookRepository.findByTitle(title);
     }
 
     public List<Book> getBooksByAuthorName(String name) {
         return bookRepository.findByAuthorsName(name);
     }
 
-    public List<Book> getBooksByGenre(String genre) {
+    public List<Book> getBooksByGenre(Genre genre) {
         return bookRepository.findByGenre(genre);
     }
 
