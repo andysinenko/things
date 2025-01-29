@@ -12,18 +12,41 @@ const booksSlice = createSlice({
             state.loading = true;
             state.error = null;
         },
+
         fetchBooksSuccess(state, action) {
             state.loading = false;
             state.books = action.payload;
         },
+
         fetchBooksFailure(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
+
+        sortUsersByTitle: (state) => {
+            state.books.sort((book1, book2) => book1.title.localeCompare(book2.title));
+        },
+
+        sortUsersById: (state) => {
+            state.books.sort((book1, book2) => book1.id - book2.id);
+        },
+
+        sortUsersByIdReverse: (state) => {
+            state.books.sort((book1, book2) => book2.id - book1.id);
+        },
+        sortUsersByGenre: (state) => {
+            state.books.sort((book1, book2) => book1.genre.name.localeCompare(book2.genre.name));
+        },
     },
 });
 
-export const { fetchBooksStart, fetchBooksSuccess, fetchBooksFailure } =
+export const {fetchBooksStart,
+    fetchBooksSuccess,
+    fetchBooksFailure,
+    sortUsersByTitle,
+    sortUsersById,
+    sortUsersByIdReverse,
+    sortUsersByGenre} =
     booksSlice.actions;
 
 export default booksSlice.reducer;

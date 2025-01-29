@@ -15,7 +15,7 @@
 .table th,
 .table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 1px;
     text-align: center;
 }
 
@@ -61,6 +61,21 @@
     background-color: #f8f8f8;
 }
 
+.authors {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+.authors span {
+    font-size: 12px;
+    border: #dddddd 1px solid;
+    border-radius: 2px;
+    padding: 2px 2px;
+    margin: 1px 1px 1px 1px;
+    background-color: #f8f8f8;
+    text-align: justify;
+}
 
 
 

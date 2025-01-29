@@ -5,7 +5,15 @@ import "./books.css";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
-import {fetchBooksFailure, fetchBooksStart, fetchBooksSuccess} from "./reducer/BooksSlice";
+import {
+    fetchBooksFailure,
+    fetchBooksStart,
+    fetchBooksSuccess,
+    sortUsersByTitle,
+    sortUsersById,
+    sortUsersByIdReverse,
+    sortUsersByGenre
+} from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 
@@ -17,8 +25,8 @@ const sortMenu = [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {
     key: 'id'
 }, {
     id: 3,
-    value: 'author',
-    innerText: 'Author',
+    value: 'reverse',
+    innerText: 'Reverse',
     key: 'id'
 }, {id: 4, value: 'genre', innerText: 'Genre', key: 'id'}];
 
@@ -52,42 +60,21 @@ export const Books = () => {
         fetchPlaces();
     }, [dispatch]);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
-    console.log("BOOKS: ", JSON.stringify(books));
-    console.log("BOOKS: ", books.length);
-
     const onSortSelect = (event) => {
         console.log("onSortSeleced", event.target.value);
         let booksTemp = books;
         switch (event.target.value) {
             case "id":
-                booksTemp = books.sort((a, b) => a.id > (b.id));
-                console.log("booksTemp: ", booksTemp);
-                setType({sortType: 'id'});
-                //setBooks(booksTemp);
-                dispatch(fetchBooksSuccess(booksTemp));
+                dispatch(sortUsersById());
                 break;
             case "Title":
-                booksTemp = books.sort((a, b) => a.title.localeCompare(b.title));
-                console.log(booksTemp);
-                setType({sortType: 'title'});
-                //setBooks(booksTemp);
-                dispatch(fetchBooksSuccess(booksTemp));
+                dispatch(sortUsersByTitle());
                 break;
-            case "Author":
-                booksTemp = books.sort((a, b) => a.author.localeCompare(b.author));
-                console.log(booksTemp);
-                setType({sortType: 'author'});
-                //setBooks(booksTemp);
-                dispatch(fetchBooksSuccess(booksTemp));
+            case "Reverse":
+                dispatch(sortUsersByIdReverse());
                 break;
             case "Genre":
-                booksTemp = books.sort((a, b) => a.genre.localeCompare(b.genre));
-                setType({sortType: 'genre'});
-                //setBooks(booksTemp);
-                dispatch(fetchBooksSuccess(booksTemp));
+                dispatch(sortUsersByGenre());
                 break;
             default:
                 break;
@@ -98,6 +85,23 @@ export const Books = () => {
     const handleDelete = (row) => {
         console.log("delete: ", row.id);
     }
+
+    if (loading) return (
+        <div className='Container'>
+            <AppHeader/>
+            <div className="main-container">
+                <h3>Books component</h3>
+                <p>Loading...</p>
+            </div>
+        </div>);
+    if (error) return (
+        <div className='Container'>
+            <AppHeader/>
+            <div className="main-container">
+                <h3>Books component</h3>
+                <p>Error: {error}</p>
+            </div>
+        </div>);
 
     return (
         <div className='Container'>
@@ -116,28 +120,31 @@ export const Books = () => {
                             <th>Title</th>
                             <th>Author</th>
                             <th>Genre</th>
+                            <th>Series</th>
                             <th>Publisher</th>
                             <th>Year</th>
                             <th>Place</th>
-                            <th>Series</th>
                             <th>Description</th>
                             <th>Delete</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {books.length !== 0 ? books.map((e) =>
-                            <tr key={e.id}>
-                                <td>{e.id}</td>
-                                <td>{e.title}</td>
-                                <td>{e.author}</td>
-                                <td>{e.genre}</td>
-                                <td>{e.publisher}</td>
-                                <td>{e.year}</td>
-                                <td>{e.name}</td>
-                                <td>{e.series}</td>
-                                <td>{e.description}</td>
+                        {books.length !== 0 ? books.map((book) =>
+                            <tr key={book.id}>
+                                <td>{book.id}</td>
+                                <td>{book.title}</td>
+                                <td>{book.authors
+                                    ? <div className="authors"> {book.authors.map(author =>
+                                        <span>{author.name}</span>)}</div>
+                                    : ''}</td>
+                                <td>{book.genre.name}</td>
+                                <td>{book.series.name}</td>
+                                <td>{book.publisher}</td>
+                                <td>{book.year}</td>
+                                <td>{book.place}</td>
+                                <td>{book.description}</td>
                                 <td>
-                                    <button onClick={() => handleDelete(e)}
+                                    <button onClick={() => handleDelete(book)}
                                             style={{cursor: 'pointer', border: 'none', background: 'none'}}>
                                         <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
                                     </button>

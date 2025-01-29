@@ -31,6 +31,7 @@ public class Series {
     @Column(name = "name")
     private String name;
 
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();

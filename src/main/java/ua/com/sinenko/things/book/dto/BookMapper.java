@@ -10,12 +10,14 @@ public class BookMapper {
         return Book
                 .builder()
                 .id(dto.id())
+                .title(dto.title())
                 .genre(GenreMapper.mapDtoToEntity(dto.genre()))
                 .series(SeriesMapper.mapDtoToEntity(dto.series()))
                 .year(dto.year())
                 .description(dto.description())
                 .volumeNumber(dto.volumeNumber())
                 .authors(AuthorMapper.mapDtosToEntities(dto.authors()))
+                .publisher(dto.publisher())
                 .build();
     }
 
@@ -23,12 +25,14 @@ public class BookMapper {
         return BookDto
                 .builder()
                 .id(entity.getId())
+                .title(entity.getTitle())
                 .genre(GenreMapper.mapEntityToDto(entity.getGenre()))
                 .series(SeriesMapper.mapEntityToDto(entity.getSeries()))
                 .year(entity.getYear())
                 .description(entity.getDescription())
                 .volumeNumber(entity.getVolumeNumber())
                 .authors(AuthorMapper.mapEntitiesToDtos(entity.getAuthors()))
+                .publisher(entity.getPublisher())
                 .build();
     }
 
