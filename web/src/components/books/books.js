@@ -16,6 +16,7 @@ import {
 } from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
+import {fetchBooks} from "./api";
 
 
 const sortMenu = [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {
@@ -33,31 +34,13 @@ const sortMenu = [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {
 const INITIAL_SORT_MENU_TYPE = {sortType: 'id'};
 
 export const Books = () => {
-    //const [books, setBooks] = useState(INITIAL_BOOKS);
     const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
     const dispatch = useDispatch();
     const {books, loading, error} = useSelector(state => state.booksReducer);
 
     useEffect(() => {
         console.log("useEffect called");
-        const fetchPlaces = async () => {
-            dispatch(fetchBooksStart());
-            try {
-                const response = await axios.get("http://localhost:8080/api/v1/books");
-                if (response.status === 200) {
-                    console.log("Success on fetching books: ", response.status);
-                    dispatch(fetchBooksSuccess(response.data));
-                } else {
-                    console.log("Error on fetching books: ", response.status);
-                    dispatch(fetchBooksFailure(`Error: ${response.status}`));
-                }
-            } catch (error) {
-                console.log("Error on fetching books, catch section: ", error.message);
-                dispatch(fetchBooksFailure(error.message));
-            }
-        };
-
-        fetchPlaces();
+        fetchBooks(dispatch);
     }, [dispatch]);
 
     const onSortSelect = (event) => {
@@ -116,10 +99,10 @@ export const Books = () => {
                     <table className="table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Title</th>
+                            <th onClick={() => dispatch(sortUsersById())}>ID &#x25be;&#x25b4;</th>
+                            <th onClick={() => dispatch(sortUsersByTitle())}>Title &#x25be;&#x25b4;</th>
                             <th>Author</th>
-                            <th>Genre</th>
+                            <th onClick={() => dispatch(sortUsersByGenre())}>Genre &#x25be;&#x25b4;</th>
                             <th>Series</th>
                             <th>Publisher</th>
                             <th>Year</th>
@@ -133,10 +116,13 @@ export const Books = () => {
                             <tr key={book.id}>
                                 <td>{book.id}</td>
                                 <td>{book.title}</td>
-                                <td>{book.authors
-                                    ? <div className="authors"> {book.authors.map(author =>
-                                        <span>{author.name}</span>)}</div>
-                                    : ''}</td>
+                                <td className="authors">
+                                    {book.authors ?
+                                        [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => ( // Sort here!
+                                            <p key={author.id}>{author.name}</p>
+                                        ))
+                                        : ''}
+                                </td>
                                 <td>{book.genre.name}</td>
                                 <td>{book.series.name}</td>
                                 <td>{book.publisher}</td>
@@ -150,8 +136,13 @@ export const Books = () => {
                                     </button>
                                 </td>
                             </tr>
-                        ) : <div><h3>book list is empty</h3></div>
-                        }
+                        ) : (
+                            <tr>
+                                <td colSpan="10" style={{textAlign: "center"}}>
+                                    <h3>Book list is empty</h3>
+                                </td>
+                            </tr>
+                        )}
                         </tbody>
                     </table>
                 </div>

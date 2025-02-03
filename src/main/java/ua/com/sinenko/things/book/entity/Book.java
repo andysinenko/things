@@ -32,7 +32,7 @@ public class Book {
     private String publisher;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "year")
+    @Column(name = "publication_year")
     private Date year;
 
     @Column(name = "title")
@@ -45,7 +45,7 @@ public class Book {
     private String description;
 
     @EqualsAndHashCode.Exclude
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "books_authors",
             schema = "things",
@@ -54,11 +54,11 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "series_id")
     private Series series;
 

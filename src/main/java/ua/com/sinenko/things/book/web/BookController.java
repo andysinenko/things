@@ -2,7 +2,6 @@ package ua.com.sinenko.things.book.web;
 
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.sinenko.things.book.dto.BookDto;
 import ua.com.sinenko.things.book.dto.BookMapper;
 import ua.com.sinenko.things.book.service.BookService;
-import ua.com.sinenko.things.place.dto.PlaceDto;
 
 import java.util.List;
 
@@ -32,8 +30,9 @@ public class BookController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> addNewBook(@RequestBody PlaceDto placeDto) {
-        return new ResponseEntity<String>("new place " + placeDto, HttpStatus.OK);
+    public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto) {
+        bookService.saveBook(BookMapper.mapDtoToEntity(bookDto));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/{bookId}")

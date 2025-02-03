@@ -11,8 +11,8 @@
         http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
     <changeSet  author="Andrew Sinenko"  id="000">
-        <sql dbms="postgresql" endDelimiter=";">
-            CREATE SCHEMA things
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS THINGS;
         </sql>
     </changeSet>
 </databaseChangeLog>

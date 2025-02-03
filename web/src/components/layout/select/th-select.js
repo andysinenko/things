@@ -20,7 +20,7 @@ export default class ThSelect extends React.Component {
                     <Col md={inputSize}>
                         <Row md={5}>
                             <Form.Select size={inputSize} onChange={onChange} defaultChecked={defaultChecked}>
-                                <option>{label}</option>
+                                <option key="0">{label}</option>
                                 {
                                     values.map((value, index) => {
                                         return (

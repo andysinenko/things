@@ -121,7 +121,7 @@
             </column>
             <column name="title" type="varchar(255)"/>
             <column name="publisher" type="varchar2(512)"/>
-            <column name="year" type="date"/>
+            <column name="publication_year" type="date"/>
             <column name="volume_number" type="varchar2(512)"/>
             <column name="genre_id" type="bigint">
                 <constraints nullable="true" foreignKeyName="fk_genre_type"/>
