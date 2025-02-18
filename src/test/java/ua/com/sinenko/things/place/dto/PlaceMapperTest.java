@@ -1,12 +1,16 @@
 package ua.com.sinenko.things.place.dto;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ua.com.sinenko.things.place.entity.Place;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+@DisplayName("Place Mapper Test")
 class PlaceMapperTest {
     @Test
+    @DisplayName("Map Entity 2 DTO Test")
     void mapDtoToEntity() {
         //given
         var placeDto = PlaceDto.builder()
@@ -27,6 +31,7 @@ class PlaceMapperTest {
         assertEquals(placeDto.parent().id(), place.getParent().getId());
     }
 
+    @DisplayName("Map DTO 2 Entity Test")
     @Test
     void mapEntityToDto() {
         //given

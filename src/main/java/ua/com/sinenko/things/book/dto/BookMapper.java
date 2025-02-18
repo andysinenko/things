@@ -2,6 +2,7 @@ package ua.com.sinenko.things.book.dto;
 
 import ua.com.sinenko.things.book.entity.Book;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,7 @@ public class BookMapper {
                 .title(dto.title())
                 .genre(GenreMapper.mapDtoToEntity(dto.genre()))
                 .series(SeriesMapper.mapDtoToEntity(dto.series()))
-                .year(dto.year())
+                .year(LocalDate.parse(dto.year()+ "-01-01"))
                 .description(dto.description())
                 .volumeNumber(dto.volumeNumber())
                 .authors(AuthorMapper.mapDtosToEntities(dto.authors()))
@@ -28,7 +29,7 @@ public class BookMapper {
                 .title(entity.getTitle())
                 .genre(GenreMapper.mapEntityToDto(entity.getGenre()))
                 .series(SeriesMapper.mapEntityToDto(entity.getSeries()))
-                .year(entity.getYear())
+                .year(entity.getYear().toString())
                 .description(entity.getDescription())
                 .volumeNumber(entity.getVolumeNumber())
                 .authors(AuthorMapper.mapEntitiesToDtos(entity.getAuthors()))

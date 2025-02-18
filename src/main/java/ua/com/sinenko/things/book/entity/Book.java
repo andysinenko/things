@@ -3,6 +3,7 @@ package ua.com.sinenko.things.book.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class Book {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "publication_year")
-    private Date year;
+    private LocalDate year;
 
     @Column(name = "title")
     private String title;

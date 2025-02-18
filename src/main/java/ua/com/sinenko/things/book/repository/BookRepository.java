@@ -5,18 +5,18 @@ import org.springframework.stereotype.Repository;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.entity.Genre;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByAuthorsName(String name);
 
-    List<Book> findByGenre(Genre genre);
+    List<Book> findBooksByGenre(Genre genre);
 
     List<Book> findByPublisher(String publisher);
 
-    List<Book> findByYear(Date year);
+    List<Book> findByYear(LocalDate year);
 
     List<Book> findByTitle(String title);
 

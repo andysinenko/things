@@ -2,7 +2,6 @@ package ua.com.sinenko.things.book.dto;
 
 import lombok.Builder;
 
-import java.util.Date;
 import java.util.Set;
 
 @Builder
@@ -13,7 +12,7 @@ public record BookDto(
     GenreDto genre,
     SeriesDto series,
     String publisher,
-    Date year,
+    String year,
     String placeId,
     String volumeNumber,
     String description) {}

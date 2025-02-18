@@ -1,10 +1,13 @@
 package ua.com.sinenko.things.book.dto;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ua.com.sinenko.things.book.entity.Author;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
+
+@DisplayName("Author Mapper Test")
 class AuthorMapperTest {
 
     @Test

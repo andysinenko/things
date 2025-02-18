@@ -1,90 +1,94 @@
 package ua.com.sinenko.things.book.repository;
 
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.entity.Genre;
 import ua.com.sinenko.things.book.entity.Series;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DisplayName("Book Repository Test")
 class BookRepositoryTest {
     @Autowired
     BookRepository bookRepository;
+
+    @Autowired
+    GenreRepository genreRepository;
+
     @Autowired
     TestEntityManager entityManager;
 
-    @Test
-    void findByAuthorsName() {
+    @BeforeEach
+    void beforeAll() {
         var author = entityManager.persist(Author.builder().name("Author Name").build());
         Set<Author> authors = new HashSet<>();
         authors.add(author);
 
+        var genre = entityManager.persist(Genre.builder().name("Fiction").build());
+
         Book book = new Book();
         book.setTitle("Book Name");
-        book.setGenre(Genre.builder().name("Fiction").build());
+        book.setGenre(genre);
         book.setSeries(Series.builder().name("Series Name").build());
-        book.setYear(new Date());
+        book.setYear(LocalDate.now());
         book.setDescription("Description");
         book.setVolumeNumber("1");
+        book.setPublisher("Publisher 1");
         book.setAuthors(authors);
 
 
         entityManager.persist(book);
         entityManager.flush();
         entityManager.clear();
-
-
-        assertNotNull(bookRepository.findByAuthorsName("Author Name"));
     }
 
     @Test
-    void findByGenre() {
+    void findByAuthorsName() {
+        var books = bookRepository.findByAuthorsName("Author Name");
+        System.out.println("By author "+ books);
+        assertTrue(books.size() > 0);
     }
 
     @Test
     void findByPublisher() {
+        var books = bookRepository.findByPublisher("Publisher 1");
+        System.out.println("findByPublisher(): " + books);
+
+        assertNotNull(books);
     }
 
     @Test
     void findByYear() {
+        var books = bookRepository.findByYear(LocalDate.now());
+        System.out.println("findByYear() " + books);
+        assertTrue(books.size() > 0 );
     }
 
     @Test
     @Transactional
     void findByTitle() {
-        var author = entityManager.persist(Author.builder().name("Author Name").build());
-        Set<Author> authors = new HashSet<>();
-        authors.add(author);
+        assertTrue(bookRepository.findByTitle("Book Name").size() > 0);
+    }
 
-        Book book = new Book();
-        book.setTitle("Book Name");
-        book.setGenre(entityManager.merge(Genre.builder().name("Fiction").build()));
-        book.setSeries(entityManager.merge(Series.builder().name("Series Name").build()));
-        book.setYear(new Date());
-        book.setDescription("Description");
-        book.setVolumeNumber("1");
-        book.setAuthors(authors);
-
-
-        entityManager.persist(book);
-        entityManager.flush();
-        entityManager.clear();
-
-        assertNotNull(bookRepository.findByTitle("Book Name"));
+    @Test
+    void findByGenre() {
+        var genre = genreRepository.findGenreByName("Fiction");
+        var books = bookRepository.findBooksByGenre(genre);
+        System.out.println(genre);
+        System.out.println(books);
+        assertTrue(books.size() > 0);
     }
 }

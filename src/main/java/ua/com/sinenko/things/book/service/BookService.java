@@ -6,6 +6,7 @@ import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.entity.Genre;
 import ua.com.sinenko.things.book.repository.BookRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,14 +45,14 @@ public class BookService {
     }
 
     public List<Book> getBooksByGenre(Genre genre) {
-        return bookRepository.findByGenre(genre);
+        return bookRepository.findBooksByGenre(genre);
     }
 
     public List<Book> getBooksByPublisher(String publisher) {
         return bookRepository.findByPublisher(publisher);
     }
 
-    public List<Book> getBooksByYear(Date year) {
+    public List<Book> getBooksByYear(LocalDate year) {
         return bookRepository.findByYear(year);
     }
 

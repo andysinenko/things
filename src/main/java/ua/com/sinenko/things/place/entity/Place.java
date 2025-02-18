@@ -34,7 +34,6 @@ public class Place {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_id")
     private Place parent;
 
     @OneToMany(mappedBy = "parent")
