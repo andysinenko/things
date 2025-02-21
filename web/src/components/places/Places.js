@@ -1,22 +1,57 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import AppHeader from "../app-header";
-import {fetchAllPlaces, fetchPlace} from "./reducer/placeActions";
+import {fetchAllPlaces} from "./api/api";
 import {useDispatch, useSelector} from "react-redux";
+import {sortPlacesByName} from "./reducer/PlaceSlice";
 
+const INITIAL_SORT_MENU_TYPE = {sortType: 'id'};
 
 const Places = () => {
     const dispatch = useDispatch();
-    const places = useSelector(state => state.placeReducer.places);
+    const {places, loading, error} = useSelector(state => state.placeReducer);
+    const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
+
 
     useEffect(() => {
-        dispatch(fetchAllPlaces());
+        console.log("useEffect called");
+        fetchAllPlaces(dispatch);
     }, [dispatch]);
+
+
+    const onSortSelect = (event) => {
+        console.log("onSortSeleced", event.target.value);
+        switch (event.target.value) {
+            case "name":
+                dispatch(sortPlacesByName());
+                break;
+            default:
+                break;
+        }
+        ;
+    };
+
+    if (loading) return (
+        <div className='Container'>
+            <AppHeader/>
+            <div className="main-container">
+                <h3>Places component</h3>
+                <p>Loading...</p>
+            </div>
+        </div>);
+    if (error) return (
+        <div className='Container'>
+            <AppHeader/>
+            <div className="main-container">
+                <h3>Places component</h3>
+                <p>Error: {error}</p>
+            </div>
+        </div>);
 
     return (
         <div className='Container'>
             <AppHeader/>
-            <div className="main-container">
-                <h1>Places component</h1>
+            <div className="tableContainer">
+                <h3>Places component</h3>
                 <table className="table">
                     <thead>
                     <tr>

@@ -3,7 +3,6 @@ package ua.com.sinenko.things.tool.service;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.tool.entity.Tool;
 import ua.com.sinenko.things.tool.entity.ToolType;
-import ua.com.sinenko.things.tool.entity.Vendor;
 import ua.com.sinenko.things.tool.repository.ToolsRepository;
 
 import java.util.List;
@@ -44,8 +43,8 @@ public class ToolService {
         return toolsRepository.findByName(name);
     }
 
-    public List<Tool> getToolsByVendor(Vendor vendor) {
-        return toolsRepository.findByVendor(vendor);
+    public List<Tool> getToolsByVendor(String vendorName) {
+        return toolsRepository.findToolsByVendor_Name(vendorName);
     }
 
     public List<Tool> getToolsByType(String type) {

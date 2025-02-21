@@ -1,22 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import AppHeader from "../app-header";
 import ThSelect from "../layout/select/th-select";
-import "./books.css";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {
-    fetchBooksFailure,
-    fetchBooksStart,
-    fetchBooksSuccess,
-    sortUsersByTitle,
-    sortUsersById,
-    sortUsersByIdReverse,
-    sortUsersByGenre
+    sortBooksByTitle,
+    sortBooksById,
+    sortBooksByIdReverse,
+    sortBooksByGenre
 } from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
-import axios from "axios";
-import {fetchBooks} from "./api";
+import {fetchBooks} from "./api/api";
 
 
 const sortMenu = [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {
@@ -39,25 +34,23 @@ export const Books = () => {
     const {books, loading, error} = useSelector(state => state.booksReducer);
 
     useEffect(() => {
-        console.log("useEffect called");
         fetchBooks(dispatch);
     }, [dispatch]);
 
     const onSortSelect = (event) => {
         console.log("onSortSeleced", event.target.value);
-        let booksTemp = books;
         switch (event.target.value) {
             case "id":
-                dispatch(sortUsersById());
+                dispatch(sortBooksById());
                 break;
             case "Title":
-                dispatch(sortUsersByTitle());
+                dispatch(sortBooksByTitle());
                 break;
             case "Reverse":
-                dispatch(sortUsersByIdReverse());
+                dispatch(sortBooksByIdReverse());
                 break;
             case "Genre":
-                dispatch(sortUsersByGenre());
+                dispatch(sortBooksByGenre());
                 break;
             default:
                 break;
@@ -99,10 +92,10 @@ export const Books = () => {
                     <table className="table">
                         <thead>
                         <tr>
-                            <th onClick={() => dispatch(sortUsersById())}>ID &#x25be;&#x25b4;</th>
-                            <th onClick={() => dispatch(sortUsersByTitle())}>Title &#x25be;&#x25b4;</th>
+                            <th onClick={() => dispatch(sortBooksById())}>ID &#x25be;&#x25b4;</th>
+                            <th onClick={() => dispatch(sortBooksByTitle())}>Title &#x25be;&#x25b4;</th>
                             <th>Author</th>
-                            <th onClick={() => dispatch(sortUsersByGenre())}>Genre &#x25be;&#x25b4;</th>
+                            <th onClick={() => dispatch(sortBooksByGenre())}>Genre &#x25be;&#x25b4;</th>
                             <th>Series</th>
                             <th>Publisher</th>
                             <th>Year</th>

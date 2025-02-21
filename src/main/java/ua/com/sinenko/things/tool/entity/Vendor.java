@@ -1,10 +1,7 @@
 package ua.com.sinenko.things.tool.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -29,9 +26,12 @@ public class Vendor {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name="name", unique = true)
     private String name;
 
     @OneToMany(mappedBy = "vendor")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Tool> tool;
 
 }

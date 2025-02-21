@@ -1,6 +1,5 @@
-import {fetchBooksFailure, fetchBooksStart, fetchBooksSuccess} from "./reducer/BooksSlice";
+import {fetchBooksFailure, fetchBooksStart, fetchBooksSuccess} from "../reducer/BooksSlice";
 import axios from "axios";
-import {useDispatch} from "react-redux";
 
 
 export const fetchBooks = async (dispatch) => {

@@ -1,3 +1,3 @@
-import Tools from './tools';
+import {Tools} from "./Tools";
 
 export default Tools;

@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -33,13 +33,13 @@ public class Tool {
     @Enumerated(EnumType.STRING)
     private ToolType type;
 
-    @JoinColumn(name = "vendor", nullable = true)
+    @JoinColumn(name = "vendor", nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     private Vendor vendor;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_purchasing")
-    private Date dateOfPurchasing;
+    private LocalDate dateOfPurchasing;
 
     @Column(name = "name")
     private String name;

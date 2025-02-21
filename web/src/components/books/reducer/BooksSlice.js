@@ -23,18 +23,18 @@ const booksSlice = createSlice({
             state.error = action.payload;
         },
 
-        sortUsersByTitle: (state) => {
+        sortBooksByTitle: (state) => {
             state.books.sort((book1, book2) => book1.title.localeCompare(book2.title));
         },
 
-        sortUsersById: (state) => {
+        sortBooksById: (state) => {
             state.books.sort((book1, book2) => book1.id - book2.id);
         },
 
-        sortUsersByIdReverse: (state) => {
+        sortBooksByIdReverse: (state) => {
             state.books.sort((book1, book2) => book2.id - book1.id);
         },
-        sortUsersByGenre: (state) => {
+        sortBooksByGenre: (state) => {
             state.books.sort((book1, book2) => book1.genre.name.localeCompare(book2.genre.name));
         },
     },
@@ -43,10 +43,10 @@ const booksSlice = createSlice({
 export const {fetchBooksStart,
     fetchBooksSuccess,
     fetchBooksFailure,
-    sortUsersByTitle,
-    sortUsersById,
-    sortUsersByIdReverse,
-    sortUsersByGenre} =
+    sortBooksByTitle,
+    sortBooksById,
+    sortBooksByIdReverse,
+    sortBooksByGenre} =
     booksSlice.actions;
 
 export default booksSlice.reducer;

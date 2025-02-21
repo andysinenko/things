@@ -13,7 +13,7 @@ public interface ToolsRepository extends JpaRepository<Tool, Long> {
 
     List<Tool> findByType(ToolType type);
 
-    List<Tool> findByVendor(Vendor vendor);
+    List<Tool> findToolsByVendor_Name(String vendorName);
 
     List<Tool> findByName(String name);
 

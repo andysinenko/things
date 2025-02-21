@@ -1,3 +1,4 @@
-import Places from './Places';
+import Places from "./Places";
+
 
 export default Places;
