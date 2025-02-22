@@ -11,6 +11,7 @@ import store from "./store/storeConfig";
 import Dashboard from "./components/dashboard";
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import SignIn from "./components/signin/SignIn";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +27,7 @@ root.render(
                     <Route path="/books" element={<Books/>}/>
                     <Route path="/tools" element={<Tools/>}/>
                     <Route path="/admin" element={<Admin/>}/>
+                    <Route path="/singnin" element={<SignIn/>}/>
                 </Routes>
             </Router>
 
