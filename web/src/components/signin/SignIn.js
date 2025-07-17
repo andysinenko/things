@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../auth/AuthProvider";
 import AppHeader from "../app-header";
+import './SignIn.css'; // Assuming you have a CSS file for styling
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const SignIn = () => {
         setError("");
         try {
             const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate", {
+                email,
                 username,
                 password
             });
@@ -48,7 +50,7 @@ const SignIn = () => {
                         <input className="form-control m-4" type="password" placeholder="password" name="password"
                                id="password"
                                onChange={(e) => setPassword(e.target.value)}/>
-                        <button className="m-4 btn btn-info" type="submit">SignIn</button>
+                        <button className="m-4 btn-signin" type="submit">Sign In</button>
                         {error && <div className="alert alert-danger">{error}</div>}
                     </div>
                 </form>

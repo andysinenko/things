@@ -1,0 +1,32 @@
+.li-header-my {
+    padding: 5px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.btn-signin {
+    border: rgba(0, 0, 0, 0.41) solid 1px;
+    font-size: inherit;
+    color: #000000;
+    background: rgb(255, 255, 255);
+    cursor: pointer;
+    padding: 10px 40px;
+    display: inline-block;
+    margin: 15px 30px;
+    /*text-transform: uppercase;*/
+    letter-spacing: 1px;
+    font-weight: 500;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    box-shadow: 2px 2px 2px rgba(56, 153, 216, 0.53);
+    border-radius: 4px;
+}
+
+.btn-signin:active {
+    background-color: rgba(56, 153, 216, 0.84);
+    box-shadow: 1px 1px 2px rgba(56, 153, 216, 0.53);
+    transform: translateY(3px);
+}

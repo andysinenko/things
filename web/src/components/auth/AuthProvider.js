@@ -3,7 +3,6 @@ import axios from "axios";
 
 export const AuthContext = createContext();
 
-// Register the interceptor globally, outside the component
 axios.interceptors.request.use(
     (config) => {
         const jwt = localStorage.getItem("jwtToken");

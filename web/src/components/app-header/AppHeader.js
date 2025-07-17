@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import './AppHeader.css';
 import { Link, useNavigate } from "react-router-dom";
 import logo from './Design.png';
 import { AuthContext } from '../auth/AuthProvider';
@@ -23,7 +24,11 @@ const AppHeader = () => {
         <header className="p-3 bg-dark text-white mymargin">
             <div className="Container">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                    <Link to="/"><img src={logo} alt="Logo" style={logoStyle}/></Link>
+                    {token ? (
+                        <Link to="/dashboard"><img src={logo} alt="Logo" style={logoStyle}/></Link>
+                    ) : (
+                        <Link to="/signin"><img src={logo} alt="Logo" style={logoStyle}/></Link>
+                    )}
                     <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                         <li className="li-header"><Link to="/dashboard" className="nav-link px-2 text-white">#</Link></li>
                         <li className="li-header"><Link to="/books" className="nav-link px-2 text-white">Books</Link></li>
@@ -32,14 +37,10 @@ const AppHeader = () => {
                         <li className="li-header"><Link to="/admin" className="nav-link px-2 text-white">Admin</Link></li>
                     </ul>
                     {token ? (
-                        <button className="btn btn-warning" onClick={handleLogout}>
-                            Logout
+                        <button className="btn-signout" onClick={handleLogout}>
+                            Sign Out
                         </button>
-                    ) : (
-                        <button className="btn btn-warning">
-                            <Link to="/signin" className="nav-link px-2 text-white">SignIn</Link>
-                        </button>
-                    )}
+                    ) : ("")}
                 </div>
             </div>
         </header>
