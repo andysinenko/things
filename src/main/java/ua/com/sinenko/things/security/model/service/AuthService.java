@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.common.exception.UserExistsException;
 import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
 import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
+import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.entity.Authority;
 import ua.com.sinenko.things.security.model.entity.JwtTokenEntity;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Data
+@AllArgsConstructor
 public class AuthService {
 
     private final JwtTokenService jwtTokenService;
@@ -39,18 +42,6 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     private final JwtTokenRepository jwtTokenRepository;
-
-    public AuthService(JwtTokenService jwtTokenService,
-                       ThingsUserRepository userRepository,
-                       AuthorityRepository authorityRepository,
-                       AuthenticationManager authenticationManager,
-                       JwtTokenRepository jwtTokenRepository) {
-        this.jwtTokenService = jwtTokenService;
-        this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenRepository = jwtTokenRepository;
-    }
 
     private void revokeAllUserTokens(ThingsUser user) {
         var validUserTokens = jwtTokenRepository.findAllValidTokenByUserAndRevokedFalseAndExpiredFalse(user);
@@ -87,7 +78,7 @@ public class AuthService {
 
         userName = Jwts.parser()
                 .build()
-                .parseClaimsJws(refreshToken)
+                .parseSignedClaims(refreshToken)
                 .getPayload()
                 .get("username").toString();
 
@@ -118,7 +109,7 @@ public class AuthService {
 
         List<String> authList = userDto.getAuthorities()
                 .stream()
-                .map(e -> e.getName())
+                .map(AuthorityDto::getName)
                 .collect(Collectors.toList());
         List<Authority> authorities = authorityRepository.findAllByNameIn(authList);
 

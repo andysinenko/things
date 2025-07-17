@@ -6,7 +6,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +20,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import static ua.com.sinenko.things.security.filter.Constants.JWT_HEADER;
+import static ua.com.sinenko.things.security.filter.Constants.JWT_ISSUER;
+
 @Component
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
@@ -29,17 +31,21 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (null != authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            /*Environment env = getEnvironment();
+            String keyEnv = env.getProperty(JWT_KEY);*/
+
             SecretKey key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
+
             String jwt = Jwts.builder()
-                    .issuer("sinenko.com.ua")
+                    .issuer(JWT_ISSUER)
                     .subject("JWT Token")
                     .claim("username", authentication.getName())
                     .claim("authorities", populateAuthorities(authentication.getAuthorities()))
                     .issuedAt(new Date())
                     .expiration(new Date((new Date()).getTime() + 30000000))
                     .signWith(key).compact();
-            response.setHeader(Constants.JWT_HEADER, jwt);
+            response.setHeader(JWT_HEADER, jwt);
         }
 
         filterChain.doFilter(request, response);

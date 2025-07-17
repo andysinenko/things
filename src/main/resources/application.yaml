@@ -1,11 +1,11 @@
 debug: false
 spring:
   profiles:
-    active: dev
+    active: stage
   docker:
     compose:
       profiles:
-        active: dev
+        active: stage
   security:
     user:
       name: user
@@ -33,7 +33,7 @@ spring:
 things:
   jwt:
     header: Authorization
-    secret-key: secretkeyforjwttokenyforjwttoken
+    secret-key: your-very-long-random-secret-key-32bytes!
     expiration: 86400000 # a day
     refresh-token:
       expiration: 604800000 # 7 days

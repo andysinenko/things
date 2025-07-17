@@ -12,6 +12,7 @@ import Dashboard from "./components/dashboard";
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import SignIn from "./components/signin/SignIn";
+import {AuthProvider} from "./components/auth/AuthProvider";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,6 +20,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <React.StrictMode>
+            <AuthProvider>
             <Router>
                 <Routes>
                     <Route path="/" element={<App/>} exect={true}/>
@@ -27,10 +29,10 @@ root.render(
                     <Route path="/books" element={<Books/>}/>
                     <Route path="/tools" element={<Tools/>}/>
                     <Route path="/admin" element={<Admin/>}/>
-                    <Route path="/singnin" element={<SignIn/>}/>
+                    <Route path="/signin" element={<SignIn/>}/>
                 </Routes>
             </Router>
-
+            </AuthProvider>
         </React.StrictMode>
     </Provider>
 );

@@ -1,22 +1,43 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../auth/AuthProvider";
 import AppHeader from "../app-header";
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const { setToken } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-
-    const handleSingIn = (e) => {
+    const handleSignIn = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', { username, email, password });
-    }
+        setError("");
+        try {
+            const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate", {
+                username,
+                password
+            });
+            const token = response.data.accessToken || response.headers['authorization'] || response.headers['Authorization'];
+            if (token) {
+                localStorage.setItem("jwtToken", token);
+                setToken(token);
+                navigate("/dashboard");
+            } else {
+                setError("No token received");
+            }
+        } catch (err) {
+            setError("Authentication failed: " + (err.response?.data?.message || err.message));
+        }
+    };
 
     return (
         <div className='Container'>
             <AppHeader/>
             <div className="main-container">
-                <form onSubmit={handleSingIn}>
+                <form onSubmit={handleSignIn}>
                     <div className="text-center w-25 m-auto form-group">
                         <h3 className="m-4">Sign In</h3>
                         <input className="form-control m-4" type="email" name="email" id="email" placeholder="email"
@@ -27,15 +48,13 @@ const SignIn = () => {
                         <input className="form-control m-4" type="password" placeholder="password" name="password"
                                id="password"
                                onChange={(e) => setPassword(e.target.value)}/>
-
                         <button className="m-4 btn btn-info" type="submit">SignIn</button>
+                        {error && <div className="alert alert-danger">{error}</div>}
                     </div>
                 </form>
             </div>
         </div>
-
     );
 };
 
 export default SignIn;
-

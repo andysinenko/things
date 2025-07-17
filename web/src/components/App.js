@@ -1,12 +1,14 @@
 import './App.css';
-import AppHeader from './app-header';
-
+import { AuthProvider } from './auth/AuthProvider';
+import SignIn from './signin/SignIn';
 
 function App() {
     return (
         <div className="Container">
-            <AppHeader/>
-            <h3>App</h3>
+            <AuthProvider>
+                <SignIn />
+                <h3>App</h3>
+            </AuthProvider>
         </div>
     );
 }

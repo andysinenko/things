@@ -1,13 +1,13 @@
 package ua.com.sinenko.things.security.model.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
 
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +24,6 @@ class JwtTokenServiceTest {
     void generateToken() {
         ThingsUser thingsUser = new ThingsUser();
         thingsUser.setUsername("test");
-        Collections.synchronizedCollection(new ArrayList<>());
         String token = jwtTokenService.generateToken(thingsUser);
         String[] parts = token.split("\\.");
 
@@ -70,6 +69,20 @@ class JwtTokenServiceTest {
         String token = jwtTokenService.generateToken(thingsUser);
 
         assertTrue(jwtTokenService.isTokenValid("test", token));
+
+    }
+
+    @Test
+    @DisplayName("Claims validation")
+    void testTokenClaims() {
+        ThingsUser thingsUser = new ThingsUser();
+        thingsUser.setUsername("test");
+
+        String token = jwtTokenService.generateToken(thingsUser);
+        Jws<Claims> claims = jwtTokenService.getCaims(token);
+        claims.getPayload().entrySet().forEach(e -> System.out.println(e.getKey() + " : " + e.getValue()));
+        assertEquals("test", claims.getPayload().getSubject());
+        assertEquals("sinenko.homes", claims.getPayload().getIssuer());
 
     }
 }

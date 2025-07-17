@@ -31,4 +31,13 @@ public class AuthorMapper {
                 .map(e -> mapEntityToDto(e))
                 .collect(Collectors.toSet());
     }
+
+
+    public static Author mapRequestToEntity(AuthorRequest authorRequest) {
+        return Author.builder()
+                .name(authorRequest.name())
+                .note(authorRequest.note())
+                .build();
+    }
+
 }

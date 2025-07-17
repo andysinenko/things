@@ -15,6 +15,9 @@ export const fetchBooks = async (dispatch) => {
         }
     } catch (error) {
         console.log("Error on fetching books, catch section: ", error.message);
+        if (error.config) {
+            console.log("Request headers on error:", error.config.headers); // Debug: log headers on error
+        }
         dispatch(fetchBooksFailure(error.message));
     }
 };

@@ -6,8 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +16,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ua.com.sinenko.things.security.model.repository.JwtTokenRepository;
-import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
-import ua.com.sinenko.things.security.model.service.AuthService;
 import ua.com.sinenko.things.security.model.service.JwtTokenService;
 
 import java.io.IOException;
@@ -39,8 +37,8 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String jwt = request.getHeader(Constants.JWT_HEADER);
-        if (request.getServletPath().contains("/api/v1/auth") || request.getServletPath().contains("/api/v1/places")) {
+
+        if (request.getServletPath().contains("/api/v1/auth") ) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,29 +49,38 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             return;
         }
 
+
         var key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
 
-        jwt = authHeader.substring(7);
+        String jwt = request.getHeader("Authorization");
+        if (jwt != null && jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
+        }
+
+        logger.info("JWT_KEY: " + Constants.JWT_KEY);
+        logger.info("JWT: " + jwt);
+
         var claims = Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(jwt)
                 .getPayload();
-        var username = (String)claims.get("sub");
+        var username = String.valueOf(claims.get("sub"));
+        var username2 = String.valueOf(claims.get("username"));
+        var authorities = String.valueOf(claims.get("authorities"));
+
+        logger.info("claims.get(\"sub\"): " + username);
+        logger.info("claims.get(\"username2\"): " + username2);
+        logger.info("claims.get(\"authorities\"): " + authorities);
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             var tokenRecord = jwtTokenRepository.findByToken(jwt);
             var isTokenValid = jwtTokenService.isTokenValid(username, tokenRecord.token);
 
             if (isTokenValid) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null,
-                        AuthorityUtils.commaSeparatedStringToAuthorityList(userDetails.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.joining(","))));
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","))));
                 usernamePasswordAuthenticationToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );

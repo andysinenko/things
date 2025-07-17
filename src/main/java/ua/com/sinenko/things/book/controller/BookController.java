@@ -1,4 +1,4 @@
-package ua.com.sinenko.things.book.web;
+package ua.com.sinenko.things.book.controller;
 
 import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class BookController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List> getAllBooks() {
+    public ResponseEntity<List<BookDto>> getAllBooks() {
         var booksEntities = bookService.getAllBooks();
         var booksDto = booksEntities.stream().map(BookMapper::mapEntityToDto).toList();
 

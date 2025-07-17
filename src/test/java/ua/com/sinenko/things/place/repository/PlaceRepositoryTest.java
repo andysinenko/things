@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ua.com.sinenko.things.place.entity.Place;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @DisplayName("Place Repository Test")
@@ -26,7 +26,7 @@ class PlaceRepositoryTest {
     void beforeEach() {
         Place place = Place.builder().name(placeName).description(placeDescription).build();
 
-        var placeStored = entityManager.persist(place);
+        entityManager.persist(place);
         entityManager.flush();
         entityManager.clear();
     }
@@ -35,17 +35,17 @@ class PlaceRepositoryTest {
     void findByName() {
         var placesStored = placeRepository.findByName(placeName);
 
-        assertEquals(placesStored.size(), 1);
-        assertEquals(placesStored.get(0).getName(), placeName);
-        assertEquals(placesStored.get(0).getDescription(), placeDescription);
+        assertEquals(1, placesStored.size());
+        assertEquals(placesStored.getFirst().getName(), placeName);
+        assertEquals(placesStored.getFirst().getDescription(), placeDescription);
     }
 
     @Test
     void findByDescription() {
         var placesStored = placeRepository.findByDescription(placeDescription);
 
-        assertEquals(placesStored.size(), 1);
-        assertEquals(placesStored.get(0).getName(), placeName);
-        assertEquals(placesStored.get(0).getDescription(), placeDescription);
+        assertEquals(1, placesStored.size());
+        assertEquals(placesStored.getFirst().getName(), placeName);
+        assertEquals(placesStored.getFirst().getDescription(), placeDescription);
     }
 }

@@ -16,7 +16,6 @@ import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 import ua.com.sinenko.things.security.model.service.AuthService;
-import ua.com.sinenko.things.security.model.service.JwtTokenService;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -32,13 +31,7 @@ public class LoginController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtTokenService jwtTokenService;
-
-    @Autowired
     private AuthService authService;
-
-
-
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody UserDto request) {
@@ -54,12 +47,11 @@ public class LoginController {
                 .username(thingsUser.getUsername())
                 .authorities(thingsUser.getAuthorities().stream()
                         .map(e -> {
-                                    AuthorityDto dto = AuthorityDto
-                                            .builder()
-                                            .name(e.getName())
-                                            .id(e.getId())
-                                            .build();
-                                    return dto;
+                            return AuthorityDto
+                                    .builder()
+                                    .name(e.getName())
+                                    .id(e.getId())
+                                    .build();
                                 })
                         .collect(Collectors.toList()))
                 .build()).orElseThrow();
