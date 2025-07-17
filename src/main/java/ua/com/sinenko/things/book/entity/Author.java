@@ -36,7 +36,7 @@ public class Author {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "books_authors",
             schema = "things",
