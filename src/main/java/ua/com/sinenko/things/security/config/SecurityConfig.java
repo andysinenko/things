@@ -69,7 +69,7 @@ public class SecurityConfig {
                     return config;
             }))
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register")
+                        .ignoringRequestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register", "/api/v1/auth/user")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests)->requests

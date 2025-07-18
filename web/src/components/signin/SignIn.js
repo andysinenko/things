@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../auth/AuthProvider";
 import AppHeader from "../app-header";
-import './SignIn.css'; // Assuming you have a CSS file for styling
+import './SignIn.css';
+import {useDispatch} from "react-redux";
+import {fetchUser} from "./api/api"; // Assuming you have a CSS file for styling
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
@@ -12,6 +14,7 @@ const SignIn = () => {
     const [error, setError] = useState("");
     const { setToken } = useContext(AuthContext);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSignIn = async (e) => {
         e.preventDefault();
@@ -27,6 +30,7 @@ const SignIn = () => {
                 localStorage.setItem("jwtToken", token);
                 setToken(token);
                 navigate("/dashboard");
+                fetchUser(dispatch);
             } else {
                 setError("No token received");
             }

@@ -41,6 +41,6 @@ logging:
   level:
     ua.com.sinenko.things: TRACE
     root: WARN
-    org.springframework: DEBUG
+    org.springframework.security: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
