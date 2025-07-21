@@ -1,5 +1,4 @@
 import './Tools.css'
-import AppHeader from "../app-header";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {fetchTools} from "./api/api";
@@ -14,7 +13,6 @@ export const Tools = () => {
 
     if (loading) return (
         <div className='Container'>
-            <AppHeader/>
             <div className="main-container">
                 <h3>Tools component</h3>
                 <p>Loading...</p>
@@ -22,7 +20,7 @@ export const Tools = () => {
         </div>);
     if (error) return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
                 <h3>Tools component</h3>
                 <p>Error: {error}</p>
@@ -31,7 +29,7 @@ export const Tools = () => {
 
     return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
                 <h3>Tools component</h3>
                 <table className="table">

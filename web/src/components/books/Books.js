@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import AppHeader from "../app-header";
+
 import ThSelect from "../layout/select/th-select";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ import {
 } from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchBooks} from "./api/api";
+import AddBookModal from "./modal/AddBookModal";
 
 
 const sortMenu = [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {
@@ -32,6 +33,25 @@ export const Books = () => {
     const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
     const dispatch = useDispatch();
     const {books, loading, error} = useSelector(state => state.booksReducer);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState(null);
+    const [formData, setFormData] = useState({ name: "", email: "" });
+    const [selectedBook, setSelectedBook] = useState(null);
+
+    const openModal = (type, book = null) => {
+        console.log("Opening modal with type:", type);
+        setModalType(type);
+        setSelectedBook(book);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalType(null);
+        setFormData({ name: "", email: "" });
+        setSelectedBook(null);
+    };
 
     useEffect(() => {
         fetchBooks(dispatch);
@@ -58,13 +78,45 @@ export const Books = () => {
         ;
     };
 
-    const handleDelete = (row) => {
-        console.log("delete: ", row.id);
-    }
+    const handleAddBook = () => {
+        console.log("Opening Add Book Modal");
+        openModal("add");
+    };
+
+    const handleDelBook = (book) => {
+        console.log("Opening Delete Book Modal for:", book.id);
+        openModal("delete", book);
+    };
+
+    const handleUploadCSV = () => {
+        console.log("Opening CSV Upload Modal");
+        openModal("csv");
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (modalType === "add") {
+                console.log("Adding book:", formData);
+                // await axios.post("https://your-api-endpoint.com/books", formData);
+            } else if (modalType === "delete") {
+                console.log("Deleting book:", selectedBook.id);
+                // await axios.delete(`https://your-api-endpoint.com/books/${selectedBook.id}`);
+            } else if (modalType === "csv") {
+                console.log("Uploading CSV:", formData.csv);
+                // const formDataToSend = new FormData();
+                // formDataToSend.append("file", formData.csv);
+                // await axios.post("https://your-api-endpoint.com/books/csv", formDataToSend);
+            }
+            closeModal();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
     if (loading) return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
                 <h3>Books component</h3>
                 <p>Loading...</p>
@@ -72,7 +124,7 @@ export const Books = () => {
         </div>);
     if (error) return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
                 <h3>Books component</h3>
                 <p>Error: {error}</p>
@@ -81,12 +133,30 @@ export const Books = () => {
 
     return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
-                <h3>Books component</h3>
-                <div className="selector flex-row">
-                    <ThSelect onChange={onSortSelect} defaultChecked={sortType} values={sortMenu}
-                              label="Sort by" label_size={1} input_size={2} required={false}/>
+                <div className="d-flex justify-content-center align-items-center">
+                    <h4>My books</h4>
+                </div>
+                <div className="d-flex flex-row align-items-center gap-3">
+                    <ThSelect
+                        onChange={onSortSelect}
+                        defaultChecked={sortType}
+                        values={sortMenu}
+                        label="Sort by"
+                        label_size={1}
+                        input_size={1}
+                        required={false}
+                    />
+                    <button className="thbtn-add" onClick={handleAddBook}>
+                        Add book
+                    </button>
+                    <button className="thbtn-add" onClick={handleUploadCSV}>
+                        CSV upload....
+                    </button>
+                    <button className="thbtn-del" onClick={handleDelBook}>
+                        Delete book
+                    </button>
                 </div>
                 <div className="tableContainer">
                     <table className="table">
@@ -123,7 +193,7 @@ export const Books = () => {
                                 <td>{book.place}</td>
                                 <td>{book.description}</td>
                                 <td>
-                                    <button onClick={() => handleDelete(book)}
+                                    <button onClick={() => handleDelBook(book)}
                                             style={{cursor: 'pointer', border: 'none', background: 'none'}}>
                                         <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
                                     </button>
@@ -140,6 +210,15 @@ export const Books = () => {
                     </table>
                 </div>
             </div>
+            <AddBookModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onSubmit={handleSubmit}
+                formData={formData}
+                setFormData={setFormData}
+                modalType={modalType}
+                selectedBook={selectedBook}
+            />
         </div>
     );
 

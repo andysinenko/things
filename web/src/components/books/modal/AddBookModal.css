@@ -1,0 +1,49 @@
+/* Modal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 700px;
+    max-width: 90%;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-content input {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.modal-content button {
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.modal-input {
+    font-size: 10px !important;
+    margin: 0em 0em !important;
+    width: 50% !important;
+    padding: 0px;
+}

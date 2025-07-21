@@ -23,13 +23,14 @@ root.render(
             <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={<App/>} exect={true}/>
-                    <Route path="/dashboard" element={<Dashboard/>}/>
-                    <Route path="/places" element={<Places/>}/>
-                    <Route path="/books" element={<Books/>}/>
-                    <Route path="/tools" element={<Tools/>}/>
-                    <Route path="/admin" element={<Admin/>}/>
-                    <Route path="/signin" element={<SignIn/>}/>
+                    <Route path="/" element={<App/>} exect={true}>
+                        <Route path="/dashboard" element={<Dashboard/>}/>
+                        <Route path="/places" element={<Places/>}/>
+                        <Route path="/books" element={<Books/>}/>
+                        <Route path="/tools" element={<Tools/>}/>
+                        <Route path="/admin" element={<Admin/>}/>
+                    </Route>
+                    <Route path="/signin" element={<SignIn />} />
                 </Routes>
             </Router>
             </AuthProvider>

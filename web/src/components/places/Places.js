@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import AppHeader from "../app-header";
+
 import {fetchAllPlaces} from "./api/api";
 import {useDispatch, useSelector} from "react-redux";
 import {sortPlacesByName} from "./reducer/PlaceSlice";
@@ -32,7 +32,7 @@ const Places = () => {
 
     if (loading) return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
                 <h3>Places component</h3>
                 <p>Loading...</p>
@@ -40,7 +40,7 @@ const Places = () => {
         </div>);
     if (error) return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
                 <h3>Places component</h3>
                 <p>Error: {error}</p>
@@ -49,7 +49,7 @@ const Places = () => {
 
     return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="tableContainer">
                 <h3>Places component</h3>
                 <table className="table">

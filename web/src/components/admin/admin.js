@@ -5,7 +5,6 @@ import {Tab, Tabs} from "react-bootstrap";
 import UserChange from "./user-change/user-change";
 import UserRights from "./user-rights/user-rights";
 import UserDelete from "./user-delete/user-delete";
-import AppHeader from "../app-header";
 
 export default class Admin extends React.Component {
 
@@ -14,7 +13,7 @@ export default class Admin extends React.Component {
 
         return (
             <div className="Container">
-                <AppHeader/>
+               {/* <AppHeader/>*/}
                 <div className="main-container">
                 <Tabs defaultActiveKey="home" id="fill-tab-example" className="mb-4" fill>
                     <Tab eventKey="home" title="Add user">

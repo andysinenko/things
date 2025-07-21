@@ -1,14 +1,26 @@
 import './App.css';
-import { AuthProvider } from './auth/AuthProvider';
-import SignIn from './signin/SignIn';
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {Outlet} from "react-router-dom";
+import {fetchUser} from "./signin/api/api";
+import AppHeader from "./app-header";
 
 function App() {
+    console.log('App render started');
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        console.log('useEffect called on initial mount or refresh');
+        const token = localStorage.getItem("jwtToken");
+        if (token) {
+            fetchUser(dispatch);
+        }
+    }, [dispatch]);
+
     return (
         <div className="Container">
-            <AuthProvider>
-                <SignIn />
-                <h3>App</h3>
-            </AuthProvider>
+            <AppHeader />
+            <Outlet />
         </div>
     );
 }

@@ -15,7 +15,7 @@ const userSlice = createSlice({
 
         fetchUserSuccess(state, action) {
             state.loading = false;
-            state.places = action.payload;
+            state.user = action.payload;
         },
 
         fetchUserFailure(state, action) {

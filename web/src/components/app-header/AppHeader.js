@@ -3,10 +3,12 @@ import './AppHeader.css';
 import { Link, useNavigate } from "react-router-dom";
 import logo from './Design.png';
 import { AuthContext } from '../auth/AuthProvider';
+import {useSelector} from "react-redux";
 
 const AppHeader = () => {
     const { token, setToken } = useContext(AuthContext); // Use 'token' here
     const navigate = useNavigate();
+    const {user, loading} = useSelector(state => state.userReducer);
 
     const handleLogout = () => {
         localStorage.removeItem("jwtToken");
@@ -36,11 +38,17 @@ const AppHeader = () => {
                         <li className="li-header"><Link to="/places" className="nav-link px-2 text-white">Places</Link></li>
                         <li className="li-header"><Link to="/admin" className="nav-link px-2 text-white">Admin</Link></li>
                     </ul>
+
+                    <button className="btn-username px-2 text-white">
+                        {loading ? "Loading..." : user.username || "Guest"}
+                    </button>
                     {token ? (
-                        <button className="btn-signout" onClick={handleLogout}>
+                        <button className="btn-signout" onClick={handleLogout} style={{visibility: 'visible'}}>
                             Sign Out
                         </button>
-                    ) : ("")}
+                    ) : (
+                        <button className="btn-signout" onClick={handleLogout} style={{visibility: 'hidden'}}>Sign Out</button>
+                    )}
                 </div>
             </div>
         </header>

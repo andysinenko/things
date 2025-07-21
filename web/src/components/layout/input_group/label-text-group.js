@@ -27,6 +27,10 @@ export default class LabelTextGroup extends React.Component {
                 });
             }
         }
+
+        if (this.props.outerOnChange) {
+            this.props.outerOnChange(event);
+        }
     };
 
     render() {
@@ -41,7 +45,8 @@ export default class LabelTextGroup extends React.Component {
             value,
             type,
             label_size,
-            input_size
+            input_size,
+            outerOnChange
         } = this.props;
 
         let newStyle = {

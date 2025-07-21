@@ -2,7 +2,7 @@ import React, {useState, useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../auth/AuthProvider";
-import AppHeader from "../app-header";
+
 import './SignIn.css';
 import {useDispatch} from "react-redux";
 import {fetchUser} from "./api/api"; // Assuming you have a CSS file for styling
@@ -41,7 +41,7 @@ const SignIn = () => {
 
     return (
         <div className='Container'>
-            <AppHeader/>
+
             <div className="main-container">
                 <form onSubmit={handleSignIn}>
                     <div className="text-center w-25 m-auto form-group">
