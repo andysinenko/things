@@ -2,6 +2,7 @@ package ua.com.sinenko.things.book.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ua.com.sinenko.things.place.entity.Place;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -15,7 +16,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Builder
 @Entity
-@Table(name = "books", schema="things")
+@Table(name = "books", schema = "things")
 public class Book {
     @Id
     @SequenceGenerator(
@@ -28,9 +29,6 @@ public class Book {
             generator = "books_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
-
-    @Column(name = "publisher")
-    private String publisher;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "publication_year")
@@ -45,6 +43,7 @@ public class Book {
     @Column(name = "description")
     private String description;
 
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
@@ -55,12 +54,21 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "series_id")
     private Series series;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "place_id")
+    private Place place;
 }

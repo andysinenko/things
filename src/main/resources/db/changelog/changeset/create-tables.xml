@@ -79,6 +79,7 @@
             </column>
             <column name="name" type="varchar2(512)"/>
             <column name="parent_id" type="bigint"/>
+            <column name="level" type="bigint"/> <!-- level of place in hierarchy -->
             <column name="description" type="varchar2(512)"/>
         </createTable>
     </changeSet>
@@ -130,6 +131,9 @@
                 <constraints nullable="true" foreignKeyName="fk_series_type"/>
             </column>
             <column name="description" type="varchar2(512)"/>
+            <column name="place_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_books_places_type"/>
+            </column>
         </createTable>
     </changeSet>
 

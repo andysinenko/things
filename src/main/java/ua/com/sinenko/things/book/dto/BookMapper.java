@@ -12,13 +12,9 @@ public class BookMapper {
                 .builder()
                 .id(dto.id())
                 .title(dto.title())
-                .genre(GenreMapper.mapDtoToEntity(dto.genre()))
-                .series(SeriesMapper.mapDtoToEntity(dto.series()))
                 .year(LocalDate.parse(dto.year()+ "-01-01"))
                 .description(dto.description())
                 .volumeNumber(dto.volumeNumber())
-                .authors(AuthorMapper.mapDtosToEntities(dto.authors()))
-                .publisher(dto.publisher())
                 .build();
     }
 
@@ -27,13 +23,9 @@ public class BookMapper {
                 .builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
-                .genre(GenreMapper.mapEntityToDto(entity.getGenre()))
-                .series(SeriesMapper.mapEntityToDto(entity.getSeries()))
                 .year(entity.getYear().toString())
                 .description(entity.getDescription())
                 .volumeNumber(entity.getVolumeNumber())
-                .authors(AuthorMapper.mapEntitiesToDtos(entity.getAuthors()))
-                .publisher(entity.getPublisher())
                 .build();
     }
 
@@ -48,5 +40,20 @@ public class BookMapper {
         return entities.stream()
                 .map(entity -> mapEntityToDto(entity))
                 .collect(Collectors.toList());
+    }
+
+
+    public static BookResponse mapEntityToResponse(Book entity) {
+        return BookResponse
+                .builder()
+                .id(entity.getId())
+                .title(entity.getTitle())
+                .year(entity.getYear().toString())
+                .description(entity.getDescription())
+                .volumeNumber(entity.getVolumeNumber())
+                .genre(GenreMapper.mapEntityToDto(entity.getGenre()))
+                .authors(entity.getAuthors().stream().map(e -> AuthorMapper.mapEntityToDto(e)).collect(Collectors.toSet()))
+                .series(SeriesMapper.mapEntityToDto(entity.getSeries()))
+                .build();
     }
 }

@@ -25,12 +25,12 @@ class BookMapperTest {
         var bookDto = BookDto.builder()
                 .id(1L)
                 .title("Book Name")
-                .genre(new GenreDto(1L, "Fiction"))
-                .series(new SeriesDto(1L, "Series Name"))
+                .genre(1L)
+                .series(1L)
                 .year("2021")
                 .description("Description")
                 .volumeNumber("1")
-                .authors(Set.of(AuthorDto.builder().id(1L).name("Author Name").build()))
+                .author(1L)
                 .build();
 
         //when
@@ -40,12 +40,12 @@ class BookMapperTest {
         assertNotNull(book);
         assertEquals(bookDto.id(), book.getId());
         assertEquals(bookDto.title(), book.getTitle());
-        assertEquals(bookDto.genre().name(), book.getGenre().getName());
-        assertEquals(bookDto.series().name(), book.getSeries().getName());
+        assertEquals(bookDto.genre(), book.getGenre().getId());
+        assertEquals(bookDto.series(), book.getSeries().getId());
         assertEquals(bookDto.year() + "-01-01", book.getYear().toString());
         assertEquals(bookDto.description(), book.getDescription());
         assertEquals(bookDto.volumeNumber(), book.getVolumeNumber());
-        assertEquals(bookDto.authors().size(), book.getAuthors().size());
+        assertEquals(1L, bookDto.author());
     }
 
     @Test
@@ -69,12 +69,12 @@ class BookMapperTest {
         assertNotNull(bookDto);
         assertEquals(book.getId(), bookDto.id());
         assertEquals(book.getTitle(), bookDto.title());
-        assertEquals(book.getGenre().getName(), bookDto.genre().name());
-        assertEquals(book.getSeries().getName(), bookDto.series().name());
+        assertEquals(book.getGenre().getId(), bookDto.genre());
+        assertEquals(book.getSeries().getId(), bookDto.id());
         assertEquals(book.getYear(), LocalDate.parse(bookDto.year()));
         assertEquals(book.getDescription(), bookDto.description());
         assertEquals(book.getVolumeNumber(), bookDto.volumeNumber());
-        assertEquals(book.getAuthors().size(), bookDto.authors().size());
+        assertEquals(book.getAuthors().size(), 1);
     }
 
 }

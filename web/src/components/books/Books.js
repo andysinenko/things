@@ -11,7 +11,7 @@ import {
     sortBooksByGenre
 } from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchBooks} from "./api/api";
+import {addNewBook, deleteBook, fetchAuthors, fetchBooks, fetchGenres, fetchSeries} from "./api/api";
 import AddBookModal from "./modal/AddBookModal";
 
 
@@ -27,16 +27,25 @@ const sortMenu = [{id: 1, value: 'id', innerText: 'id', key: 'id'}, {
     key: 'id'
 }, {id: 4, value: 'genre', innerText: 'Genre', key: 'id'}];
 
-const INITIAL_SORT_MENU_TYPE = {sortType: 'id'};
+const INITIAL_SORT_MENU_TYPE = 'id';
 
 export const Books = () => {
     const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
     const dispatch = useDispatch();
-    const {books, loading, error} = useSelector(state => state.booksReducer);
+
+    //const {books, loading, error} = useSelector(state => state.booksReducer);
+    const books = useSelector(state => state.booksReducer.books);
+    const loading = useSelector(state => state.booksReducer.loading);
+    const error = useSelector(state => state.booksReducer.error);
+
+
+    const {series, seriesLoading, seriesError} = useSelector(state => state.seriesReducer);
+    const {genres, genresLoading, genresError} = useSelector(state => state.genresReducer);
+    const {authors, authorsLoading, authorsError} = useSelector(state => state.authorsReducer);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
-    const [formData, setFormData] = useState({ name: "", email: "" });
+    const [formData, setFormData] = useState({ id: "", title: "", genre: "", author: "",  series: "", year: "", description: "" });
     const [selectedBook, setSelectedBook] = useState(null);
 
     const openModal = (type, book = null) => {
@@ -49,33 +58,36 @@ export const Books = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
-        setFormData({ name: "", email: "" });
+        setFormData({ id: "", title: "", genre: "", author: "", series: "", year: "", description: "" });
         setSelectedBook(null);
     };
 
     useEffect(() => {
-        fetchBooks(dispatch);
+        console.log("!!!!Books component rendered");
+        dispatch(fetchSeries());
+        dispatch(fetchGenres());
+        dispatch(fetchAuthors());
+        dispatch(fetchBooks());
     }, [dispatch]);
 
     const onSortSelect = (event) => {
-        console.log("onSortSeleced", event.target.value);
+        setType(event.target.value);
         switch (event.target.value) {
             case "id":
                 dispatch(sortBooksById());
                 break;
-            case "Title":
+            case "title": // поправил на маленькие буквы для соответствия sortMenu
                 dispatch(sortBooksByTitle());
                 break;
-            case "Reverse":
+            case "reverse":
                 dispatch(sortBooksByIdReverse());
                 break;
-            case "Genre":
+            case "genre":
                 dispatch(sortBooksByGenre());
                 break;
             default:
                 break;
         }
-        ;
     };
 
     const handleAddBook = () => {
@@ -98,15 +110,24 @@ export const Books = () => {
         try {
             if (modalType === "add") {
                 console.log("Adding book:", formData);
-                // await axios.post("https://your-api-endpoint.com/books", formData);
+                console.log("author:", authors[formData.author]);
+                console.log("series:", series[formData.series]);
+                console.log("genres:", genres[formData.genres]);
+                const newBookObject =
+                    { id: "",
+                        title: formData.title,
+                        genre: formData.genre,
+                        author: formData.author,
+                        series: formData.series,
+                        year: "2000",
+                        description: "mnbjkbnkjbn"
+                    };
+                dispatch(addNewBook(newBookObject));
             } else if (modalType === "delete") {
                 console.log("Deleting book:", selectedBook.id);
-                // await axios.delete(`https://your-api-endpoint.com/books/${selectedBook.id}`);
+                dispatch(deleteBook(selectedBook.id));
             } else if (modalType === "csv") {
                 console.log("Uploading CSV:", formData.csv);
-                // const formDataToSend = new FormData();
-                // formDataToSend.append("file", formData.csv);
-                // await axios.post("https://your-api-endpoint.com/books/csv", formDataToSend);
             }
             closeModal();
         } catch (error) {
@@ -138,7 +159,7 @@ export const Books = () => {
                 <div className="d-flex justify-content-center align-items-center">
                     <h4>My books</h4>
                 </div>
-                <div className="d-flex flex-row align-items-center gap-3">
+                <div className="d-flex flex-row align-items-center gap-3 mb-3">
                     <ThSelect
                         onChange={onSortSelect}
                         defaultChecked={sortType}
@@ -167,7 +188,6 @@ export const Books = () => {
                             <th>Author</th>
                             <th onClick={() => dispatch(sortBooksByGenre())}>Genre &#x25be;&#x25b4;</th>
                             <th>Series</th>
-                            <th>Publisher</th>
                             <th>Year</th>
                             <th>Place</th>
                             <th>Description</th>
@@ -181,14 +201,13 @@ export const Books = () => {
                                 <td>{book.title}</td>
                                 <td className="authors">
                                     {book.authors ?
-                                        [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => ( // Sort here!
+                                        [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => (
                                             <p key={author.id}>{author.name}</p>
                                         ))
                                         : ''}
                                 </td>
-                                <td>{book.genre.name}</td>
-                                <td>{book.series.name}</td>
-                                <td>{book.publisher}</td>
+                                <td>{book.genre.id}</td>
+                                <td>{book.series.id}</td>
                                 <td>{book.year}</td>
                                 <td>{book.place}</td>
                                 <td>{book.description}</td>
@@ -218,6 +237,10 @@ export const Books = () => {
                 setFormData={setFormData}
                 modalType={modalType}
                 selectedBook={selectedBook}
+                header="Add New Book"
+                genres = {genres}
+                series = {series}
+                authors = {authors}
             />
         </div>
     );

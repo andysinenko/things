@@ -1,0 +1,20 @@
+package ua.com.sinenko.things.book.service;
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import ua.com.sinenko.things.book.entity.Genre;
+import ua.com.sinenko.things.book.entity.Series;
+import ua.com.sinenko.things.book.repository.GenreRepository;
+import ua.com.sinenko.things.book.repository.SeriesRepository;
+
+import java.util.List;
+
+@AllArgsConstructor
+@Service
+public class GenreService {
+    private GenreRepository genreRepository;
+
+    public List<Genre> getAllSeries() {
+        return genreRepository.findAll();
+    }
+}

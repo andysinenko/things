@@ -1,12 +1,12 @@
 package ua.com.sinenko.things.place.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import ua.com.sinenko.things.book.entity.Book;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -41,4 +41,12 @@ public class Place {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "level")
+    private Long level;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private Set<Book> books = new HashSet<>();
 }

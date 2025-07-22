@@ -8,11 +8,10 @@ import java.util.Set;
 public record BookDto(
     Long id,
     String title,
-    Set<AuthorDto> authors,
-    GenreDto genre,
-    SeriesDto series,
-    String publisher,
+    Long author,
+    Long genre,
+    Long series,
     String year,
-    String placeId,
+    Long placeId,
     String volumeNumber,
     String description) {}

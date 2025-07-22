@@ -46,7 +46,6 @@ class BookRepositoryTest {
         book.setYear(LocalDate.now());
         book.setDescription("Description");
         book.setVolumeNumber("1");
-        book.setPublisher("Publisher 1");
         book.setAuthors(authors);
 
 
@@ -60,14 +59,6 @@ class BookRepositoryTest {
         var books = bookRepository.findByAuthorsName("Author Name");
         System.out.println("By author "+ books);
         assertTrue(books.size() > 0);
-    }
-
-    @Test
-    void findByPublisher() {
-        var books = bookRepository.findByPublisher("Publisher 1");
-        System.out.println("findByPublisher(): " + books);
-
-        assertNotNull(books);
     }
 
     @Test

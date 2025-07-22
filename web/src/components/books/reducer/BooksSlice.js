@@ -23,6 +23,11 @@ const booksSlice = createSlice({
             state.error = action.payload;
         },
 
+        deleteBook(state, action) {
+            const bookId = action.payload;
+            state.books = state.books.filter(book => book.id !== bookId);
+        },
+
         sortBooksByTitle: (state) => {
             state.books.sort((book1, book2) => book1.title.localeCompare(book2.title));
         },
@@ -40,9 +45,11 @@ const booksSlice = createSlice({
     },
 });
 
-export const {fetchBooksStart,
+export const {
+    fetchBooksStart,
     fetchBooksSuccess,
     fetchBooksFailure,
+    deleteBook,
     sortBooksByTitle,
     sortBooksById,
     sortBooksByIdReverse,

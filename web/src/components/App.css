@@ -114,7 +114,7 @@
     cursor: pointer;
     padding: 10px 20px;
     display: inline-block;
-    margin: 0px 0px;
+    margin: 5px;
     letter-spacing: 1px;
     font-weight: 600;
     outline: none;
@@ -122,31 +122,28 @@
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-    /*box-shadow: 3px 3px 3px rgba(115, 129, 136, 0.77);*/
     border-radius: 0px;
 }
 
 .thbtn-add:hover {
     background-color: rgba(216, 227, 234, 0.53);
-    /*box-shadow: 2px 2px 2px rgba(115, 129, 136, 0.77);*/
 }
 
 .thbtn-add:active {
     color: rgb(0, 0, 0);
     background-color: #ffffff;
-    /*box-shadow: 1px 1px 2px rgba(115, 129, 136, 0.77);*/
     transform: translateY(3px);
 }
 
 .thbtn-del {
-    border: none;
+    border: 1px solid rgba(115, 129, 136, 0.77);
     font-size: inherit;
     color: rgb(0, 0, 0);
     background-color: rgba(201, 225, 239, 0.53);
     cursor: pointer;
     padding: 10px 20px;
     display: inline-block;
-    margin: 0px 0px;
+    margin: 5px;
     letter-spacing: 1px;
     font-weight: 600;
     outline: none;
@@ -154,19 +151,16 @@
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-    box-shadow: 3px 3px 3px rgba(201, 225, 239, 0.53);
     border-radius: 0px;
 }
 
 .thbtn-del:hover {
-    background-color: #bf1414;
-    box-shadow: 2px 2px 2px rgba(201, 225, 239, 0.53);
+    background-color: rgba(157, 173, 182, 0.53);
 }
 
 .thbtn-del:active {
     color: rgb(255, 255, 255);
-    background: rgb(237, 8, 41);
-    box-shadow: 1px 1px 2px rgba(201, 225, 239, 0.77);
+    background-color: rgba(201, 225, 239, 0.53);
     transform: translateY(3px);
 }
 
