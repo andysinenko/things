@@ -4,6 +4,7 @@ import ua.com.sinenko.things.book.entity.Book;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BookMapper {
@@ -12,6 +13,8 @@ public class BookMapper {
                 .builder()
                 .id(dto.id())
                 .title(dto.title())
+                .authors(dto.author() != null ? dto.author().stream()
+                        .map(authorDto -> AuthorMapper.mapDtoToEntity(authorDto)).collect(Collectors.toSet()) : null)
                 .year(LocalDate.parse(dto.year()+ "-01-01"))
                 .description(dto.description())
                 .volumeNumber(dto.volumeNumber())

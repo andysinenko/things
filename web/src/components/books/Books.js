@@ -43,7 +43,7 @@ export const Books = () => {
         id: "",
         title: "",
         genre: "",
-        author: "",
+        author: [],
         series: "",
         year: "",
         place: "",
@@ -61,7 +61,7 @@ export const Books = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
-        setFormData({id: "", title: "", genre: "", author: "", series: "", year: "", place: "", description: ""});
+        setFormData({id: "", title: "", genre: "", author: [], series: "", year: "", place: "", description: ""});
         setSelectedBook(null);
     };
 
@@ -113,7 +113,9 @@ export const Books = () => {
         try {
             if (modalType === "add") {
                 console.log("Adding book:", formData);
-                console.log("author:", authors[formData.author]);
+                console.log("author:", Object.keys(formData.author)
+                    .filter(v => formData.author[v] != null)
+                    .map(key => ({ [key]: formData.author[key] })));
                 console.log("series:", series[formData.series]);
                 console.log("genres:", genres[formData.genres]);
                 const newBookObject =
@@ -202,11 +204,9 @@ export const Books = () => {
                                 <tr key={book.id}>
                                     <td>{book.id}</td>
                                     <td>{book.title}</td>
-                                    <td className="authors">
+                                    <td>
                                         {book.authors ?
-                                            [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => (
-                                                <p key={author.id}>{author.name}</p>
-                                            ))
+                                            [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => (author.name)).join(", ")
                                             : ''}
                                     </td>
                                     <td>{book.genre?.name}</td>

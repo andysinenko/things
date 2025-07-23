@@ -40,16 +40,16 @@ public class BookService {
 
     @Transactional
     public Book saveBook(BookDto bookDto) {
-        var author = authorRepository.findById(bookDto.author());
+        var authors = authorRepository.findByIdIn(bookDto.author().stream().map(e-> e.id()).collect(Collectors.toSet()));
         var genre = genreRepository.findById(bookDto.genre());
         var series = seriesRepository.findById(bookDto.series());
 
-        if (author.isEmpty() || genre.isEmpty() || series.isEmpty()) {
+        if (authors.isEmpty() || genre.isEmpty() || series.isEmpty()) {
             throw new IllegalArgumentException("Author, genre or series not found");
         }
 
         Book book = BookMapper.mapDtoToEntity(bookDto);
-        book.setAuthors(Set.of(author.get()));
+        book.setAuthors(authors);
         book.setGenre(genre.get());
         book.setSeries(series.get());
         book.setYear(LocalDate.parse(bookDto.year() + "-01-01"));

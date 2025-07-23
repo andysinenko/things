@@ -29,8 +29,17 @@ const AddBookModal = ({isOpen, onClose, onSubmit, formData, setFormData, modalTy
                                     </option>
                                 ))}
                             </Form.Select>
-                            <Form.Select aria-label="Author name" value={formData.authorName} onChange={(e) => setFormData({...formData, author: e.target.value})}>
-                                <option>Authors</option>
+                            <Form.Select
+                                multiple
+                                aria-label="Author name"
+                                value={formData.author.map(a => a.id)} // value — массив id
+                                onChange={(e) => {
+                                    const selectedIds = Array.from(e.target.selectedOptions, option => Number(option.value));
+                                    const selectedAuthors = authors.filter(author => selectedIds.includes(author.id));
+                                    setFormData({ ...formData, author: selectedAuthors });
+                                }}
+                            >
+                                <option disabled>Authors</option>
                                 {authors.map((author) => (
                                     <option key={author.id} value={author.id}>
                                         {author.name}

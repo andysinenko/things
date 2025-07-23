@@ -10,6 +10,7 @@ import ua.com.sinenko.things.book.entity.Series;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +23,10 @@ class BookMapperTest {
     @Test
     void mapDtoToEntity() throws ParseException {
         //given
+        var authorDto = AuthorDto.builder()
+                .id(1L)
+                .name("Author Name")
+                .build();
         var bookDto = BookDto.builder()
                 .id(1L)
                 .title("Book Name")
@@ -30,7 +35,7 @@ class BookMapperTest {
                 .year("2021")
                 .description("Description")
                 .volumeNumber("1")
-                .author(1L)
+                .author(List.of(authorDto))
                 .build();
 
         //when
