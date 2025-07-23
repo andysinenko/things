@@ -39,13 +39,4 @@ class PlaceRepositoryTest {
         assertEquals(placesStored.getFirst().getName(), placeName);
         assertEquals(placesStored.getFirst().getDescription(), placeDescription);
     }
-
-    @Test
-    void findByDescription() {
-        var placesStored = placeRepository.findByDescription(placeDescription);
-
-        assertEquals(1, placesStored.size());
-        assertEquals(placesStored.getFirst().getName(), placeName);
-        assertEquals(placesStored.getFirst().getDescription(), placeDescription);
-    }
 }

@@ -39,7 +39,7 @@ public class BookService {
     }
 
     @Transactional
-    public void saveBook(BookDto bookDto) {
+    public Book saveBook(BookDto bookDto) {
         var author = authorRepository.findById(bookDto.author());
         var genre = genreRepository.findById(bookDto.genre());
         var series = seriesRepository.findById(bookDto.series());
@@ -54,7 +54,7 @@ public class BookService {
         book.setSeries(series.get());
         book.setYear(LocalDate.parse(bookDto.year() + "-01-01"));
 
-        bookRepository.save(book);
+        return bookRepository.save(book);
     }
 
     public void updateBook(Book book) {

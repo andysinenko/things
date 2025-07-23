@@ -37,8 +37,4 @@ public class PlaceService {
         placeRepository.save(place);
     }
 
-    public List<Place> getPlacesByDescription(String description) {
-        return placeRepository.findByDescription(description);
-    }
-
 }

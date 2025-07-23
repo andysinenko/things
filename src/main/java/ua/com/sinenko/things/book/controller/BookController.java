@@ -35,9 +35,9 @@ public class BookController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Void> addBook(@RequestBody BookDto bookDto) {
-        bookService.saveBook(bookDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<BookResponse> addBook(@RequestBody BookDto bookDto) {
+        var bookResponse = BookMapper.mapEntityToResponse(bookService.saveBook(bookDto));
+        return new ResponseEntity<>(bookResponse, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{bookId}")

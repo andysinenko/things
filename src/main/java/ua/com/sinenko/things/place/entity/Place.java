@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import ua.com.sinenko.things.book.entity.Book;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,19 +35,21 @@ public class Place {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
     private Place parent;
 
-    @OneToMany(mappedBy = "parent")
-    private List<Place> children;
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Place> children = new ArrayList<>();
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "level")
-    private Long level;
+    private Long level; // 1 - flat, house etc., 2 - room, premices, 3 - shelf
 
-    @ToString.Exclude
+    /*@ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-    private Set<Book> books = new HashSet<>();
+    private Set<Book> books = new HashSet<>();*/
+
 }

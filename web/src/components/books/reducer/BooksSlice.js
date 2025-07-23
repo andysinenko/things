@@ -25,11 +25,12 @@ const booksSlice = createSlice({
 
         deleteBook(state, action) {
             const bookId = action.payload;
-            state.books = state.books.filter(book => book.id !== bookId);
+            state.books = state.booksReducer.books.filter(book => book.id !== bookId);
         },
 
-        sortBooksByTitle: (state) => {
-            state.books.sort((book1, book2) => book1.title.localeCompare(book2.title));
+        sortBooksByTitle(state) {
+            console.log(state.books);
+            state.books = [...state.books].sort((a, b) => b.id - a.id);
         },
 
         sortBooksById: (state) => {

@@ -26,6 +26,10 @@ const placeSlice = createSlice({
         sortPlacesByName: (state) => {
             state.places.sort((place1, place2) => place1.name.localeCompare(place2.name));
         },
+
+        sortPlacesById: (state) => {
+            state.places.sort((place1, place2) => place1.id - place2.id);
+        },
     },
 });
 
@@ -33,6 +37,7 @@ export const {
     fetchPlacesStart,
     fetchPlacesSuccess,
     sortPlacesByName,
+    sortPlacesById,
     fetchPlacesFailure
 } = placeSlice.actions;
 

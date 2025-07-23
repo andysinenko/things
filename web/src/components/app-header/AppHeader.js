@@ -23,7 +23,7 @@ const AppHeader = () => {
     };
 
     return (
-        <header className="p-3 bg-dark text-white mymargin">
+        <header className="p-3 bg-dark text-white mymargin th-header">
             <div className="Container">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     {token ? (
@@ -43,11 +43,11 @@ const AppHeader = () => {
                         {loading ? "Loading..." : user.username || "Guest"}
                     </button>
                     {token ? (
-                        <button className="btn-signout" onClick={handleLogout} style={{visibility: 'visible'}}>
+                        <button className="btn-signout" onClick={handleLogout}>
                             Sign Out
                         </button>
                     ) : (
-                        <button className="btn-signout" onClick={handleLogout} style={{visibility: 'hidden'}}>Sign Out</button>
+                        <button className="btn-signout" onClick={handleLogout}>Sign Out</button>
                     )}
                 </div>
             </div>
