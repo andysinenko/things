@@ -3,8 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {fetchAllPlaces} from "./api/api";
 import {useDispatch, useSelector} from "react-redux";
 import {sortPlacesById, sortPlacesByName} from "./reducer/PlaceSlice";
-import {Button, Container, Row} from "react-bootstrap";
-import ThSelect from "../layout/select/th-select";
+import {Button} from "react-bootstrap";
 
 const INITIAL_SORT_MENU_TYPE = 'id';
 
