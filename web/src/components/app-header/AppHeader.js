@@ -47,7 +47,7 @@ const AppHeader = () => {
                             Sign Out
                         </button>
                     ) : (
-                        <button className="btn-signout" onClick={handleLogout}>Sign Out</button>
+                        <button className="btn-signout" onClick={handleLogout}>Sign In</button>
                     )}
                 </div>
             </div>

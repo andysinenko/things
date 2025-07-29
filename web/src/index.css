@@ -9,8 +9,8 @@ html, body, #root {
   background-color: #f9f9f9;
   width: 100%;
   height: 100%;
-  display: block;        /* Убираем flex для body */
-  overflow-y: auto;      /* Разрешаем вертикальный скролл */
+  display: block;
+  overflow-y: auto;
 }
 
 .content-container {
