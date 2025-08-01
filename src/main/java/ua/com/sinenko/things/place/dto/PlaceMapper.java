@@ -12,6 +12,7 @@ public class PlaceMapper {
                 .id(dto.id())
                 .name(dto.name())
                 .description(dto.description())
+                .level(dto.level())
                 .parent(PlaceMapper.mapDtoToEntity(dto.parent()))
                 .build();
     }
@@ -22,6 +23,7 @@ public class PlaceMapper {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .level(entity.getLevel())
                 .parent(PlaceMapper.mapEntityToDto(entity.getParent()))
                 .build();
     }

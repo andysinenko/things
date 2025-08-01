@@ -3,6 +3,7 @@ package ua.com.sinenko.things.place.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.sinenko.things.place.entity.Place;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
 
@@ -25,7 +26,9 @@ public class PlaceService {
         return placeRepository.findById(id).get();
     }
 
+    @Transactional
     public void savePlace(Place place) {
+        //placeRepository.getPlace(place);
         placeRepository.save(place);
     }
 

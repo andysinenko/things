@@ -92,10 +92,10 @@ const AddBookModal = ({
                                 </Row>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={onClose}>
+                                <Button variant="light" onClick={onClose}>
                                     Close
                                 </Button>
-                                <Button variant="primary" onClick={onSubmit}>
+                                <Button variant="light" onClick={onSubmit}>
                                     Save Changes
                                 </Button>
                             </Modal.Footer>
@@ -119,10 +119,10 @@ const AddBookModal = ({
                                 </Row>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={onClose}>
+                                <Button variant="light" onClick={onClose}>
                                     Close
                                 </Button>
-                                <Button variant="primary" onClick={onSubmit}>
+                                <Button variant="light" onClick={onSubmit}>
                                     Delete
                                 </Button>
                             </Modal.Footer>
@@ -149,10 +149,10 @@ const AddBookModal = ({
                                 </Row>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={onClose}>
+                                <Button variant="light" onClick={onClose}>
                                     Close
                                 </Button>
-                                <Button variant="primary" onClick={onSubmit}>
+                                <Button variant="light" onClick={onSubmit}>
                                     Upload
                                 </Button>
                             </Modal.Footer>

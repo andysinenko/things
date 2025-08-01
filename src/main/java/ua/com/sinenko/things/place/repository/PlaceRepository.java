@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long> {
     List<Place> findByName(String name);
+
+     //getPlaceByNameAndChildren();
 }

@@ -36,8 +36,20 @@ public class PlaceController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> addNewPlaces(@RequestBody PlaceDto placeDto) {
-        return null;
+    public ResponseEntity<Void> addNewPlace(@RequestBody PlaceDto placeDto) {
+        var place = PlaceMapper.mapDtoToEntity(placeDto);
+        placeService.savePlace(place);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping
+    @ResponseBody
+    public ResponseEntity<Void> updatePlace(@RequestBody PlaceDto placeDto) {
+        var place = PlaceMapper.mapDtoToEntity(placeDto);
+        placeService.savePlace(place);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

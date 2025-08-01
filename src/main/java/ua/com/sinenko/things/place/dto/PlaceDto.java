@@ -7,4 +7,5 @@ public record PlaceDto(
     Long id,
     String name,
     PlaceDto parent,
+    Long level,
     String description) {}

@@ -15,7 +15,7 @@ html, body, #root {
 
 .content-container {
   position: fixed;
-  top: 75px; /* высота твоего хедера */
+  top: 75px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -24,22 +24,30 @@ html, body, #root {
   padding: 20px;
 }
 
+.Container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
 .main-container {
   padding: 10px;
   display: flex;
   flex-direction: column;
   box-shadow: antiquewhite 0 0 5px;
-  max-height: 90vh;      /* Ограничиваем высоту */
-  overflow-y: auto;      /* Добавляем скролл */
+  max-height: 90vh;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .tableContainer {
   display: block;
-  overflow-y: auto;      /* Вертикальный скролл */
-  overflow-x: auto;      /* Горизонтальный скролл */
-  max-height: 90vh;     /* Высота контейнера для скролла */
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: 90vh;
   border: 1px solid #ddd;
-  flex: 1;                /* Таблица растягивается */
+  flex: 1;
 }
 
 code {

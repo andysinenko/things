@@ -13,7 +13,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {addNewBook, deleteBook, fetchAuthors, fetchBooks, fetchGenres, fetchSeries} from "./api/api";
 import AddBookModal from "./modal/AddBookModal";
-import {Button, Col, Container, Row} from "react-bootstrap";
+import {Button, ButtonToolbar} from "react-bootstrap";
 
 
 const sortMenu = [
@@ -163,9 +163,8 @@ export const Books = () => {
         <div className="content-container">
             <div className='Container'>
                 <div className="main-container">
-                    <div className="d-flex align-items-center gap-3 mb-3">
-                        <h4>My books</h4>
-                        <ThSelect
+                    <ButtonToolbar className="d-flex gap-2 p-3" aria-label="Books">
+                        <ThSelect className="me-4"
                             onChange={onSortSelect}
                             defaultChecked={sortType}
                             values={sortMenu}
@@ -174,16 +173,17 @@ export const Books = () => {
                             input_size={1}
                             required={false}
                         />
-                        <Button variant="secondary" size="sm" onClick={handleAddBook}>
+                        <Button className="ms-4 me-4" variant="light" size="sm" onClick={handleAddBook}>
                             Add book
                         </Button>
-                        <Button variant="secondary" size="sm" onClick={handleUploadCSV}>
+                        <Button className="me-4" variant="light" size="sm" onClick={handleUploadCSV}>
                             CSV upload....
                         </Button>
-                        <Button variant="secondary" size="sm" onClick={handleDelBook}>
+                        <Button className="me-4" variant="light" size="sm" onClick={handleDelBook}>
                             Delete book
                         </Button>
-                    </div>
+                    </ButtonToolbar>
+
                     <div className="tableContainer">
                         <table className="table">
                             <thead>
