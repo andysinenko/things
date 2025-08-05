@@ -12,14 +12,14 @@ export const Tools = () => {
     }, [dispatch]);
 
     if (loading) return (
-        <div className='Container'>
+        <div className='root'>
             <div className="main-container">
                 <h3>Tools component</h3>
                 <p>Loading...</p>
             </div>
         </div>);
     if (error) return (
-        <div className='Container'>
+        <div className='root'>
 
             <div className="main-container">
                 <h3>Tools component</h3>
@@ -28,7 +28,7 @@ export const Tools = () => {
         </div>);
 
     return (
-        <div className='Container'>
+        <div className='root'>
 
             <div className="main-container">
                 <h3>Tools component</h3>

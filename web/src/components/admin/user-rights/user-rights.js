@@ -6,7 +6,7 @@ import './user-rights.css';
 export default class UserRights extends React.Component {
     render() {
         return (
-            <div className="Container user-change">
+            <div className="root user-change">
                 <Col>
                     <Row md={5}>
                         <Form.Select aria-label="Select user" size="sm">

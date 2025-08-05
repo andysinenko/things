@@ -40,7 +40,7 @@ const SignIn = () => {
     };
 
     return (
-        <div className="Container">
+        <div className="root">
             <div className="main-container">
                 <form onSubmit={handleSignIn}>
                     <div className="text-center w-25 m-auto form-group">

@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import './AppHeader.css';
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import logo from './Design.png';
-import { AuthContext } from '../auth/AuthProvider';
+import {AuthContext} from '../auth/AuthProvider';
 import {useSelector} from "react-redux";
 
 const AppHeader = () => {
-    const { token, setToken } = useContext(AuthContext); // Use 'token' here
+    const {token, setToken} = useContext(AuthContext); // Use 'token' here
     const navigate = useNavigate();
     const {user, loading} = useSelector(state => state.userReducer);
 
@@ -23,33 +23,32 @@ const AppHeader = () => {
     };
 
     return (
-        <header className="p-3 bg-dark text-white mymargin th-header">
-            <div className="Container">
-                <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                    {token ? (
-                        <Link to="/dashboard"><img src={logo} alt="Logo" style={logoStyle}/></Link>
-                    ) : (
-                        <Link to="/signin"><img src={logo} alt="Logo" style={logoStyle}/></Link>
-                    )}
-                    <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li className="li-header"><Link to="/dashboard" className="nav-link px-2 text-white">#</Link></li>
-                        <li className="li-header"><Link to="/books" className="nav-link px-2 text-white">Books</Link></li>
-                        <li className="li-header"><Link to="/tools" className="nav-link px-2 text-white">Tools</Link></li>
-                        <li className="li-header"><Link to="/places" className="nav-link px-2 text-white">Places</Link></li>
-                        <li className="li-header"><Link to="/admin" className="nav-link px-2 text-white">Admin</Link></li>
-                    </ul>
-
-                    <button className="btn-username px-2 text-white">
-                        {loading ? "Loading..." : user.username || "Guest"}
+        <header className="header">
+            <div className="left-header">
+                {token ? (
+                    <Link to="/dashboard"><img src={logo} alt="Logo" style={logoStyle}/></Link>
+                ) : (
+                    <Link to="/signin"><img src={logo} alt="Logo" style={logoStyle}/></Link>
+                )}
+                <ul className="header-menue">
+                    <li className="li-header"><Link to="/dashboard" className="nav-link px-2 text-white">#</Link></li>
+                    <li className="li-header"><Link to="/books" className="nav-link px-2 text-white">Books</Link></li>
+                    <li className="li-header"><Link to="/tools" className="nav-link px-2 text-white">Tools</Link></li>
+                    <li className="li-header"><Link to="/places" className="nav-link px-2 text-white">Places</Link></li>
+                    <li className="li-header"><Link to="/admin" className="nav-link px-2 text-white">Admin</Link></li>
+                </ul>
+            </div>
+            <div className="right-header">
+                <ul className="header-menue">
+                    <li>{loading ? "Loading..." : user.username || "Guest"}</li>
+                </ul>
+                {token ? (
+                    <button className="th-main-button" onClick={handleLogout}>
+                        Sign Out
                     </button>
-                    {token ? (
-                        <button className="btn-signout" onClick={handleLogout}>
-                            Sign Out
-                        </button>
-                    ) : (
-                        <button className="btn-signout" onClick={handleLogout}>Sign In</button>
-                    )}
-                </div>
+                ) : (
+                    <button className="th-main-button" onClick={handleLogout}>Sign In</button>
+                )}
             </div>
         </header>
     );

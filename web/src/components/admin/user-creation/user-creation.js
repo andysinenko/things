@@ -10,7 +10,7 @@ export default class UserCreation extends React.Component {
     };
     render() {
         return (
-            <div className="Container user-creation">
+            <div className="root user-creation">
                 <Row>
                     <Form>
                         <Form.Check type="switch" id="enabled-switch" label="Enabled" defaultChecked={true}/>

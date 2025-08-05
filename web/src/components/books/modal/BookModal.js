@@ -1,8 +1,8 @@
 import React from "react";
 import {Form, Row, Col, Modal, Button} from "react-bootstrap";
-import "./AddBookModal.css";
+import "./BookModal.css";
 
-const AddBookModal = ({
+const BookModal = ({
                           isOpen,
                           onClose,
                           onSubmit,
@@ -170,4 +170,4 @@ const AddBookModal = ({
     );
 };
 
-export default AddBookModal;
+export default BookModal;

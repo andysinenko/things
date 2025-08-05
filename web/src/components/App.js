@@ -18,7 +18,7 @@ function App() {
     }, [dispatch]);
 
     return (
-        <div className="Container">
+        <div className="root">
             <AppHeader />
             <Outlet />
         </div>

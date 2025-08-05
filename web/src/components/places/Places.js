@@ -2,17 +2,63 @@ import React, {useEffect, useState} from 'react';
 
 import {fetchAllPlaces} from "./api/api";
 import {useDispatch, useSelector} from "react-redux";
-import {sortPlacesById, sortPlacesByName} from "./reducer/PlaceSlice";
-import {Button, Col, Row} from "react-bootstrap";
-import {TreeView} from "./TreeView";
+import PlaceModal from "./modal/PlaceModal";
 
 const INITIAL_SORT_MENU_TYPE = 'id';
 
 const Places = () => {
     const dispatch = useDispatch();
     const {places, loading, error} = useSelector(state => state.placeReducer);
-    const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
+    const [treeData, setTreeData] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState(null);
+    const [formData, setFormData] = useState({
+        id: "",
+        title: "",
+        genre: "",
+        author: [],
+        series: "",
+        year: "",
+        place: "",
+        description: ""
+    });
+    const [selectedBook, setSelectedBook] = useState(null);
 
+    const openModal = (type, book = null) => {
+        console.log("Opening modal with type:", type);
+        setModalType(type);
+        setSelectedBook(book);
+        setIsModalOpen(true);
+    };
+    const handleAddChild = (parentNode, childName) => {
+        const addChild = (nodes) => {
+            return nodes.map(node => {
+                if (node.id === parentNode.id) {
+                    const newChild = {
+                        id: Date.now(),
+                        name: childName,
+                        level: node.level + 1,
+                        description: '',
+                        children: []
+                    };
+                    return {
+                        ...node,
+                        children: [...(node.children || []), newChild]
+                    };
+                } else if (node.children) {
+                    return { ...node, children: addChild(node.children) };
+                }
+                return node;
+            });
+        };
+        setTreeData(prev => addChild(prev));
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalType(null);
+        setFormData({id: "", name: "", parent: "", level: ""});
+        setSelectedBook(null);
+    };
 
     useEffect(() => {
         console.log("useEffect called");
@@ -20,35 +66,30 @@ const Places = () => {
     }, [dispatch]);
 
     const handleAddPlace = () => {
+        console.log("Opening Add Place Modal");
+        openModal("add");
+    };
 
-    }
-
-    const onSortSelect = (event) => {
-        console.log("onSortSeleced", event.target.value);
-        switch (event.target.value) {
-            case "id":
-                dispatch(sortPlacesById());
-                break;
-            case "name":
-                dispatch(sortPlacesByName());
-                break;
-            default:
-                break;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("Submitting form data:", formData);
+        try {
+            //await dispatch(addNewBook(formData));
+            closeModal();
+        } catch (error) {
+            console.error("Error submitting form:", error);
         }
-        ;
     };
 
     if (loading) return (
-        <div className='Container'>
-
+        <div className='root'>
             <div className="main-container">
                 <h3>Places component</h3>
                 <p>Loading...</p>
             </div>
         </div>);
     if (error) return (
-        <div className='Container'>
-
+        <div className='root'>
             <div className="main-container">
                 <h3>Places component</h3>
                 <p>Error: {error}</p>
@@ -60,7 +101,6 @@ const Places = () => {
         const roots = [];
 
         data.forEach(item => {
-            console.log("Building tree for item:", item);
             map.set(item.id, {...item, children: []});
         });
 
@@ -82,50 +122,46 @@ const Places = () => {
     };
 
     return (
-        <div className="content-container">
-            <Row>
-                <Col>
-                    <TreeView data={tree} onCrossClick={onNodeClick} />
-                </Col>
-                <Col>
-                <div className='Container'>
-                    <div className="main-container">
-                        <div className="d-flex align-items-center gap-3 mb-3">
-                            <h4>My places</h4>
-                            <select onChange={onSortSelect} value={sortType.sortType} style={{marginLeft: '8px'}}>
-                                <option>Sort by...</option>
-                                <option value="id">Sort by ID</option>
-                                <option value="name">Sort by Name</option>
-                            </select>
-                            <Button variant="secondary" size="sm" onClick={handleAddPlace}>
-                                Add place
-                            </Button>
-                        </div>
+        <div className="main-container">
+            <div className="th-buttons-toolbar">
+                <button className="th-main-button" onClick={handleAddPlace}>
+                    Add place
+                </button>
+            </div>
 
-                        <div className="tableContainer">
-                            <table className="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {places.map((e) => (
-                                    <tr key={e.id}>
-                                        <td>{e.id}</td>
-                                        <td>{e.name}</td>
-                                        <td>{e.description}</td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                </Col>
-            </Row>
+            <div className="tableContainer">
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {places.map((e) => (
+                        <tr key={e.id}>
+                            <td>{e.id}</td>
+                            <td>{e.name}</td>
+                            <td>{e.description}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+            <PlaceModal
+                data={tree}
+                onCrossClick={onNodeClick}
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onSubmit={handleSubmit}
+                formData={formData}
+                setFormData={setFormData}
+                modalType={modalType}
+                selectedBook={selectedBook}
+                header="Add place"
+                onAddChild={handleAddChild}
+            />
         </div>
     );
 }

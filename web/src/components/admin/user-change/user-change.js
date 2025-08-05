@@ -12,7 +12,7 @@ export default class UserChange extends React.Component {
 
     render() {
         return (
-            <div className="Container user-change">
+            <div className="root user-change">
                 <Row md={5} className="selector">
                     <Form.Select aria-label="Select user" size="sm">
                         <option>Select user</option>

@@ -12,8 +12,7 @@ import {
 } from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {addNewBook, deleteBook, fetchAuthors, fetchBooks, fetchGenres, fetchSeries} from "./api/api";
-import AddBookModal from "./modal/AddBookModal";
-import {Button, ButtonToolbar} from "react-bootstrap";
+import BookModal from "./modal/BookModal";
 
 
 const sortMenu = [
@@ -29,9 +28,6 @@ export const Books = () => {
     const dispatch = useDispatch();
 
     const {books, loading, error} = useSelector(state => state.booksReducer);
-    //const books = useSelector(state => state.booksReducer.books);
-    //const loading = useSelector(state => state.booksReducer.loading);
-    //const error = useSelector(state => state.booksReducer.error);
 
     const {series, seriesLoading, seriesError} = useSelector(state => state.seriesReducer);
     const {genres, genresLoading, genresError} = useSelector(state => state.genresReducer);
@@ -112,12 +108,6 @@ export const Books = () => {
         e.preventDefault();
         try {
             if (modalType === "add") {
-                console.log("Adding book:", formData);
-                console.log("author:", Object.keys(formData.author)
-                    .filter(v => formData.author[v] != null)
-                    .map(key => ({ [key]: formData.author[key] })));
-                console.log("series:", series[formData.series]);
-                console.log("genres:", genres[formData.genres]);
                 const newBookObject =
                     {
                         id: "",
@@ -143,7 +133,7 @@ export const Books = () => {
     };
 
     if (loading) return (
-        <div className='Container'>
+        <div className='root'>
 
             <div className="main-container">
                 <h3>Books component</h3>
@@ -151,7 +141,7 @@ export const Books = () => {
             </div>
         </div>);
     if (error) return (
-        <div className='Container'>
+        <div className='root'>
 
             <div className="main-container">
                 <h3>Books component</h3>
@@ -160,93 +150,88 @@ export const Books = () => {
         </div>);
 
     return (
-        <div className="content-container">
-            <div className='Container'>
-                <div className="main-container">
-                    <ButtonToolbar className="d-flex gap-2 p-3" aria-label="Books">
-                        <ThSelect className="me-4"
-                            onChange={onSortSelect}
-                            defaultChecked={sortType}
-                            values={sortMenu}
-                            label="Sort by"
-                            label_size={1}
-                            input_size={1}
-                            required={false}
-                        />
-                        <Button className="ms-4 me-4" variant="light" size="sm" onClick={handleAddBook}>
-                            Add book
-                        </Button>
-                        <Button className="me-4" variant="light" size="sm" onClick={handleUploadCSV}>
-                            CSV upload....
-                        </Button>
-                        <Button className="me-4" variant="light" size="sm" onClick={handleDelBook}>
-                            Delete book
-                        </Button>
-                    </ButtonToolbar>
-
-                    <div className="tableContainer">
-                        <table className="table">
-                            <thead>
-                            <tr>
-                                <th onClick={() => dispatch(sortBooksById())}>ID &#x25be;&#x25b4;</th>
-                                <th onClick={() => dispatch(sortBooksByTitle())}>Title &#x25be;&#x25b4;</th>
-                                <th>Author</th>
-                                <th onClick={() => dispatch(sortBooksByGenre())}>Genre &#x25be;&#x25b4;</th>
-                                <th>Series</th>
-                                <th>Year</th>
-                                <th>Place</th>
-                                <th>Description</th>
-                                <th>Delete</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {books.length !== 0 ? books.map((book) =>
-                                <tr key={book.id}>
-                                    <td>{book.id}</td>
-                                    <td>{book.title}</td>
-                                    <td>
-                                        {book.authors ?
-                                            [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => (author.name)).join(", ")
-                                            : ''}
-                                    </td>
-                                    <td>{book.genre?.name}</td>
-                                    <td>{book.series?.name}</td>
-                                    <td>{book.year}</td>
-                                    <td>{book.place}</td>
-                                    <td>{book.description}</td>
-                                    <td>
-                                        <button onClick={() => handleDelBook(book)}
-                                                style={{cursor: 'pointer', border: 'none', background: 'none'}}>
-                                            <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
-                                        </button>
-                                    </td>
-                                </tr>
-                            ) : (
-                                <tr>
-                                    <td colSpan="10" style={{textAlign: "center"}}>
-                                        <h3>Book list is empty</h3>
-                                    </td>
-                                </tr>
-                            )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <AddBookModal
-                    isOpen={isModalOpen}
-                    onClose={closeModal}
-                    onSubmit={handleSubmit}
-                    formData={formData}
-                    setFormData={setFormData}
-                    modalType={modalType}
-                    selectedBook={selectedBook}
-                    header="Add New Book"
-                    genres={genres}
-                    series={series}
-                    authors={authors}
+        <div className="main-container">
+            <div className="th-buttons-toolbar" aria-label="Books">
+                <ThSelect
+                    onChange={onSortSelect}
+                    defaultChecked={sortType}
+                    values={sortMenu}
+                    label="Sort by"
+                    label_size={1}
+                    input_size={1}
+                    required={false}
                 />
+                <button className="th-main-button" variant="light" size="sm" onClick={handleAddBook}>
+                    Add book
+                </button>
+                <button className="th-main-button" variant="light" size="sm" onClick={handleUploadCSV}>
+                    CSV upload....
+                </button>
+                <button className="th-main-button" variant="light" size="sm" onClick={handleDelBook}>
+                    Delete book
+                </button>
             </div>
+
+            <div className="tableContainer">
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th onClick={() => dispatch(sortBooksById())}>ID &#x25be;&#x25b4;</th>
+                        <th onClick={() => dispatch(sortBooksByTitle())}>Title &#x25be;&#x25b4;</th>
+                        <th>Author</th>
+                        <th onClick={() => dispatch(sortBooksByGenre())}>Genre &#x25be;&#x25b4;</th>
+                        <th>Series</th>
+                        <th>Year</th>
+                        <th>Place</th>
+                        <th>Description</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {books.length !== 0 ? books.map((book) =>
+                        <tr key={book.id}>
+                            <td>{book.id}</td>
+                            <td>{book.title}</td>
+                            <td>
+                                {book.authors ?
+                                    [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => (author.name)).join(", ")
+                                    : ''}
+                            </td>
+                            <td>{book.genre?.name}</td>
+                            <td>{book.series?.name}</td>
+                            <td>{book.year}</td>
+                            <td>{book.place}</td>
+                            <td>{book.description}</td>
+                            <td>
+                                <button onClick={() => handleDelBook(book)}
+                                        style={{cursor: 'pointer', border: 'none', background: 'none'}}>
+                                    <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
+                                </button>
+                            </td>
+                        </tr>
+                    ) : (
+                        <tr>
+                            <td colSpan="10" style={{textAlign: "center"}}>
+                                <h3>Book list is empty</h3>
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
+            </div>
+            <BookModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onSubmit={handleSubmit}
+                formData={formData}
+                setFormData={setFormData}
+                modalType={modalType}
+                selectedBook={selectedBook}
+                header="Add book"
+                genres={genres}
+                series={series}
+                authors={authors}
+            />
         </div>);
 
 }

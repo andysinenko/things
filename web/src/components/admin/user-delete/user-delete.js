@@ -5,7 +5,7 @@ import {Button, Col, Form, Row} from "react-bootstrap";
 export default class UserDelete extends React.Component {
     render() {
         return (
-            <div className="Container user-change">
+            <div className="root user-change">
                 <Col>
                     <Row md={5}>
                         <Form.Select aria-label="Select user" size="sm">
