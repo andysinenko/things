@@ -1,4 +1,4 @@
-.modal-overlay {
+.th-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 1000;
 }
 
-.modal-content {
+.th-modal-content {
     background: white;
     padding: 20px;
     border-radius: 5px;
@@ -19,20 +19,20 @@
     max-width: 100%;
 }
 
-.modal-content h6 {
+.th-modal-content h6 {
     margin-top: 0;
     margin-bottom: 15px;
 }
 
-.modal-content form {
+.th-modal-content form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.modal-content input {
+.th-modal-content input {
     padding: 8px;
-    font-size: 16px;
+    font-size: 12px;
     width: 100% !important;
 }
 

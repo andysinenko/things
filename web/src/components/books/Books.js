@@ -150,8 +150,8 @@ export const Books = () => {
         </div>);
 
     return (
-        <div className="main-container">
-            <div className="th-buttons-toolbar" aria-label="Books">
+        <main className="main-container">
+            <nav className="th-buttons-toolbar" aria-label="Books">
                 <ThSelect
                     onChange={onSortSelect}
                     defaultChecked={sortType}
@@ -170,9 +170,9 @@ export const Books = () => {
                 <button className="th-main-button" variant="light" size="sm" onClick={handleDelBook}>
                     Delete book
                 </button>
-            </div>
+            </nav>
 
-            <div className="tableContainer">
+            <section className="tableContainer">
                 <table className="table">
                     <thead>
                     <tr>
@@ -218,7 +218,7 @@ export const Books = () => {
                     )}
                     </tbody>
                 </table>
-            </div>
+            </section>
             <BookModal
                 isOpen={isModalOpen}
                 onClose={closeModal}
@@ -232,6 +232,6 @@ export const Books = () => {
                 series={series}
                 authors={authors}
             />
-        </div>);
+        </main>);
 
 }

@@ -1,0 +1,70 @@
+.tree-view {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.tree-node {
+    padding: 6px;
+    border: 1px solid #ddd;
+    margin: 5px 0;
+    border-radius: 4px;
+}
+
+.tree-node-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tree-toggle-btn,
+.tree-add-btn,
+.tree-remove-btn,
+.tree-confirm-btn,
+.tree-cancel-btn {
+    padding: 2px 6px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.tree-toggle-btn:hover,
+.tree-add-btn:hover,
+.tree-remove-btn:hover,
+.tree-confirm-btn:hover,
+.tree-cancel-btn:hover {
+    background: #e0e0e0;
+}
+
+.tree-node-name {
+    flex-grow: 1;
+}
+
+.tree-input-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding-left: 30px;
+}
+
+.tree-input {
+    flex-grow: 1;
+    padding: 1px;
+    font-size: 10px;
+}
+
+.th-modal-content input {
+    font-size: 10px;
+}
+
+.tree-children {
+    padding-left: 20px;
+    margin-top: 4px;
+    list-style: none;
+}
+.modal-dialog {
+    pointer-events: auto !important;
+}

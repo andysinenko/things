@@ -1,7 +1,6 @@
 import React from "react";
-import {Form, Row, Modal, Button} from "react-bootstrap";
 import "./PlaceModal.css";
-import {TreeView} from "../TreeView";
+import {TreeView} from "../treeview/TreeView";
 
 const PlaceModal = ({
                         data,
@@ -30,30 +29,29 @@ const PlaceModal = ({
 
     const renderContent = () => {
         return (
-            <Row className="justify-content-center">
-                <Modal show={isOpen} onHide={handleChange}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{header}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <TreeView data={data} onCrossClick={onCrossClick}/>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="light" onClick={onClose}>
-                            Close
-                        </Button>
-                        <Button variant="light" onClick={onSubmit}>
-                            Save Changes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </Row>
+            <div className="th-modal-overlay">
+                <div className="th-modal-content">
+                    <div className="th-modal-header">
+                        <h2>{header}</h2>
+                        <button className="th-modal-close-btn" onClick={onClose}>×</button>
+                    </div>
+
+                    <div className="modal-body">
+                        <TreeView data={data} onCrossClick={onCrossClick} onAddChild={onAddChild} />
+                    </div>
+
+                    <div className="modal-footer">
+                        <button className="th-main-button" onClick={onClose}>Close</button>
+                        <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                    </div>
+                </div>
+            </div>
         );
     }
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">{renderContent()}</div>
+        <div className="th-modal-overlay">
+            <div className="th-modal-content">{renderContent()}</div>
         </div>
     );
 };

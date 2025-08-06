@@ -1,48 +1,59 @@
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+* {
+    pointer-events: auto !important;
+}
+
+.th-modal-overlay {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
     z-index: 1000;
 }
 
-.modal-content {
+.th-modal-content {
+    pointer-events: auto;
     background: white;
     padding: 20px;
-    border-radius: 5px;
-    width: 600px;
-    max-width: 100%;
+    border-radius: 8px;
+    z-index: 1001;
+    position: relative;
 }
 
-.modal-content h6 {
-    margin-top: 0;
-    margin-bottom: 15px;
-}
-
-.modal-content form {
+.th-modal-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.th-modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-body {
+    margin-bottom: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
     gap: 10px;
 }
 
-.modal-content input {
-    padding: 8px;
-    font-size: 16px;
-    width: 100% !important;
+.modal-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    border-radius: 4px;
 }
 
-.form-select {
-    width: 100% !important;
-}
-
-.modal-input {
-    font-size: 10px !important;
-    margin: 0em 0em !important;
-    width: 100% !important;
-    padding: 0px;
+.modal-button:hover {
+    background-color: #e0e0e0;
 }

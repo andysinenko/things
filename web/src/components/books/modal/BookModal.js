@@ -164,8 +164,8 @@ const BookModal = ({
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">{renderContent()}</div>
+        <div className="th-modal-overlay">
+            <div className="th-modal-content">{renderContent()}</div>
         </div>
     );
 };

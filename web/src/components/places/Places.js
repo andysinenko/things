@@ -35,7 +35,7 @@ const Places = () => {
             return nodes.map(node => {
                 if (node.id === parentNode.id) {
                     const newChild = {
-                        id: Date.now(),
+                        id: "",
                         name: childName,
                         level: node.level + 1,
                         description: '',
@@ -122,14 +122,14 @@ const Places = () => {
     };
 
     return (
-        <div className="main-container">
-            <div className="th-buttons-toolbar">
+        <main className="main-container">
+            <nav className="th-buttons-toolbar">
                 <button className="th-main-button" onClick={handleAddPlace}>
                     Add place
                 </button>
-            </div>
+            </nav>
 
-            <div className="tableContainer">
+            <section className="tableContainer">
                 <table className="table">
                     <thead>
                     <tr>
@@ -148,7 +148,7 @@ const Places = () => {
                     ))}
                     </tbody>
                 </table>
-            </div>
+            </section>
             <PlaceModal
                 data={tree}
                 onCrossClick={onNodeClick}
@@ -162,7 +162,7 @@ const Places = () => {
                 header="Add place"
                 onAddChild={handleAddChild}
             />
-        </div>
+        </main>
     );
 }
 
