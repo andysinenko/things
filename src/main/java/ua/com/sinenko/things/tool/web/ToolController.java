@@ -1,6 +1,8 @@
 package ua.com.sinenko.things.tool.web;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/v1/tools")
 @RequiredArgsConstructor
 public class ToolController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ToolController.class);
 
     private final ToolService toolService;
     private final VendorService vendorService;
@@ -31,14 +34,24 @@ public class ToolController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> addNewTool(ToolDto toolDto) {
-        return new ResponseEntity<String>("new tool", HttpStatus.OK);
+    public ResponseEntity<Void> addNewTool(@RequestBody ToolDto toolDto) {
+        LOGGER.debug("Add new tool: {}", toolDto);
+        var tool = ToolMapper.mapDtoToEntity(toolDto);
+        toolService.saveTool(tool);
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<String> getToolById(@PathVariable("id") String id) {
         return new ResponseEntity<>("tool " + id, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteToolById(@PathVariable("id") Long id) {
+        toolService.deleteTool(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/brands", produces = "application/json")

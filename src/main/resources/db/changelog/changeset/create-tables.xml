@@ -152,13 +152,16 @@
             <column name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tools"/>
             </column>
+            <column name="name" type="varchar2(512)"/>
             <column name="tool_type" type="varchar2(512)"/>
+            <column name="serial_number" type="varchar2(512)"/>
             <column name="vendor" type="bigint">
                 <constraints nullable="true" foreignKeyName="fk_vendor_type"/>
             </column>
+            <column name="place" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_place_tool"/>
+            </column>
             <column name="date_of_purchasing" type="date"/>
-            <column name="name" type="varchar2(512)"/>
-            <column name="serial_number" type="varchar2(512)"/>
             <column name="description" type="varchar2(512)"/>
         </createTable>
     </changeSet>

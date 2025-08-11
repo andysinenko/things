@@ -1,30 +1,39 @@
 import './Tools.css'
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {addNewTool, fetchBrands, fetchTools} from "./api/api";
+import {addNewTool, deleteTool, fetchBrands, fetchTools} from "./api/api";
 import ToolModal from "./modal/ToolModal";
 import {fetchAllPlaces} from "../places/api/api";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
+
 
 export const Tools = () => {
     const dispatch = useDispatch();
+    const sortMenu = [
+        {id: 1, value: 'id', innerText: 'id', key: 'id'},
+        {id: 2, value: 'title', innerText: 'Title', key: 'id'},
+        {id: 3, value: 'reverse', innerText: 'Reverse', key: 'id'},
+        {id: 4, value: 'genre', innerText: 'Genre', key: 'id'}];
     const {tools, loading, error} = useSelector(state => state.toolsReducer);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [formData, setFormData] = useState({
         id: "",
         name: "",
-        brand: "",
-        address: "",
-        year: "",
-        description: "",
+        toolType: "",
+        serialNumber:"",
+        vendor: {},
         place: {},
+        dateOfPurchasing: "",
+        description: "",
     });
 
     const [selectedTool, setSelectedTool] = useState(null);
     const [selectedPlace, setSelectedPlace] = useState(null);
     const [selectedBrand, setSelectedBrand] = useState(null);
-    const {places, loading: placesLoading, error: placesError} = useSelector(state => state.placeReducer);
-    const {brands, loading: brandsLoading, error: brandsError} = useSelector(state => state.brandsReducer);
+    const {places, placesLoading: placesLoading, placesError: placesError} = useSelector(state => state.placeReducer);
+    const {brands, brandsLoading: brandsLoading, brandsError: brandsError} = useSelector(state => state.brandsReducer);
 
     useEffect(() => {
         dispatch(fetchTools());
@@ -47,42 +56,59 @@ export const Tools = () => {
             </div>
         </div>);
 
-    const openModal = (tool = null) => {
-        setSelectedTool(null);
+    const openModal = (modalType, tool = null) => {
+        setModalType(modalType);
+        setSelectedTool(tool);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
-        setFormData({id: "", title: "", genre: "", author: [], series: "", year: "", place: "", description: ""});
+        setFormData({
+            id: "", name: "", toolType: "", serialNumber:"", vendor: {}, place: {}, dateOfPurchasing: "", description: "",
+        });
         setSelectedTool(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log( modalType + " " + formData.name);
         try {
-            const newTool =
-                {
-                    id:         formData.id,
-                    name:       formData.name,
-                    brand:      formData.brand,
-                    address:    formData.address,
-                    year:       formData.year,
-                    description:formData.description,
-                    place:      formData.place ? formData.place.id : null
-                };
-            dispatch(addNewTool(newTool));
+            if (modalType === "add") {
+                const vendorObj = brands.find(v => v.id === Number(formData.vendor)) || null;
+                const placeObj = places.find(p => p.id === Number(formData.place)) || null;
+
+                const newTool =
+                    {
+                        id: formData.id,
+                        name: formData.name,
+                        toolType: formData.toolType,
+                        serialNumber: formData.serialNumber,
+                        vendor: vendorObj ? { id: vendorObj.id, name: vendorObj.name } : null,
+                        place: placeObj ? { id: placeObj.id, name: placeObj.name, description: placeObj.description } : null,
+                        dateOfPurchasing: `${formData.dateOfPurchasing}-01-01`,
+                        description: formData.description
+                    };
+                dispatch(addNewTool(newTool));
+            } else if (modalType === "delete") {
+                console.log("Deleting book:", selectedTool);
+                dispatch(deleteTool(selectedTool.id));
+            }
             closeModal();
+
         } catch (error) {
             console.error("Error:", error);
         }
     };
 
-
     const handleAddTool = () => {
-        openModal();
+        openModal("add");
     };
+
+    const handleDelTool = (tool) => {
+        openModal("delete", tool);
+    }
 
     return (
         <>
@@ -99,29 +125,43 @@ export const Tools = () => {
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Brand</th>
-                        <th scope="col">Year</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Description</th>
+                        <th scope="col">Tool type</th>
+                        <th scope="col">Serial number</th>
+                        <th scope="col">Purchasing date</th>
                         <th scope="col">Place</th>
+                        <th scope="col">Description</th>
+
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {tools.map((e) =>
-                        <tr key={e.id}>
-                            <td>{e.id}</td>
-                            <td>{e.name}</td>
-                            <td>{e.brand}</td>
-                            <td>{e.year}</td>
-                            <td>{e.address}</td>
-                            <td>{e.description}</td>
-                            <td>{e.place.description}</td>
+                    {Array.isArray(tools) && tools.length !== 0 ? tools
+                    .filter(tool => typeof tool === 'object' && tool !== null && 'id' in tool)
+                    .map((tool) =>
+                        <tr key={tool.id}>
+                            <td>{tool.id}</td>
+                            <td>{tool.name}</td>
+                            <td>{tool.vendor?.name}</td>
+                            <td>{tool.toolType}</td>
+                            <td>{tool.serialNumber}</td>
+                            <td>{tool.dateOfPurchasing}</td>
+                            <td>{tool.place?.description || "—"}</td>
+                            <td>{tool.description}</td>
                             <td>
                                 <button type="button" className="btn btn btn-warning"></button>
                             </td>
-                            <td><a href="bbb" onClick={this.test}>
-                                <i className="fa fa-trash" aria-hidden="true"></i></a>
+                            <td>
+                                <button onClick={() => handleDelTool(tool)}
+                                        style={{cursor: 'pointer', border: 'none', background: 'none'}}>
+                                    <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
+                                </button>
+                            </td>
+                        </tr>
+                    ): (
+                        <tr>
+                            <td colSpan="10" style={{textAlign: "center"}}>
+                                <h5>Tools list is empty</h5>
                             </td>
                         </tr>
                     )}
@@ -135,6 +175,7 @@ export const Tools = () => {
         onSubmit={handleSubmit}
         formData={formData}
         setFormData={setFormData}
+        modalType = {modalType}
         selectedTool={selectedTool}
         selectedBrand={selectedBrand}
         selectedPlace={selectedPlace}

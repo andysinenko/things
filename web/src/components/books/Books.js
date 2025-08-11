@@ -62,7 +62,6 @@ export const Books = () => {
     };
 
     useEffect(() => {
-        console.log("!!!!Books component rendered");
         dispatch(fetchSeries());
         dispatch(fetchGenres());
         dispatch(fetchAuthors());
@@ -95,7 +94,6 @@ export const Books = () => {
     };
 
     const handleDelBook = (book) => {
-        console.log("Opening Delete Book Modal for:", book.id);
         openModal("delete", book);
     };
 

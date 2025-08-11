@@ -104,7 +104,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDescription errorDescription = new ErrorDescription();
         StringBuilder builder = new StringBuilder();
         builder.append(ex.getContentType());
-        builder.append(" media type is not supported. Supported media types are ");
+        builder.append(" media toolType is not supported. Supported media types are ");
         ex.getSupportedMediaTypes().forEach(t -> builder.append(t).append(" "));
 
         errorDescription.setTimestamp(String.valueOf(new Date().getTime()));

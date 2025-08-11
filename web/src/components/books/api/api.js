@@ -1,4 +1,4 @@
-import {fetchBooksFailure, fetchBooksStart, fetchBooksSuccess} from "../reducer/BooksSlice";
+import {deleteBookFailure, deleteBookSuccess, fetchBooksFailure, fetchBooksStart, fetchBooksSuccess} from "../reducer/BooksSlice";
 import axios from "axios";
 import {fetchAuthorsFailure, fetchAuthorsStart, fetchAuthorsSuccess} from "../reducer/AuthorsSlice";
 import {fetchSeriesFailure, fetchSeriesStart, fetchSeriesSuccess} from "../reducer/SeriesSlice";
@@ -96,12 +96,12 @@ export const deleteBook = (id) => async (dispatch) => {
         if (resp.status === 200 || resp.status === 204) {
             console.log("Book deleted:", resp.status);
             // Instead of fetching all books, remove the book from the state
-            dispatch(fetchBooksSuccess(store.getState().booksReducer.books.filter(book => book.id !== id)));
+            dispatch(deleteBookSuccess(store.getState().booksReducer.books.filter(book => book.id !== id)));
         } else {
-            dispatch(fetchBooksFailure(`Delete failed: ${resp.status}`));
+            dispatch(deleteBookFailure(`Delete failed: ${resp.status}`));
         }
     } catch (err) {
         console.error("Delete error:", err.message);
-        dispatch(fetchBooksFailure(err.message));
+        dispatch(deleteBookFailure(err.message));
     }
 };

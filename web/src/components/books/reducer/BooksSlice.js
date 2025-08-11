@@ -43,6 +43,16 @@ const booksSlice = createSlice({
         sortBooksByGenre: (state) => {
             state.books.sort((book1, book2) => book1.genre.name.localeCompare(book2.genre.name));
         },
+
+        deleteBookSuccess(state, action) {
+            state.loading = false;
+            state.books = action.payload;
+        },
+
+        deleteBookFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
     },
 });
 
@@ -54,7 +64,9 @@ export const {
     sortBooksByTitle,
     sortBooksById,
     sortBooksByIdReverse,
-    sortBooksByGenre} =
+    sortBooksByGenre,
+    deleteBookSuccess,
+    deleteBookFailure} =
     booksSlice.actions;
 
 export default booksSlice.reducer;

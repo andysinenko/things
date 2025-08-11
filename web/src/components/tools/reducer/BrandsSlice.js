@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 const brandsSlice = createSlice({
     name: "brands",
     initialState: {
-        tools: [],
+        brands: [],
         loading: false,
         error: null,
     },
@@ -15,7 +15,7 @@ const brandsSlice = createSlice({
 
         fetchBrandsSuccess(state, action) {
             state.loading = false;
-            state.places = action.payload;
+            state.brands = action.payload;
         },
 
         fetchBrandsFailure(state, action) {

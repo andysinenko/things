@@ -7,11 +7,23 @@ const ToolModal = ({isOpen,
     onSubmit,
     formData,
     setFormData,
+    modalType,
     selectedTool,
     selectedBrand,
     selectedPlace,
     places = [],
     brands = []}) => {
+
+    const ToolTypes = [
+        "DRILL",
+        "PERFORATOR",
+        "BELT_SANDER",
+        "ANGLE_GRINDER",
+        "WELDING_INVERTER",
+        "JIG_SAW",
+        "VIBRO_GRINDING_MACHINE",
+        "CIRCULAR_SAW"
+    ];
 
     if (!isOpen) return null;
 
@@ -25,30 +37,78 @@ const ToolModal = ({isOpen,
     };
 
     const renderContent = () => {
-        return (
-            <div className="th-modal-overlay">
-                <div className="th-modal-content">
-                    <div className="th-modal-header">
-                        <h5>Add tool</h5>
+        switch (modalType) {
+            case "add":
+                return (
+                    <div className="th-modal-overlay">
+                        <div className="th-modal-content">
+                            <div className="th-modal-header">
+                                <h5>Add tool</h5>
+                            </div>
+                            <div className="modal-body">
+                                <form onSubmit={onSubmit}>
+                                    <input placeholder="id" className="th-main-input" name="id" value={formData.id} onChange={handleChange}  />
+                                    <input placeholder="name of tool" className="th-main-input" name="name" value={formData.name} onChange={handleChange}/>
+                                    <select aria-label="Brands" value={formData.vendor} onChange={(e) => setFormData({ ...formData, vendor: e.target.value })} aria-placeholder="Select brand">
+                                        <option value="" defaultValue>Brand name</option>
+                                        {brands.map((brand) => (
+                                            <option key={brand.id} value={brand.id}>
+                                                {brand.name}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={formData.serialNumber} onChange={handleChange}/>
+                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={formData.dateOfPurchasing} onChange={handleChange}/>
+
+                                    <select aria-label="Places" value={formData.place} onChange={(e) => setFormData({ ...formData, place: e.target.value })} aria-placeholder="Select place">
+                                        <option value="" defaultValue>Places</option>
+                                        {places.map((place) => (
+                                            <option key={place.id} value={place.id}>
+                                                {place.id} - {place.name} - {place.description}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <select id="toolType" value={formData.toolType} onChange={e => setFormData({...formData, toolType: e.target.value})} aria-placeholder="Select tool type">
+                                        <option value="" defaultValue>Tool type</option>
+                                        {ToolTypes.map((tool) => (
+                                            <option key={tool} value={tool}>
+                                                {tool}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <input placeholder="Description" className="th-main-input" name="description" value={formData.description} onChange={handleChange}/>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                                <button className="th-main-button" onClick={onClose}>Close</button>
+                                <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                            </div>
+                        </div>
                     </div>
-                    <div className="modal-body">
-                        <form onSubmit={onSubmit}>
-                            <input placeholder="id" className="th-main-input" name="id" />
-                            <input placeholder="name of tool" className="th-main-input" name="name"/>
-                            <input placeholder="brand" className="th-main-input" name="brand"/>
-                            <input placeholder="" className="th-main-input" name="address"/>
-                            <input placeholder="" className="th-main-input" name="year"/>
-                            <input placeholder="" className="th-main-input" name="description"/>
-                            <input placeholder="" className="th-main-input" name="place"/>
-                        </form>
+                );
+            case "delete" :
+                return (
+                    <div className="th-modal-overlay">
+                        <div className="th-modal-content">
+                            <div className="th-modal-header">
+                                <h5>Delete tool</h5>
+                            </div>
+                            <div className="modal-body">
+                                <form onSubmit={onSubmit}>
+                                    <span>Are you sure you want to delete "{selectedTool?.title || "this tool"}"?</span>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                                <button className="th-main-button" onClick={onClose}>Close</button>
+                                <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                            </div>
+                        </div>
                     </div>
-                    <div className="modal-footer">
-                        <button className="th-main-button" onClick={onClose}>Close</button>
-                        <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
-                    </div>
-                </div>
-            </div>
-        );
+                );
+        }
     };
 
     return (

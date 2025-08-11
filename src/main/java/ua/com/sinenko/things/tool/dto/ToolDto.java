@@ -1,6 +1,8 @@
 package ua.com.sinenko.things.tool.dto;
 
 import lombok.Builder;
+import ua.com.sinenko.things.place.dto.PlaceDto;
+import ua.com.sinenko.things.tool.entity.ToolType;
 
 import java.time.LocalDate;
 
@@ -8,10 +10,11 @@ import java.time.LocalDate;
 @Builder
 public record ToolDto(
         Long id,
-        String type,
-        VendorDto vendorDto,
-        LocalDate dateOfPurchasing,
         String name,
+        ToolType toolType,
         String serialNumber,
+        VendorDto vendor,
+        PlaceDto place,
+        LocalDate dateOfPurchasing,
         String description) {
 }

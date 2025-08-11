@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ua.com.sinenko.things.place.entity.Place;
 
 import java.time.LocalDate;
 
@@ -29,23 +30,27 @@ public class Tool {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "tool_type")
     @Enumerated(EnumType.STRING)
     private ToolType type;
+
+    @Column(name = "serial_number")
+    private String serialNumber;
 
     @JoinColumn(name = "vendor", nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     private Vendor vendor;
 
+    @JoinColumn(name = "place", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Place place;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_purchasing")
     private LocalDate dateOfPurchasing;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "serial_number")
-    private String serialNumber;
 
     @Column(name = "description")
     private String description;

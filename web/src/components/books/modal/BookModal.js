@@ -82,8 +82,6 @@ const BookModal = ({
                             </div>
                         </div>
                     </div>
-
-
                 );
             case "delete":
                 return (

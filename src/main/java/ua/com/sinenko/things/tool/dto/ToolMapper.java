@@ -1,7 +1,7 @@
 package ua.com.sinenko.things.tool.dto;
 
+import ua.com.sinenko.things.place.dto.PlaceMapper;
 import ua.com.sinenko.things.tool.entity.Tool;
-import ua.com.sinenko.things.tool.entity.ToolType;
 import ua.com.sinenko.things.tool.entity.Vendor;
 
 import java.util.List;
@@ -10,16 +10,17 @@ import java.util.stream.Collectors;
 public class ToolMapper {
     public static Tool mapDtoToEntity(ToolDto dto) {
         Vendor vendor = new Vendor();
-        vendor.setId(dto.vendorDto().id());
-        vendor.setName(dto.vendorDto().name());
+        vendor.setId(dto.vendor().id());
+        vendor.setName(dto.vendor().name());
         return Tool.builder()
                 .id(dto.id())
                 .name(dto.name())
-                .description(dto.description())
-                .type(ToolType.valueOf(dto.type()))
-                .dateOfPurchasing(dto.dateOfPurchasing())
-                .vendor(vendor)
                 .serialNumber(dto.serialNumber())
+                .dateOfPurchasing(dto.dateOfPurchasing())
+                .type(dto.toolType())
+                .vendor(vendor)
+                .place(PlaceMapper.mapDtoToEntity(dto.place()))
+                .description(dto.description())
                 .build();
     }
 
@@ -29,9 +30,10 @@ public class ToolMapper {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
-                .type(entity.getType().name())
+                .toolType(entity.getType())
+                .place(PlaceMapper.mapEntityToDto(entity.getPlace()))
                 .dateOfPurchasing(entity.getDateOfPurchasing())
-                .vendorDto(vendor)
+                .vendor(vendor)
                 .serialNumber(entity.getSerialNumber())
                 .build();
     }
