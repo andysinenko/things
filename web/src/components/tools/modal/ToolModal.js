@@ -24,7 +24,6 @@ const ToolModal = ({isOpen,
         }
     };
 
-
     const renderContent = () => {
         return (
             <div className="th-modal-overlay">

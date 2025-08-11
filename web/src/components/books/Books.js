@@ -227,7 +227,6 @@ export const Books = () => {
                 setFormData={setFormData}
                 modalType={modalType}
                 selectedBook={selectedBook}
-                header="Add book"
                 genres={genres}
                 series={series}
                 authors={authors}
