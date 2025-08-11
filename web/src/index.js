@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './modal.css';
 import App from './components/App';
 import Places from "./components/places";
 import Books from "./components/books";

@@ -1,24 +1,24 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const toolsSlice = createSlice({
-    name: "tools",
+const brandsSlice = createSlice({
+    name: "brands",
     initialState: {
         tools: [],
         loading: false,
         error: null,
     },
     reducers: {
-        fetchToolsStart(state) {
+        fetchBrandsStart(state) {
             state.loading = true;
             state.error = null;
         },
 
-        fetchToolsSuccess(state, action) {
+        fetchBrandsSuccess(state, action) {
             state.loading = false;
             state.places = action.payload;
         },
 
-        fetchToolsFailure(state, action) {
+        fetchBrandsFailure(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -26,9 +26,9 @@ const toolsSlice = createSlice({
 });
 
 export const {
-    fetchToolsStart,
-    fetchToolsSuccess,
-    fetchToolsFailure
-} = toolsSlice.actions;
+    fetchBrandsStart,
+    fetchBrandsSuccess,
+    fetchBrandsFailure
+} = brandsSlice.actions;
 
-export default toolsSlice.reducer;
+export default brandsSlice.reducer;

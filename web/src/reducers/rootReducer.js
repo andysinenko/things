@@ -6,6 +6,7 @@ import useReducer from "../components/signin/reducer/UserSlice";
 import authorsReducer from "../components/books/reducer/AuthorsSlice";
 import genresReducer from "../components/books/reducer/GenresSlice";
 import seriesReducer from "../components/books/reducer/SeriesSlice";
+import brandsReducer from "../components/tools/reducer/BrandsSlice";
 
 
 const rootReducer = combineReducers({
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     userReducer: useReducer,
     authorsReducer: authorsReducer,
     genresReducer: genresReducer,
-    seriesReducer: seriesReducer
+    seriesReducer: seriesReducer,
+    brandsReducer: brandsReducer
 });
 
 

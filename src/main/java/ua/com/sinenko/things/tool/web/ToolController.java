@@ -1,28 +1,25 @@
 package ua.com.sinenko.things.tool.web;
 
-import jakarta.websocket.server.PathParam;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ua.com.sinenko.things.tool.dto.ToolDto;
 import ua.com.sinenko.things.tool.dto.ToolMapper;
+import ua.com.sinenko.things.tool.dto.VendorDto;
+import ua.com.sinenko.things.tool.dto.VendorMapper;
 import ua.com.sinenko.things.tool.service.ToolService;
+import ua.com.sinenko.things.tool.service.VendorService;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/tools")
+@RequiredArgsConstructor
 public class ToolController {
 
-    private ToolService toolService;
-
-    public ToolController(ToolService toolService) {
-        this.toolService = toolService;
-    }
+    private final ToolService toolService;
+    private final VendorService vendorService;
 
     @GetMapping
     @ResponseBody
@@ -34,13 +31,22 @@ public class ToolController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> addNewTool() {
+    public ResponseEntity<String> addNewTool(ToolDto toolDto) {
         return new ResponseEntity<String>("new tool", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<String> getToolById(@PathParam("id") String id) {
-        return new ResponseEntity<String>("tool " + id, HttpStatus.OK);
+    public ResponseEntity<String> getToolById(@PathVariable("id") String id) {
+        return new ResponseEntity<>("tool " + id, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/brands", produces = "application/json")
+    public ResponseEntity<List<VendorDto>> getToolBrands() {
+        var vendors = vendorService.getAllVendors();
+        var vendorDtos = VendorMapper.toVendorDtoList(vendors);
+        return new ResponseEntity<>(vendorDtos, HttpStatus.OK);
+    }
+
+
 }

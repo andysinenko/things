@@ -1,19 +1,18 @@
 import React from "react";
-import "./PlaceModal.css";
-import {TreeView} from "../treeview/TreeView";
+import "./ToolModal.css";
+import {TreeView} from "../../places/treeview/TreeView";
 
-const PlaceModal = ({
-                        data,
-                        onCrossClick,
-                        isOpen,
-                        onClose,
-                        onSubmit,
-                        formData,
-                        setFormData,
-                        modalType,
-                        selectedPlace,
-                        onAddChild
-                    }) => {
+const ToolModal = ({isOpen,
+    onClose,
+    onSubmit,
+    formData,
+    setFormData,
+    selectedTool,
+    selectedBrand,
+    selectedPlace,
+    places = [],
+    brands = []}) => {
+
     if (!isOpen) return null;
 
     const handleChange = (e) => {
@@ -31,14 +30,19 @@ const PlaceModal = ({
             <div className="th-modal-overlay">
                 <div className="th-modal-content">
                     <div className="th-modal-header">
-                        <h5>Add place</h5>
-                        <button className="th-modal-close-btn" onClick={onClose}>×</button>
+                        <h5>Add tool</h5>
                     </div>
-
                     <div className="modal-body">
-                        <TreeView data={data} onCrossClick={onCrossClick} onAddChild={onAddChild} />
+                        <form onSubmit={onSubmit}>
+                            <input placeholder="id" className="th-main-input" name="id" />
+                            <input placeholder="name of tool" className="th-main-input" name="name"/>
+                            <input placeholder="brand" className="th-main-input" name="brand"/>
+                            <input placeholder="" className="th-main-input" name="address"/>
+                            <input placeholder="" className="th-main-input" name="year"/>
+                            <input placeholder="" className="th-main-input" name="description"/>
+                            <input placeholder="" className="th-main-input" name="place"/>
+                        </form>
                     </div>
-
                     <div className="modal-footer">
                         <button className="th-main-button" onClick={onClose}>Close</button>
                         <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
@@ -46,7 +50,7 @@ const PlaceModal = ({
                 </div>
             </div>
         );
-    }
+    };
 
     return (
         <div className="th-modal-overlay">
@@ -55,4 +59,4 @@ const PlaceModal = ({
     );
 };
 
-export default PlaceModal;
+export default ToolModal;

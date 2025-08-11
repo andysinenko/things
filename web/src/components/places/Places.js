@@ -4,8 +4,6 @@ import {fetchAllPlaces} from "./api/api";
 import {useDispatch, useSelector} from "react-redux";
 import PlaceModal from "./modal/PlaceModal";
 
-const INITIAL_SORT_MENU_TYPE = 'id';
-
 const Places = () => {
     const dispatch = useDispatch();
     const {places, loading, error} = useSelector(state => state.placeReducer);
@@ -159,7 +157,6 @@ const Places = () => {
                 setFormData={setFormData}
                 modalType={modalType}
                 selectedBook={selectedBook}
-                header="Add place"
                 onAddChild={handleAddChild}
             />
         </main>
