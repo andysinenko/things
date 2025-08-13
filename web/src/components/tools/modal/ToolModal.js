@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import "./ToolModal.css";
-import {TreeView} from "../../places/treeview/TreeView";
+import PlaceModal from "../../places/modal/PlaceModal";
 
 const ToolModal = ({isOpen,
     onClose,
@@ -8,11 +8,13 @@ const ToolModal = ({isOpen,
     formData,
     setFormData,
     modalType,
+   setSelectedPlace,
+   setSelectedBrand,
     selectedTool,
-    selectedBrand,
-    selectedPlace,
-    places = [],
-    brands = []}) => {
+    isTreeModalOpen,
+    setIsTreeModalOpen,
+    places=[],
+    brands=[]}) => {
 
     const ToolTypes = [
         "DRILL",
@@ -25,7 +27,20 @@ const ToolModal = ({isOpen,
         "CIRCULAR_SAW"
     ];
 
-    if (!isOpen) return null;
+    if (!isOpen) {
+        return null;
+    }
+
+    const closeTreeModal = () => {
+        setIsTreeModalOpen(false);
+        //setFormData({id: "", name: "", parent: "", level: ""});
+    };
+
+    const onNodeClick = (key) => {
+        const placeObject = places.find(p => p.id === Number(key)) || null;
+        setSelectedPlace(placeObject);
+        setIsTreeModalOpen(false); // Close the PlaceModal after selection
+    };
 
     const handleChange = (e) => {
         if (e !== undefined && e.target !== undefined) {
@@ -34,6 +49,37 @@ const ToolModal = ({isOpen,
         } else {
             onClose();
         }
+    };
+
+
+    const buildTree = data => {
+        const map = new Map();
+        const roots = [];
+
+        data.forEach(item => {
+            map.set(item.id, {...item, children: []});
+        });
+
+        map.forEach(item => {
+            if (item.parent && map.has(item.parent.id)) {
+                map.get(item.parent.id).children.push(item);
+            } else {
+                roots.push(item);
+            }
+        });
+
+        return roots;
+    };
+
+    const placesTree = buildTree(places);
+
+    const onPlacesOpenDialogBox = (e) => {
+        e.preventDefault();
+        setIsTreeModalOpen(true);
+    };
+
+    const handleTreeSubmit = (e) => {
+        setIsTreeModalOpen(false);
     };
 
     const renderContent = () => {
@@ -47,9 +93,15 @@ const ToolModal = ({isOpen,
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={formData.id} onChange={handleChange}  />
+                                    <input placeholder="id" className="th-main-input" name="id" value={formData.id} onChange={handleChange}  disabled={true}/>
                                     <input placeholder="name of tool" className="th-main-input" name="name" value={formData.name} onChange={handleChange}/>
-                                    <select aria-label="Brands" value={formData.vendor} onChange={(e) => setFormData({ ...formData, vendor: e.target.value })} aria-placeholder="Select brand">
+                                    <select aria-label="Brands" value={formData.vendor} onChange={
+                                        (e) => {
+                                            console.log("!!!! FROM BRANDS SELECTED: ", e.target.value);
+                                            const brandId = e.target.value;
+                                            setSelectedBrand(brandId);
+                                        }
+                                    } aria-placeholder="Select brand">
                                         <option value="" defaultValue>Brand name</option>
                                         {brands.map((brand) => (
                                             <option key={brand.id} value={brand.id}>
@@ -61,14 +113,7 @@ const ToolModal = ({isOpen,
                                     <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={formData.serialNumber} onChange={handleChange}/>
                                     <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={formData.dateOfPurchasing} onChange={handleChange}/>
 
-                                    <select aria-label="Places" value={formData.place} onChange={(e) => setFormData({ ...formData, place: e.target.value })} aria-placeholder="Select place">
-                                        <option value="" defaultValue>Places</option>
-                                        {places.map((place) => (
-                                            <option key={place.id} value={place.id}>
-                                                {place.id} - {place.name} - {place.description}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Choose place</button>
 
                                     <select id="toolType" value={formData.toolType} onChange={e => setFormData({...formData, toolType: e.target.value})} aria-placeholder="Select tool type">
                                         <option value="" defaultValue>Tool type</option>
@@ -83,8 +128,8 @@ const ToolModal = ({isOpen,
                                 </form>
                             </div>
                             <div className="modal-footer">
-                                <button className="th-main-button" onClick={onClose}>Close</button>
-                                <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                                <button type="button" className="th-main-button" onClick={onClose}>Close</button>
+                                <button type="submit" className="th-main-button" onClick={onSubmit}>Save Changes</button>
                             </div>
                         </div>
                     </div>
@@ -112,9 +157,26 @@ const ToolModal = ({isOpen,
     };
 
     return (
-        <div className="th-modal-overlay">
-            <div className="th-modal-content">{renderContent()}</div>
-        </div>
+        <>
+            {isOpen && (
+                <div className="th-modal-overlay">
+                    <div className="th-modal-content">
+                        {renderContent()}
+                    </div>
+                </div>
+            )}
+
+            <PlaceModal
+                data={placesTree}
+                onCrossClick={onNodeClick}
+                isOpen={isTreeModalOpen}
+                onClose={closeTreeModal}
+                onSubmit={handleTreeSubmit}
+                formData={formData}
+                setFormData={setFormData}
+                onAddChild={onNodeClick}
+            />
+        </>
     );
 };
 

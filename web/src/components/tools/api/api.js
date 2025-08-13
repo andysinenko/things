@@ -28,6 +28,7 @@ export const addNewTool = (tool) => async (dispatch) => {
 export const deleteTool = (id) => async (dispatch) => {
     try {
         const response = await axios.delete(`http://localhost:8080/api/v1/tools/${id}`);
+        console.log("tool deleted " , response);
         if (response.status === 200) {
             dispatch(deleteToolSuccess(id));
         } else {

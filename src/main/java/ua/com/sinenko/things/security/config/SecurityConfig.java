@@ -80,8 +80,6 @@ public class SecurityConfig {
                 .exceptionHandling((exception) -> exception.authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler)
                 );
-                /*.formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults());*/
         return http.build();
     }
 

@@ -182,6 +182,7 @@ export const Books = () => {
                         <th>Year</th>
                         <th>Place</th>
                         <th>Description</th>
+                        <th>Edit</th>
                         <th>Delete</th>
                     </tr>
                     </thead>
@@ -201,16 +202,16 @@ export const Books = () => {
                             <td>{book.place}</td>
                             <td>{book.description}</td>
                             <td>
-                                <button onClick={() => handleDelBook(book)}
-                                        style={{cursor: 'pointer', border: 'none', background: 'none'}}>
-                                    <FontAwesomeIcon icon={faTrash} size="lg" color="red"/>
-                                </button>
+                                <button className="table-action-btn edit-btn" title="Редактировать">✏️</button>
+                            </td>
+                            <td>
+                                <button className="table-action-btn delete-btn" title="Удалить" onClick={() => handleDelBook(book)}>🗑️</button>
                             </td>
                         </tr>
                     ) : (
                         <tr>
                             <td colSpan="10" style={{textAlign: "center"}}>
-                                <h3>Book list is empty</h3>
+                                <h5>Book list is empty</h5>
                             </td>
                         </tr>
                     )}

@@ -41,6 +41,11 @@ logging:
   level:
     ua.com.sinenko.things: TRACE
     root: WARN
-    org.springframework.security: DEBUG
+    org:
+      springframework:
+        security: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql.BasicBinder: TRACE
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

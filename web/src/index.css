@@ -181,42 +181,36 @@ code {
   cursor: pointer;
 }
 
-.authors {
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-}
-
-.authors span {
-  font-size: 12px;
-  border: #dddddd 1px solid;
-  border-radius: 2px;
-  padding: 2px 2px;
-  margin: 1px 1px 1px 1px;
-  background-color: #f8f8f8;
-  text-align: justify;
-}
-
-.authors {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 4px;
-}
-
-.authors span {
-  font-size: 13px;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  padding: 4px 8px;
-  margin: 0;
-  background-color: #f9fafb;
-  text-align: left;
+/* Общий стиль для кнопок */
+.table-action-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px; /* Размер кнопки */
+  height: 32px;
+  border: none;
+  border-radius: 4px; /* Скругление углов */
+  cursor: pointer;
+  font-size: 16px; /* Размер иконки */
+  color: #fff;
   transition: background-color 0.2s ease;
+  margin: 0 4px; /* Отступы между кнопками */
 }
 
-.authors span:hover {
-  background-color: #e5e7eb;
+.edit-btn {
+  background-color: #f9f9f9;
+}
+
+.edit-btn:hover {
+  background-color: #c6c5c5;
+}
+
+.delete-btn {
+  background-color: #fff0;
+}
+
+.delete-btn:hover {
+  background-color: #c6c5c5;
 }
 
 .thbtn-add {

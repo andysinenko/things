@@ -9,7 +9,6 @@ const Places = () => {
     const {places, loading, error} = useSelector(state => state.placeReducer);
     const [treeData, setTreeData] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalType, setModalType] = useState(null);
     const [formData, setFormData] = useState({
         id: "",
         title: "",
@@ -23,11 +22,9 @@ const Places = () => {
     const [selectedBook, setSelectedBook] = useState(null);
 
     const openModal = (type, book = null) => {
-        console.log("Opening modal with type:", type);
-        setModalType(type);
-        setSelectedBook(book);
         setIsModalOpen(true);
     };
+
     const handleAddChild = (parentNode, childName) => {
         const addChild = (nodes) => {
             return nodes.map(node => {
@@ -51,20 +48,17 @@ const Places = () => {
         };
         setTreeData(prev => addChild(prev));
     };
+
     const closeModal = () => {
         setIsModalOpen(false);
-        setModalType(null);
         setFormData({id: "", name: "", parent: "", level: ""});
-        setSelectedBook(null);
     };
 
     useEffect(() => {
-        console.log("useEffect called");
         dispatch(fetchAllPlaces());
     }, [dispatch]);
 
     const handleAddPlace = () => {
-        console.log("Opening Add Place Modal");
         openModal("add");
     };
 
@@ -72,7 +66,7 @@ const Places = () => {
         e.preventDefault();
         console.log("Submitting form data:", formData);
         try {
-            //await dispatch(addNewBook(formData));
+           // await dispatch(addNewPlace(formData));
             closeModal();
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -155,8 +149,6 @@ const Places = () => {
                 onSubmit={handleSubmit}
                 formData={formData}
                 setFormData={setFormData}
-                modalType={modalType}
-                selectedBook={selectedBook}
                 onAddChild={handleAddChild}
             />
         </main>

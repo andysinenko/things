@@ -35,7 +35,7 @@ public class ToolController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<Void> addNewTool(@RequestBody ToolDto toolDto) {
-        LOGGER.debug("Add new tool: {}", toolDto);
+        LOGGER.debug("!!!!!! Add new tool: {}", toolDto);
         var tool = ToolMapper.mapDtoToEntity(toolDto);
         toolService.saveTool(tool);
         return new ResponseEntity<Void>(HttpStatus.CREATED);

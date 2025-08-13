@@ -19,6 +19,10 @@ const TreeNode = ({ node, onCrossClick, onAddChild }) => {
         }
     };
 
+    const handleChoosePlase = (key) => {
+        onCrossClick(key);
+    }
+
     return (
         <li className="tree-node">
             <div className="tree-node-header">
@@ -35,8 +39,8 @@ const TreeNode = ({ node, onCrossClick, onAddChild }) => {
                 </span>
 
                 {node.level === 3 ?
-                    (<button title="Remove" type="button" onClick={(event) => alert("Clicked")} className="tree-remove-btn">x</button>) :
-                    (<button title="Add a child place" onClick={handleAddClick} className="tree-add-btn">+</button>
+                    (<button title="Choose this plase" type="button" onClick={() => handleChoosePlase(node.id)} className="tree-remove-btn">⚽️</button>)
+                    : (<button title="Add a child place" type="button" onClick={handleAddClick} className="tree-add-btn">+</button>
                 )}
             </div>
 

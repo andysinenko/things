@@ -1,10 +1,7 @@
 package ua.com.sinenko.things.tool.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ua.com.sinenko.things.place.entity.Place;
 
 import java.time.LocalDate;
@@ -40,12 +37,16 @@ public class Tool {
     @Column(name = "serial_number")
     private String serialNumber;
 
-    @JoinColumn(name = "vendor", nullable = false)
+    @JoinColumn(name = "vendor")
     @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Vendor vendor;
 
-    @JoinColumn(name = "place", nullable = false)
+    @JoinColumn(name = "place")
     @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Place place;
 
     @Temporal(TemporalType.DATE)

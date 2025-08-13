@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ToolsRepository extends JpaRepository<Tool, Long> {
-
     List<Tool> findByType(ToolType type);
 
     List<Tool> findToolsByVendor_Name(String vendorName);

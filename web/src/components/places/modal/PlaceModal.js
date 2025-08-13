@@ -10,20 +10,9 @@ const PlaceModal = ({
                         onSubmit,
                         formData,
                         setFormData,
-                        modalType,
-                        selectedPlace,
                         onAddChild
                     }) => {
     if (!isOpen) return null;
-
-    const handleChange = (e) => {
-        if (e !== undefined && e.target !== undefined) {
-            const {name, value} = e.target;
-            setFormData((prev) => ({...prev, [name]: value}));
-        } else {
-            onClose();
-        }
-    };
 
 
     const renderContent = () => {
