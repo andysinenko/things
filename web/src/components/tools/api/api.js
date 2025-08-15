@@ -9,18 +9,15 @@ export const fetchTools = () => async (dispatch) => {
         const response = await axios.get("http://localhost:8080/api/v1/tools");
         dispatch(fetchToolsSuccess(response.data));
     } catch (error) {
-        console.log("Error on fetching tools: ", error.message);
         dispatch(fetchToolsFailure(error.message));
     }
 };
 
 export const addNewTool = (tool) => async (dispatch) => {
-    console.log("Ready for storing on adding new tool: ", tool);
     try {
         const response = await axios.post("http://localhost:8080/api/v1/tools", tool);
         dispatch(fetchTools());
     } catch (error) {
-        console.log("Error on adding new tool: ", error.message);
         dispatch(fetchToolsFailure(error.message));
     }
 };
@@ -28,7 +25,6 @@ export const addNewTool = (tool) => async (dispatch) => {
 export const deleteTool = (id) => async (dispatch) => {
     try {
         const response = await axios.delete(`http://localhost:8080/api/v1/tools/${id}`);
-        console.log("tool deleted " , response);
         if (response.status === 200) {
             dispatch(deleteToolSuccess(id));
         } else {
@@ -45,7 +41,6 @@ export const fetchBrands = () => async (dispatch) => {
         const response = await axios.get("http://localhost:8080/api/v1/tools/brands");
         dispatch(fetchBrandsSuccess(response.data));
     } catch (error) {
-        console.log("Error on fetching brands: ", error.message);
         dispatch(fetchBrandsFailure(error.message));
     }
 };

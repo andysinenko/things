@@ -1,4 +1,4 @@
-package ua.com.sinenko.things.tool.web;
+package ua.com.sinenko.things.tool.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.com.sinenko.things.tool.dto.ToolDto;
-import ua.com.sinenko.things.tool.dto.ToolMapper;
-import ua.com.sinenko.things.tool.dto.VendorDto;
-import ua.com.sinenko.things.tool.dto.VendorMapper;
+import ua.com.sinenko.things.tool.dto.*;
 import ua.com.sinenko.things.tool.service.ToolService;
 import ua.com.sinenko.things.tool.service.VendorService;
 
@@ -26,25 +23,31 @@ public class ToolController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<ToolDto>> getAllTools() {
+    public ResponseEntity<List<ToolResponse>> getAllTools() {
         var tools = toolService.getAllTools();
         var toolsDto = ToolMapper.mapEntitiesToDtos(tools);
-        return new ResponseEntity<List<ToolDto>>(toolsDto, HttpStatus.OK);
+        return new ResponseEntity<>(toolsDto, HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Void> addNewTool(@RequestBody ToolDto toolDto) {
-        LOGGER.debug("!!!!!! Add new tool: {}", toolDto);
-        var tool = ToolMapper.mapDtoToEntity(toolDto);
-        toolService.saveTool(tool);
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    public ResponseEntity<Void> addTool(@RequestBody ToolDto toolDto) {
+        toolService.saveTool(toolDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<ToolResponse> updateTool(@PathVariable Long id, @RequestBody ToolDto toolDto) {
+        var tool = toolService.updateTool(id, toolDto);
+        var toolResponse = ToolMapper.mapEntityToDto(tool);
+        return new ResponseEntity<>(toolResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<String> getToolById(@PathVariable("id") String id) {
-        return new ResponseEntity<>("tool " + id, HttpStatus.OK);
+    public ResponseEntity<ToolResponse> getToolById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

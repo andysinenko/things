@@ -3,9 +3,15 @@ package ua.com.sinenko.things.tool.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.sinenko.things.common.exception.PlaceNotExistsException;
+import ua.com.sinenko.things.common.exception.VendorNotExistsException;
+import ua.com.sinenko.things.place.repository.PlaceRepository;
+import ua.com.sinenko.things.tool.dto.ToolDto;
+import ua.com.sinenko.things.tool.dto.ToolMapper;
 import ua.com.sinenko.things.tool.entity.Tool;
 import ua.com.sinenko.things.tool.entity.ToolType;
 import ua.com.sinenko.things.tool.repository.ToolsRepository;
+import ua.com.sinenko.things.tool.repository.VendorRepository;
 
 import java.util.List;
 
@@ -13,13 +19,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ToolService {
     private final ToolsRepository toolsRepository;
+    private final VendorRepository vendorRepository;
+    private final PlaceRepository placeRepository;
 
     public List<Tool> getAllTools() {
         return toolsRepository.findAll();
     }
 
     @Transactional
-    public void saveTool(Tool tool) {
+    public void saveTool(ToolDto toolDto) {
+        var tool = ToolMapper.mapDtoToEntity(toolDto);
+        var place = placeRepository.findById(toolDto.place()).orElseThrow(() -> new PlaceNotExistsException(toolDto.place()));
+        var vendor = vendorRepository.findById(toolDto.vendor()).orElseThrow(() -> new VendorNotExistsException(toolDto.vendor()));
+        tool.setVendor(vendor);
+        tool.setPlace(place);
         toolsRepository.save(tool);
     }
 
@@ -39,8 +52,22 @@ public class ToolService {
     }
 
     @Transactional
-    public void updateTool(Tool tool) {
-        toolsRepository.save(tool);
+    public Tool updateTool(Long id, ToolDto toolDto) {
+        Tool tool = toolsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tool not found"));
+
+        var place = placeRepository.findById(toolDto.place()).orElseThrow(() -> new PlaceNotExistsException(toolDto.place()));
+        var vendor = vendorRepository.findById(toolDto.vendor()).orElseThrow(() -> new VendorNotExistsException(toolDto.vendor()));
+
+        tool.setName(toolDto.name());
+        tool.setSerialNumber(toolDto.serialNumber());
+        tool.setType(toolDto.toolType());
+        tool.setDescription(toolDto.description());
+        tool.setDateOfPurchasing(toolDto.dateOfPurchasing());
+        tool.setVendor(vendor);
+        tool.setPlace(place);
+
+        return toolsRepository.save(tool);
     }
 
     public List<Tool> getToolsByDescription(String description) {

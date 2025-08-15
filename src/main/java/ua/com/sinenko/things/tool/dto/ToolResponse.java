@@ -8,13 +8,13 @@ import java.time.LocalDate;
 
 
 @Builder
-public record ToolDto(
+public record ToolResponse(
         Long id,
         String name,
         ToolType toolType,
         String serialNumber,
-        Long vendor,
-        Long place,
+        VendorDto vendor,
+        PlaceDto place,
         LocalDate dateOfPurchasing,
         String description) {
 }

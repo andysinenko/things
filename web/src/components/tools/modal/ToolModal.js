@@ -1,5 +1,3 @@
-import React, {useState} from "react";
-import "./ToolModal.css";
 import PlaceModal from "../../places/modal/PlaceModal";
 
 const ToolModal = ({isOpen,
@@ -8,8 +6,9 @@ const ToolModal = ({isOpen,
     formData,
     setFormData,
     modalType,
-   setSelectedPlace,
-   setSelectedBrand,
+    selectedPlace,
+    setSelectedPlace,
+    setSelectedBrand,
     selectedTool,
     isTreeModalOpen,
     setIsTreeModalOpen,
@@ -33,13 +32,14 @@ const ToolModal = ({isOpen,
 
     const closeTreeModal = () => {
         setIsTreeModalOpen(false);
-        //setFormData({id: "", name: "", parent: "", level: ""});
     };
 
-    const onNodeClick = (key) => {
-        const placeObject = places.find(p => p.id === Number(key)) || null;
-        setSelectedPlace(placeObject);
-        setIsTreeModalOpen(false); // Close the PlaceModal after selection
+    const onNodeClick = (nodePlace) => {
+        //setSelectedPlace(nodePlace.id);
+        setSelectedPlace(nodePlace);
+        const newformData = {...formData, place: nodePlace.id};
+        setFormData(newformData);
+        setIsTreeModalOpen(false);
     };
 
     const handleChange = (e) => {
@@ -51,6 +51,16 @@ const ToolModal = ({isOpen,
         }
     };
 
+    const getFullPlacePath = (place) => {
+        if (!place) return '';
+        const names = [];
+        let current = place;
+        while (current) {
+            names.unshift(current.name);
+            current = current.parent;
+        }
+        return names.join(' -> ');
+    }
 
     const buildTree = data => {
         const map = new Map();
@@ -97,9 +107,10 @@ const ToolModal = ({isOpen,
                                     <input placeholder="name of tool" className="th-main-input" name="name" value={formData.name} onChange={handleChange}/>
                                     <select aria-label="Brands" value={formData.vendor} onChange={
                                         (e) => {
-                                            console.log("!!!! FROM BRANDS SELECTED: ", e.target.value);
                                             const brandId = e.target.value;
-                                            setSelectedBrand(brandId);
+                                            const newformData = {...formData, vendor: brandId};
+                                            setFormData(newformData);
+                                            //setSelectedBrand(brandId);
                                         }
                                     } aria-placeholder="Select brand">
                                         <option value="" defaultValue>Brand name</option>
@@ -113,7 +124,66 @@ const ToolModal = ({isOpen,
                                     <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={formData.serialNumber} onChange={handleChange}/>
                                     <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={formData.dateOfPurchasing} onChange={handleChange}/>
 
-                                    <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Choose place</button>
+                                    {selectedPlace !== null && selectedPlace !== undefined ? (
+                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedPlace)} ✅</button>
+                                    ) : (
+                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>What a place ❓</button>
+                                    )}
+
+                                    <select id="toolType" value={formData.toolType} onChange={e => setFormData({...formData, toolType: e.target.value})} aria-placeholder="Select tool type">
+                                        <option value="" defaultValue>Tool type</option>
+                                        {ToolTypes.map((tool) => (
+                                            <option key={tool} value={tool}>
+                                                {tool}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <input placeholder="Description" className="th-main-input" name="description" value={formData.description} onChange={handleChange}/>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="th-main-button" onClick={onClose}>Close</button>
+                                <button type="submit" className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            case "edit":
+                return (
+                    <div className="th-modal-overlay">
+                        <div className="th-modal-content">
+                            <div className="th-modal-header">
+                                <h5>Edit tool</h5>
+                            </div>
+                            <div className="modal-body">
+                                <form onSubmit={onSubmit}>
+                                    <input placeholder="id" className="th-main-input" name="id" value={formData.id} onChange={handleChange}  disabled={true}/>
+                                    <input placeholder="name of tool" className="th-main-input" name="name" value={formData.name} onChange={handleChange}/>
+                                    <select aria-label="Brands" value={formData.vendor} onChange={
+                                        (e) => {
+                                            const brandId = e.target.value;
+                                            const newformData = {...formData, vendor: brandId};
+                                            setFormData(newformData);
+                                            //setSelectedBrand(brandId);
+                                        }
+                                    } aria-placeholder="Select brand">
+                                        <option value="" defaultValue>Brand name</option>
+                                        {brands.map((brand) => (
+                                            <option key={brand.id} value={brand.id}>
+                                                {brand.name}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={formData.serialNumber} onChange={handleChange}/>
+                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={formData.dateOfPurchasing} onChange={handleChange}/>
+
+                                    {selectedPlace !== null && selectedPlace !== undefined ? (
+                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedPlace)} ✅</button>
+                                    ) : (
+                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>What a place ❓</button>
+                                    )}
 
                                     <select id="toolType" value={formData.toolType} onChange={e => setFormData({...formData, toolType: e.target.value})} aria-placeholder="Select tool type">
                                         <option value="" defaultValue>Tool type</option>
@@ -153,6 +223,7 @@ const ToolModal = ({isOpen,
                         </div>
                     </div>
                 );
+            default: return (<p>Unknown action</p>);
         }
     };
 
@@ -172,8 +243,6 @@ const ToolModal = ({isOpen,
                 isOpen={isTreeModalOpen}
                 onClose={closeTreeModal}
                 onSubmit={handleTreeSubmit}
-                formData={formData}
-                setFormData={setFormData}
                 onAddChild={onNodeClick}
             />
         </>

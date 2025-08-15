@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TreeView.css';
 
-const TreeNode = ({ node, onCrossClick, onAddChild }) => {
+const TreeNode = ({ node, onCrossClick, onAddChild}) => {
     const [expanded, setExpanded] = useState(false);
     const [showInput, setShowInput] = useState(false);
     const [childName, setChildName] = useState('');
@@ -19,8 +19,8 @@ const TreeNode = ({ node, onCrossClick, onAddChild }) => {
         }
     };
 
-    const handleChoosePlase = (key) => {
-        onCrossClick(key);
+    const handleChoosePlase = (node) => {
+        onCrossClick(node);
     }
 
     return (
@@ -39,7 +39,7 @@ const TreeNode = ({ node, onCrossClick, onAddChild }) => {
                 </span>
 
                 {node.level === 3 ?
-                    (<button title="Choose this plase" type="button" onClick={() => handleChoosePlase(node.id)} className="tree-remove-btn">⚽️</button>)
+                    (<button title="Choose this plase" type="button" onClick={() => handleChoosePlase(node)} className="tree-remove-btn">⚽️</button>)
                     : (<button title="Add a child place" type="button" onClick={handleAddClick} className="tree-add-btn">+</button>
                 )}
             </div>
@@ -57,7 +57,7 @@ const TreeNode = ({ node, onCrossClick, onAddChild }) => {
             {hasChildren && expanded && (
                 <ul className="tree-children">
                     {node.children.map(child =>
-                        (<TreeNode key={child.id} node={child} onCrossClick={onCrossClick} onAddChild={onAddChild}/>)
+                        (<TreeNode key={child.id} node={child} onCrossClick={onCrossClick} onAddChild={onAddChild} />)
                     )}
                 </ul>
             )}

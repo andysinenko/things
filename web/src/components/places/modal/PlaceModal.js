@@ -8,12 +8,10 @@ const PlaceModal = ({
                         isOpen,
                         onClose,
                         onSubmit,
-                        formData,
-                        setFormData,
                         onAddChild
                     }) => {
-    if (!isOpen) return null;
 
+    if (!isOpen) return null;
 
     const renderContent = () => {
         return (
@@ -25,7 +23,7 @@ const PlaceModal = ({
                     </div>
 
                     <div className="modal-body">
-                        <TreeView data={data} onCrossClick={onCrossClick} onAddChild={onAddChild} />
+                        <TreeView data={data} onCrossClick={onCrossClick} onAddChild={onAddChild}/>
                     </div>
 
                     <div className="modal-footer">
