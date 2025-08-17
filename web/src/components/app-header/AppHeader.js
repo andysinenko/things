@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import './AppHeader.css';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import logo from './Design.png';
 import {AuthContext} from '../auth/AuthProvider';
 import {useSelector} from "react-redux";
@@ -31,13 +31,14 @@ const AppHeader = () => {
                     <Link to="/signin"><img src={logo} alt="Logo" style={logoStyle}/></Link>
                 )}
                 <ul className="header-menue">
-                    <li className="li-header"><Link to="/dashboard" className="nav-link px-2 text-white">#</Link></li>
-                    <li className="li-header"><Link to="/books" className="nav-link px-2 text-white">Books</Link></li>
-                    <li className="li-header"><Link to="/tools" className="nav-link px-2 text-white">Tools</Link></li>
-                    <li className="li-header"><Link to="/places" className="nav-link px-2 text-white">Places</Link></li>
-                    <li className="li-header"><Link to="/admin" className="nav-link px-2 text-white">Admin</Link></li>
+                    <li className="li-header-my"><NavLink to="/dashboard" className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>#</NavLink></li>
+                    <li className="li-header-my"><NavLink to="/books"     className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Books</NavLink></li>
+                    <li className="li-header-my"><NavLink to="/tools"     className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Tools</NavLink></li>
+                    <li className="li-header-my"><NavLink to="/places"    className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Places</NavLink></li>
+
                 </ul>
             </div>
+            <div className="header-title"><span>Things</span></div>
             <div className="right-header">
                 <ul className="header-menue">
                     <li>{loading ? "Loading..." : user.username || "Guest"}</li>

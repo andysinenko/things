@@ -36,7 +36,7 @@ public class ToolController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     @ResponseBody
     public ResponseEntity<ToolResponse> updateTool(@PathVariable Long id, @RequestBody ToolDto toolDto) {
         var tool = toolService.updateTool(id, toolDto);

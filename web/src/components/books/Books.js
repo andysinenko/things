@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react'
-
 import ThSelect from "../layout/select/th-select";
 
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {
     sortBooksByTitle,
     sortBooksById,

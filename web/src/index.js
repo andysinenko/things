@@ -6,7 +6,7 @@ import App from './components/App';
 import Places from "./components/places";
 import Books from "./components/books";
 import Tools from "./components/tools";
-import Admin from "./components/admin";
+//import Admin from "./components/admin";
 import {Provider} from "react-redux";
 import store from "./store/storeConfig";
 import Dashboard from "./components/dashboard";
@@ -29,7 +29,6 @@ root.render(
                         <Route path="/places" element={<Places/>}/>
                         <Route path="/books" element={<Books/>}/>
                         <Route path="/tools" element={<Tools/>}/>
-                        <Route path="/admin" element={<Admin/>}/>
                     </Route>
                     <Route path="/signin" element={<SignIn />} />
                 </Routes>

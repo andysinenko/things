@@ -38,71 +38,32 @@
     color: white;
 }
 
-/*
-.th-header {
-    z-index: 1000;
+.active_link {
+    color: rgb(251, 240, 66)!important;
+    font-weight: bold!important;
+}
+
+.pending {
+    text-decoration: none;
+    color: white;
+    padding: 5px;
+    margin: 5px;
 }
 
 .li-header-my {
     padding: 5px;
     margin-right: 10px;
     font-size: 14px;
-    background-color: #1f2937;
+    color: white;
+    font-family: Lato, sans-serif;
+    font-size: 12px;
 }
 
-.btn-signout {
-    border: none;
-    font-size: inherit;
-    color: #000000;
-    background: rgb(255, 255, 255);
-    cursor: pointer;
-    padding: 10px 20px;
-    display: inline-block;
-    margin: 0px 0px;
-    !*text-transform: uppercase;*!
-    letter-spacing: 1px;
-    font-weight: 500;
-    outline: none;
-    position: relative;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s;
-    box-shadow: 2px 2px 2px rgba(201, 225, 239, 0.53);
-    border-radius: 4px;
+.header-title {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 10px;
+    font-size: 30px;
+    color: white;
 }
-
-.btn-signout:active {
-    background-color: rgb(255, 255, 255);
-    box-shadow: 1px 1px 2px rgba(201, 225, 239, 0.77);
-    transform: translateY(3px);
-}
-
-.btn-username {
-    border: none;
-    font-size: inherit;
-    color: #ffffff;
-    background: rgb(0, 0, 0, 0);
-    cursor: pointer;
-    padding: 10px 20px;
-    display: inline-block;
-    !*text-transform: uppercase;*!
-    letter-spacing: 1px;
-    font-weight: 500;
-    outline: none;
-    position: relative;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    margin-right: 50px;
-    height: fit-content;
-
-}
-
-.btn-username:hover {
-    font-weight: 700;
-}
-
-.btn-username:active {
-    background-color: rgb(0, 0, 0, 0);
-    text-shadow: 1px 1px 2px rgba(201, 225, 239, 0.77);
-    transform: translateY(3px);
-}*/

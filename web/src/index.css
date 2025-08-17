@@ -11,6 +11,7 @@ html, body, #root {
   height: 100%;
   display: block;
   overflow-y: auto;
+  font-family: Lato, sans-serif;
 }
 
 .content-container {
@@ -181,20 +182,19 @@ code {
   cursor: pointer;
 }
 
-/* Общий стиль для кнопок */
 .table-action-btn {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 32px; /* Размер кнопки */
+  width: 32px;
   height: 32px;
   border: none;
-  border-radius: 4px; /* Скругление углов */
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px; /* Размер иконки */
+  font-size: 16px;
   color: #fff;
   transition: background-color 0.2s ease;
-  margin: 0 4px; /* Отступы между кнопками */
+  margin: 0 4px;
 }
 
 .edit-btn {
@@ -269,4 +269,13 @@ code {
   color: rgb(255, 255, 255);
   background-color: rgba(201, 225, 239, 0.53);
   transform: translateY(3px);
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  padding: 5px;
+  margin: 5px;
+  display: inline-block;
+  font-size: 14px;
 }
