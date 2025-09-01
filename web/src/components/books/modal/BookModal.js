@@ -27,6 +27,7 @@ const BookModal = ({
     const renderContent = () => {
         switch (modalType) {
             case "add":
+            case "edit":
                 return (
                     <div className="th-modal-overlay">
                         <div className="th-modal-content">
@@ -36,8 +37,9 @@ const BookModal = ({
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={formData.id} />
-                                        <input className="th-main-input" type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Enter title of book"/>
+                                    <input placeholder="id" className="th-main-input" name="id" value={formData.id} readOnly={true} disabled={true}/>
+                                    <input className="th-main-input" type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Enter title of book"/>
+                                    <input className="th-main-input" type="text" name="volume" value={formData.volume} onChange={handleChange} placeholder="Enter volume of book"/>
                                     <select aria-label="Genre name" value={formData.genre} onChange={(e) => setFormData({ ...formData, genre: e.target.value })} aria-placeholder="Select genre">
                                         <option value="" disabled hidden>Genre name</option>
                                         {genres.map((genre) => (
@@ -47,7 +49,7 @@ const BookModal = ({
                                         ))}
                                     </select>
                                     <select multiple aria-label="Authors"
-                                                 value={formData.author.map(a => a.id)} // value — массив id
+                                                 value={formData.author?.map(a => a.id)} // value — массив id
                                                  onChange={(e) => {
                                                      const selectedIds = Array.from(e.target.selectedOptions, option => Number(option.value));
                                                      const selectedAuthors = authors.filter(author => selectedIds.includes(author.id));

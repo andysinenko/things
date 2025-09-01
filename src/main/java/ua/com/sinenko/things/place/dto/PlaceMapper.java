@@ -1,5 +1,6 @@
 package ua.com.sinenko.things.place.dto;
 
+import org.springframework.data.domain.Page;
 import ua.com.sinenko.things.place.entity.Place;
 
 import java.util.List;

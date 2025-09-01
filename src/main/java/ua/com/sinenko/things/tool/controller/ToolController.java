@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ua.com.sinenko.things.common.exception.aop.ThLogger;
 import ua.com.sinenko.things.tool.dto.*;
 import ua.com.sinenko.things.tool.service.ToolService;
 import ua.com.sinenko.things.tool.service.VendorService;
@@ -36,8 +37,9 @@ public class ToolController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @ResponseBody
+    @ThLogger
     public ResponseEntity<ToolResponse> updateTool(@PathVariable Long id, @RequestBody ToolDto toolDto) {
         var tool = toolService.updateTool(id, toolDto);
         var toolResponse = ToolMapper.mapEntityToDto(tool);

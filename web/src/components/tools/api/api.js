@@ -1,4 +1,4 @@
-import {deleteToolFailure, deleteToolSuccess, fetchToolsFailure, fetchToolsStart, fetchToolsSuccess} from "../reducer/ToolsSlice";
+import {deleteToolFailure, deleteToolSuccess, fetchToolsFailure, fetchToolsStart, fetchToolsSuccess, updateToolFailure} from "../reducer/ToolsSlice";
 import axios from "axios";
 import {fetchBrandsFailure, fetchBrandsStart, fetchBrandsSuccess} from "../reducer/BrandsSlice";
 
@@ -19,6 +19,17 @@ export const addNewTool = (tool) => async (dispatch) => {
         dispatch(fetchTools());
     } catch (error) {
         dispatch(fetchToolsFailure(error.message));
+    }
+};
+
+export const updateTool = (id, tool) => async (dispatch) => {
+    try {
+        console.log("EDITED TOOL ID: ", id);
+        console.log("EDITED TOOL: ", tool);
+        const response = await axios.put(`http://localhost:8080/api/v1/tools/${id}`, tool);
+        dispatch(fetchTools());
+    } catch (error) {
+        dispatch(updateToolFailure(error.message));
     }
 };
 

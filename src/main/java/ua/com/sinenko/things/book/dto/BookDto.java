@@ -14,5 +14,5 @@ public record BookDto(
     Long series,
     String year,
     Long placeId,
-    String volumeNumber,
+    String volume,
     String description) {}

@@ -1,6 +1,8 @@
 package ua.com.sinenko.things.book.dto;
 
 import lombok.Builder;
+import ua.com.sinenko.things.place.dto.PlaceDto;
+
 import java.util.Set;
 
 @Builder
@@ -11,6 +13,6 @@ public record BookResponse(
         GenreDto genre,
         SeriesDto series,
         String year,
-        String placeId,
-        String volumeNumber,
+        PlaceDto place,
+        String volume,
         String description) {}

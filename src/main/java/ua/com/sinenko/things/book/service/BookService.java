@@ -1,6 +1,9 @@
 package ua.com.sinenko.things.book.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.sinenko.things.book.dto.BookDto;
@@ -13,9 +16,7 @@ import ua.com.sinenko.things.book.repository.GenreRepository;
 import ua.com.sinenko.things.book.repository.SeriesRepository;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -26,8 +27,9 @@ public class BookService {
     private AuthorRepository authorRepository;
     private SeriesRepository seriesRepository;
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Page<Book> getAllBooks(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return bookRepository.findAll(pageable);
     }
 
     public Book getBookById(Long id) {

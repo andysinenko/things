@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.sinenko.things.book.dto.BookDto;
 import ua.com.sinenko.things.book.dto.BookMapper;
+import ua.com.sinenko.things.book.dto.BookPageResponse;
 import ua.com.sinenko.things.book.dto.BookResponse;
 import ua.com.sinenko.things.book.service.BookService;
+import ua.com.sinenko.things.common.exception.aop.ThLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,11 +28,13 @@ public class BookController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<BookResponse>> getAllBooks() {
-        var booksEntities = bookService.getAllBooks();
-        var booksDto = booksEntities.stream().map(BookMapper::mapEntityToResponse).toList();
+    @ThLogger
+    public ResponseEntity<BookPageResponse> getAllBooks(@RequestParam(defaultValue = "0") int pageNumber,
+                                                        @RequestParam(defaultValue = "20") int pageSize) {
+        var booksPage = bookService.getAllBooks(pageNumber, pageSize);
+        var response = BookMapper.mapEntityToResponse(booksPage);
 
-        return new ResponseEntity<>(booksDto, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping

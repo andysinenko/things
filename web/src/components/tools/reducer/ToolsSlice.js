@@ -30,11 +30,27 @@ const toolsSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        // Optional: Add this for efficient adds without refetch
+
         addToolSuccess(state, action) {
             state.loading = false;
             state.error = null;
             state.tools.push(action.payload);
+        },
+
+        updateToolStart(state) {
+            state.loading = true;
+            state.error = null;
+        },
+        updateToolSuccess(state, action) {
+            state.loading = false;
+            state.error = null;
+            state.tools = state.tools.map(tool =>
+                tool.id === action.payload.id ? action.payload : tool
+            );
+        },
+        updateToolFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
         },
     },
 });
@@ -45,7 +61,10 @@ export const {
     fetchToolsFailure,
     deleteToolSuccess,
     deleteToolFailure,
-    addToolSuccess,  // Export if using
+    updateToolFailure,
+    updateToolStart,
+    updateToolSuccess,
+    addToolSuccess,
 } = toolsSlice.actions;
 
 export default toolsSlice.reducer;

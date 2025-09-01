@@ -10,6 +10,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {addNewBook, deleteBook, fetchAuthors, fetchBooks, fetchGenres, fetchSeries} from "./api/api";
 import BookModal from "./modal/BookModal";
+import {Paginator} from "../layout/pagination/Paginator";
 
 
 const sortMenu = [
@@ -24,7 +25,16 @@ export const Books = () => {
     const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
     const dispatch = useDispatch();
 
-    const {books, loading, error} = useSelector(state => state.booksReducer);
+    const { books, loading, error } = useSelector(state => state.booksReducer.books);
+    const total = useSelector(state => state.booksReducer.books.total);
+    const pageNumber =  useSelector(state => state.booksReducer.books.pageNumber);
+    const pageSize = 15;
+
+    console.log("!!!!!!books: ", books);
+    console.log("!!!!!!total: ", total);
+    console.log("!!!!!!pageNumber: ", pageNumber);
+
+    const [selectedPlace, setSelectedPlace] = useState(null);
 
     const {series, seriesLoading, seriesError} = useSelector(state => state.seriesReducer);
     const {genres, genresLoading, genresError} = useSelector(state => state.genresReducer);
@@ -35,6 +45,7 @@ export const Books = () => {
     const [formData, setFormData] = useState({
         id: "",
         title: "",
+        volume: "",
         genre: "",
         author: [],
         series: "",
@@ -54,7 +65,8 @@ export const Books = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
-        setFormData({id: "", title: "", genre: "", author: [], series: "", year: "", place: "", description: ""});
+        setFormData({id: "", title: "", volume: "", genre: "", author: [], series: "", year: "", place: "", description: ""});
+        setSelectedPlace(null);
         setSelectedBook(null);
     };
 
@@ -62,7 +74,7 @@ export const Books = () => {
         dispatch(fetchSeries());
         dispatch(fetchGenres());
         dispatch(fetchAuthors());
-        dispatch(fetchBooks());
+        dispatch(fetchBooks(0, pageSize));
     }, [dispatch]);
 
     const onSortSelect = (event) => {
@@ -107,10 +119,11 @@ export const Books = () => {
                     {
                         id: "",
                         title: formData.title,
+                        volume: formData.volume,
                         genre: formData.genre,
                         author: formData.author,
                         series: formData.series,
-                        year: formData.year,
+                        year: `${formData.year}-01-01`,
                         place: formData.place,
                         description: formData.description
                     };
@@ -120,12 +133,44 @@ export const Books = () => {
                 dispatch(deleteBook(selectedBook.id));
             } else if (modalType === "csv") {
                 console.log("Uploading CSV:", formData.csv);
+            } else if (modalType === "edit") {
+                const editedBookObject =
+                    {
+                        id: Number(formData.id),
+                        title: formData.title,
+                        volume: formData.volume,
+                        genre: formData.genre,
+                        author: formData.author,
+                        series: formData.series,
+                        year:  `${formData.year}-01-01`,
+                        place: formData.place,
+                        description: formData.description
+                    };
+                //dispatch(addNewBook(editedBookObject));
             }
             closeModal();
         } catch (error) {
             console.error("Error:", error);
         }
     };
+
+    const handleEditBook = (book) => {
+        console.log("!!! handleEditBook: ", book);
+        const newSelectedBook = {
+            id:             Number(book.id),
+            title:          book.title,
+            volume:         book.volume,
+            genre:          book.genre,
+            author:         book.author,
+            series:         book.series,
+            year:           book.year.substring(0, 4),
+            place:         book.place,
+            description:    book.description
+        };
+        setFormData(newSelectedBook);
+        setSelectedPlace(book.place);
+        openModal("edit", book);
+    }
 
     if (loading) return (
         <div className='root'>
@@ -143,6 +188,10 @@ export const Books = () => {
                 <p>Error: {error}</p>
             </div>
         </div>);
+
+    const onChagePage = (pageNumber, pageSize) => {
+        dispatch(fetchBooks(pageNumber, pageSize));
+    };
 
     return (
         <main className="main-container">
@@ -173,6 +222,7 @@ export const Books = () => {
                     <tr>
                         <th onClick={() => dispatch(sortBooksById())}>ID &#x25be;&#x25b4;</th>
                         <th onClick={() => dispatch(sortBooksByTitle())}>Title &#x25be;&#x25b4;</th>
+                        <th>Volume</th>
                         <th>Author</th>
                         <th onClick={() => dispatch(sortBooksByGenre())}>Genre &#x25be;&#x25b4;</th>
                         <th>Series</th>
@@ -188,6 +238,7 @@ export const Books = () => {
                         <tr key={book.id}>
                             <td>{book.id}</td>
                             <td>{book.title}</td>
+                            <td>{book.volume}</td>
                             <td>
                                 {book.authors ?
                                     [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(author => (author.name)).join(", ")
@@ -196,10 +247,10 @@ export const Books = () => {
                             <td>{book.genre?.name}</td>
                             <td>{book.series?.name}</td>
                             <td>{book.year}</td>
-                            <td>{book.place}</td>
+                            <td>{book.place.parent?.name + ":" + book.place.name}</td>
                             <td>{book.description}</td>
                             <td>
-                                <button className="table-action-btn edit-btn" title="Редактировать">✏️</button>
+                                <button className="table-action-btn edit-btn" title="Редактировать" onClick={() => handleEditBook(book)}>✏️</button>
                             </td>
                             <td>
                                 <button className="table-action-btn delete-btn" title="Удалить" onClick={() => handleDelBook(book)}>🗑️</button>
@@ -214,6 +265,7 @@ export const Books = () => {
                     )}
                     </tbody>
                 </table>
+                <Paginator onChagePage = {onChagePage} total={total} pageSize={pageSize}/>
             </section>
             <BookModal
                 isOpen={isModalOpen}

@@ -34,7 +34,7 @@ class BookMapperTest {
                 .series(1L)
                 .year("2021")
                 .description("Description")
-                .volumeNumber("1")
+                .volume("1")
                 .author(List.of(authorDto))
                 .build();
 
@@ -49,7 +49,7 @@ class BookMapperTest {
         assertEquals(bookDto.series(), book.getSeries().getId());
         assertEquals(bookDto.year() + "-01-01", book.getYear().toString());
         assertEquals(bookDto.description(), book.getDescription());
-        assertEquals(bookDto.volumeNumber(), book.getVolumeNumber());
+        assertEquals(bookDto.volume(), book.getVolumeNumber());
         assertEquals(1L, bookDto.author());
     }
 
@@ -78,7 +78,7 @@ class BookMapperTest {
         assertEquals(book.getSeries().getId(), bookDto.id());
         assertEquals(book.getYear(), LocalDate.parse(bookDto.year()));
         assertEquals(book.getDescription(), bookDto.description());
-        assertEquals(book.getVolumeNumber(), bookDto.volumeNumber());
+        assertEquals(book.getVolumeNumber(), bookDto.volume());
         assertEquals(book.getAuthors().size(), 1);
     }
 

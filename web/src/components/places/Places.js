@@ -55,7 +55,7 @@ const Places = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchAllPlaces());
+        dispatch(fetchAllPlaces(0, 20));
     }, [dispatch]);
 
     const handleAddPlace = () => {

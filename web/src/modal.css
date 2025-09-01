@@ -36,7 +36,7 @@
 .th-modal-content input {
   padding: 8px;
   font-size: 12px;
-  width: 100% !important;
+  /*width: 100% !important;*/
 }
 
 .th-modal-content select {

@@ -6,16 +6,16 @@ import {fetchGenresSuccess, fetchGenresFailure, fetchGenresStart} from "../reduc
 import store from "../../../store/storeConfig";
 
 
-export const fetchBooks = () => async (dispatch) => {
+export const fetchBooks = (pageNumber, pageSize) => async (dispatch) => {
     dispatch(fetchBooksStart());
     try {
-        const response = await axios.get("http://localhost:8080/api/v1/books");
+        const response = await axios.get(`http://localhost:8080/api/v1/books?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        console.log("!!! response.data: " + response.data);
         dispatch(fetchBooksSuccess(response.data));
     } catch (err) {
         dispatch(fetchBooksFailure(err.message));
     }
 };
-
 
 export const addNewBook = (book) => async (dispatch) => {
     try {

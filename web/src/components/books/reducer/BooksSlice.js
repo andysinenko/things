@@ -1,12 +1,19 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const booksSlice = createSlice({
-    name: "books",
-    initialState: {
-        books: [],
+
+const initialState = {
+    books: {
+        books: [], // Ensure the books array is initialized
+        total: 0,
+        pageNumber: 0,
         loading: false,
         error: null,
     },
+};
+
+const booksSlice = createSlice({
+    name: "books",
+    initialState,
     reducers: {
         fetchBooksStart(state) {
             state.loading = true;

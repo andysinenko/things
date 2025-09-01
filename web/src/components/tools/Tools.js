@@ -1,9 +1,10 @@
 import './Tools.css'
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {addNewTool, deleteTool, fetchBrands, fetchTools} from "./api/api";
+import {addNewTool, deleteTool, fetchBrands, fetchTools, updateTool} from "./api/api";
 import ToolModal from "./modal/ToolModal";
 import {fetchAllPlaces} from "../places/api/api";
+import {Paginator} from "../layout/pagination/Paginator";
 
 
 export const Tools = () => {
@@ -89,7 +90,18 @@ export const Tools = () => {
             } else if (modalType === "delete") {
                 dispatch(deleteTool(selectedTool.id));
             } else if (modalType === "edit") {
-                //dispatch(addNewTool(newTool));
+                const editedTool = {
+                    id: Number(formData.id),
+                    name: formData.name,
+                    toolType: formData.toolType,
+                    serialNumber: formData.serialNumber,
+                    vendor: formData.vendor,
+                    place: formData.place.id,
+                    dateOfPurchasing: `${formData.dateOfPurchasing}-01-01`,
+                    description: formData.description,
+                };
+                console.log("EDITED TOOL: ", editedTool);
+                dispatch(updateTool(editedTool.id, editedTool));
             }
             closeModal();
         } catch (error) {
@@ -174,6 +186,7 @@ export const Tools = () => {
                     )}
                     </tbody>
                 </table>
+                <Paginator />
             </section>
         </main>
     <ToolModal
