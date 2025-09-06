@@ -41,7 +41,7 @@ public class Book {
     @Column(name = "description")
     private String description;
 
-    //@ToString.Exclude
+    @ToString.Exclude
     @Builder.Default
     @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

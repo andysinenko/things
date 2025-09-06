@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-@BatchSize(size = 20)
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByAuthorsName(String name);
 
