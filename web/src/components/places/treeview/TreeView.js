@@ -66,6 +66,7 @@ const TreeNode = ({ node, onCrossClick, onAddChild}) => {
 };
 
 export const TreeView = ({ data, onCrossClick, onAddChild }) => {
+    console.log("DATA from TreeView: ", data);
     return (
         <ul className="tree-view">
             {data.map(node => (

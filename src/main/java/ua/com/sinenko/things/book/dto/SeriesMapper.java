@@ -7,31 +7,39 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SeriesMapper {
-    public static SeriesDto mapEntityToDto(Series entity) {
-        return SeriesDto
+    public static SeriesDto entityToDto(Series entity) {
+        if(entity != null)
+            return SeriesDto
                 .builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .build();
+        return null;
     }
 
-    public static Series mapDtoToEntity(SeriesDto dto) {
-        return Series
+    public static Series maptoToEntity(SeriesDto dto) {
+        if(dto != null)
+            return Series
                 .builder()
                 .id(dto.id())
                 .name(dto.name())
                 .build();
+        return null;
     }
 
-    public static Collection<SeriesDto> mapEntitiesToDtos(Collection<Series> entities) {
-        return entities.stream()
-                .map(e -> mapEntityToDto(e))
+    public static Collection<SeriesDto> entitiesToDtos(Collection<Series> entities) {
+        if(entities != null || entities.size() > 0)
+            return entities.stream()
+                .map(e -> entityToDto(e))
                 .collect(Collectors.toCollection(() -> Set.of()));
+        return null;
     }
 
-    public static Collection<Series> mapDtosToEntities(Collection<SeriesDto> dto) {
-        return dto.stream()
-                .map(e -> mapDtoToEntity(e))
+    public static Collection<Series> dtosToEntities(Collection<SeriesDto> dtos) {
+        if(dtos != null || dtos.size() > 0)
+            return dtos.stream()
+                .map(e -> maptoToEntity(e))
                 .collect(Collectors.toCollection(() -> Set.of()));
+        return null;
     }
 }

@@ -23,7 +23,7 @@ public class AuthorController {
     @ResponseBody
     public ResponseEntity<List<AuthorDto>> getAllBooks() {
         var authors = authorService.getAllAuthors();
-        var authorDtos = authors.stream().map(AuthorMapper::mapEntityToDto).toList();
+        var authorDtos = authors.stream().map(AuthorMapper::entityToDto).toList();
 
         return new ResponseEntity<>(authorDtos, HttpStatus.OK);
     }
@@ -31,7 +31,7 @@ public class AuthorController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<Void> addAuthor(@RequestBody AuthorRequest authorRequest) {
-        authorService.saveAuthor(AuthorMapper.mapRequestToEntity(authorRequest));
+        authorService.saveAuthor(AuthorMapper.requestToEntity(authorRequest));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

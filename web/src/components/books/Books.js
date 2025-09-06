@@ -8,9 +8,10 @@ import {
     sortBooksByGenre
 } from "./reducer/BooksSlice";
 import {useDispatch, useSelector} from "react-redux";
-import {addNewBook, deleteBook, fetchAuthors, fetchBooks, fetchGenres, fetchSeries} from "./api/api";
+import {addNewBook, deleteBook, fetchAuthors, fetchBooks, fetchGenres, fetchSeries, updateBook} from "./api/api";
 import BookModal from "./modal/BookModal";
 import {Paginator} from "../layout/pagination/Paginator";
+import {fetchAllPlaces} from "../places/api/api";
 
 
 const sortMenu = [
@@ -30,52 +31,47 @@ export const Books = () => {
     const pageNumber =  useSelector(state => state.booksReducer.books.pageNumber);
     const pageSize = 15;
 
-    console.log("!!!!!!books: ", books);
-    console.log("!!!!!!total: ", total);
-    console.log("!!!!!!pageNumber: ", pageNumber);
-
-    const [selectedPlace, setSelectedPlace] = useState(null);
-
     const {series, seriesLoading, seriesError} = useSelector(state => state.seriesReducer);
     const {genres, genresLoading, genresError} = useSelector(state => state.genresReducer);
     const {authors, authorsLoading, authorsError} = useSelector(state => state.authorsReducer);
+    const {places, ploading, perror} = useSelector(state => state.placeReducer);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
-    const [formData, setFormData] = useState({
+
+    const [selectedBook, setSelectedBook] = useState({
         id: "",
         title: "",
         volume: "",
-        genre: "",
-        author: [],
-        series: "",
+        genre: {},
+        authors: [],
+        series: {},
         year: "",
-        place: "",
+        place: null,
         description: ""
     });
-    const [selectedBook, setSelectedBook] = useState(null);
 
-    const openModal = (type, book = null) => {
+    useEffect(() => {
+        dispatch(fetchSeries());
+        dispatch(fetchGenres());
+        dispatch(fetchAuthors());
+        dispatch(fetchAllPlaces());
+        dispatch(fetchBooks(0, pageSize));
+    }, [dispatch]);
+
+    const openModal = (type) => {
         console.log("Opening modal with type:", type);
         setModalType(type);
-        setSelectedBook(book);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
-        setFormData({id: "", title: "", volume: "", genre: "", author: [], series: "", year: "", place: "", description: ""});
-        setSelectedPlace(null);
+        setSelectedBook({id: "", title: "", volume: "", genre: {}, authors: [], series: {}, year: "", place: null, description: ""});
         setSelectedBook(null);
     };
 
-    useEffect(() => {
-        dispatch(fetchSeries());
-        dispatch(fetchGenres());
-        dispatch(fetchAuthors());
-        dispatch(fetchBooks(0, pageSize));
-    }, [dispatch]);
 
     const onSortSelect = (event) => {
         setType(event.target.value);
@@ -98,6 +94,7 @@ export const Books = () => {
     };
 
     const handleAddBook = () => {
+        setSelectedBook({id: "", title: "", volume: "", genre: {}, authors: [], series: {}, year: "", place: null, description: ""});
         console.log("Opening Add Book Modal");
         openModal("add");
     };
@@ -115,38 +112,15 @@ export const Books = () => {
         e.preventDefault();
         try {
             if (modalType === "add") {
-                const newBookObject =
-                    {
-                        id: "",
-                        title: formData.title,
-                        volume: formData.volume,
-                        genre: formData.genre,
-                        author: formData.author,
-                        series: formData.series,
-                        year: `${formData.year}-01-01`,
-                        place: formData.place,
-                        description: formData.description
-                    };
-                dispatch(addNewBook(newBookObject));
+                console.log("selectedBook: ", selectedBook);
+                dispatch(addNewBook(selectedBook));
             } else if (modalType === "delete") {
                 console.log("Deleting book:", selectedBook.id);
                 dispatch(deleteBook(selectedBook.id));
             } else if (modalType === "csv") {
-                console.log("Uploading CSV:", formData.csv);
+                //console.log("Uploading CSV:", selectedBook.csv);
             } else if (modalType === "edit") {
-                const editedBookObject =
-                    {
-                        id: Number(formData.id),
-                        title: formData.title,
-                        volume: formData.volume,
-                        genre: formData.genre,
-                        author: formData.author,
-                        series: formData.series,
-                        year:  `${formData.year}-01-01`,
-                        place: formData.place,
-                        description: formData.description
-                    };
-                //dispatch(addNewBook(editedBookObject));
+                dispatch(updateBook(selectedBook.id, selectedBook, pageNumber, pageSize));
             }
             closeModal();
         } catch (error) {
@@ -156,21 +130,10 @@ export const Books = () => {
 
     const handleEditBook = (book) => {
         console.log("!!! handleEditBook: ", book);
-        const newSelectedBook = {
-            id:             Number(book.id),
-            title:          book.title,
-            volume:         book.volume,
-            genre:          book.genre,
-            author:         book.author,
-            series:         book.series,
-            year:           book.year.substring(0, 4),
-            place:         book.place,
-            description:    book.description
-        };
-        setFormData(newSelectedBook);
-        setSelectedPlace(book.place);
-        openModal("edit", book);
-    }
+        setSelectedBook({ ...book });
+        console.log("!!! handleEditBook selectedBook: ", selectedBook);
+        openModal("edit");
+    };
 
     if (loading) return (
         <div className='root'>
@@ -246,11 +209,14 @@ export const Books = () => {
                             </td>
                             <td>{book.genre?.name}</td>
                             <td>{book.series?.name}</td>
-                            <td>{book.year}</td>
+                            <td>{book.year.substring(0,4)}</td>
                             <td>{book.place.parent?.name + ":" + book.place.name}</td>
                             <td>{book.description}</td>
                             <td>
-                                <button className="table-action-btn edit-btn" title="Редактировать" onClick={() => handleEditBook(book)}>✏️</button>
+                                <button className="table-action-btn edit-btn" title="Редактировать" onClick={() => {
+                                    console.log("Current book", book);
+                                    handleEditBook(book);
+                                }} >✏️</button>
                             </td>
                             <td>
                                 <button className="table-action-btn delete-btn" title="Удалить" onClick={() => handleDelBook(book)}>🗑️</button>
@@ -271,13 +237,13 @@ export const Books = () => {
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 onSubmit={handleSubmit}
-                formData={formData}
-                setFormData={setFormData}
                 modalType={modalType}
                 selectedBook={selectedBook}
+                setSelectedBook={setSelectedBook}
                 genres={genres}
                 series={series}
                 authors={authors}
+                places={places}
             />
         </main>);
 

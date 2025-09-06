@@ -39,7 +39,6 @@ public class ToolController {
 
     @PutMapping("/{id}")
     @ResponseBody
-    @ThLogger
     public ResponseEntity<ToolResponse> updateTool(@PathVariable Long id, @RequestBody ToolDto toolDto) {
         var tool = toolService.updateTool(id, toolDto);
         var toolResponse = ToolMapper.mapEntityToDto(tool);

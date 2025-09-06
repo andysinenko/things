@@ -1,13 +1,17 @@
-import {deleteBookFailure, deleteBookSuccess, fetchBooksFailure, fetchBooksStart, fetchBooksSuccess} from "../reducer/BooksSlice";
+import {deleteBookFailure, deleteBookSuccess, fetchBooksFailure, fetchBooksStart, fetchBooksSuccess, updateBookFailure, updateBookStart} from "../reducer/BooksSlice";
 import axios from "axios";
 import {fetchAuthorsFailure, fetchAuthorsStart, fetchAuthorsSuccess} from "../reducer/AuthorsSlice";
 import {fetchSeriesFailure, fetchSeriesStart, fetchSeriesSuccess} from "../reducer/SeriesSlice";
 import {fetchGenresSuccess, fetchGenresFailure, fetchGenresStart} from "../reducer/GenresSlice";
 import store from "../../../store/storeConfig";
+import {updateToolFailure} from "../../tools/reducer/ToolsSlice";
+import {fetchTools} from "../../tools/api/api";
 
 
 export const fetchBooks = (pageNumber, pageSize) => async (dispatch) => {
     dispatch(fetchBooksStart());
+    console.log("====pageSize: ", pageSize);
+    console.log("====pageNumber: ", pageNumber);
     try {
         const response = await axios.get(`http://localhost:8080/api/v1/books?pageNumber=${pageNumber}&pageSize=${pageSize}`);
         console.log("!!! response.data: " + response.data);
@@ -31,6 +35,18 @@ export const addNewBook = (book) => async (dispatch) => {
     } catch (error) {
         console.log("Error on adding new book, catch section: ", error.message);
         dispatch(fetchBooksFailure(error.message));
+    }
+};
+
+export const updateBook = (id, book, pageNumber, pageSize) => async (dispatch) => {
+    dispatch(updateBookStart());
+    try {
+        console.log("EDITED book ID: ", id);
+        console.log("EDITED book: ", book);
+        const response = await axios.put(`http://localhost:8080/api/v1/books/${id}`, book);
+        dispatch(fetchBooks(pageNumber, pageSize));
+    } catch (error) {
+        dispatch(updateBookFailure(error.message));
     }
 };
 

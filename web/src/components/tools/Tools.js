@@ -11,7 +11,7 @@ export const Tools = () => {
     const dispatch = useDispatch();
 
     const {tools, loading, error} = useSelector(state => state.toolsReducer);
-    const {places, loading: placesLoading, error: placesError} = useSelector(state => state.placeReducer);
+    const {places, ploading, perror} = useSelector(state => state.placeReducer);
     const {brands, loading: brandsLoading, error: brandsError} = useSelector(state => state.brandsReducer);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,6 +55,7 @@ export const Tools = () => {
         </div>);
 
     const openModal = (modalType, tool = null) => {
+        console.log("PLACES 1 Tools: ", places);
         setModalType(modalType);
         setSelectedTool(tool);
         setIsModalOpen(true);
@@ -76,6 +77,8 @@ export const Tools = () => {
         const vendorObject = brands.find(b => b.id === Number(selectedBrand)) || null;
         try {
             if (modalType === "add") {
+                console.log("PLACES 2 Tools: ", places);
+
                 const newTool = {
                     id: formData.id,
                     name: formData.name,
@@ -90,6 +93,7 @@ export const Tools = () => {
             } else if (modalType === "delete") {
                 dispatch(deleteTool(selectedTool.id));
             } else if (modalType === "edit") {
+                console.log("PLACES 3 Tools: ", places);
                 const editedTool = {
                     id: Number(formData.id),
                     name: formData.name,

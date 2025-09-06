@@ -1,62 +1,81 @@
 package ua.com.sinenko.things.book.dto;
 
 import org.springframework.data.domain.Page;
+import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.place.dto.PlaceMapper;
 
 import java.time.LocalDate;
-import java.util.Collection;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BookMapper {
-    public static Book mapDtoToEntity(BookDto dto) {
-        return Book
-                .builder()
-                .id(dto.id())
-                .title(dto.title())
-                .authors(dto.author() != null ? dto.author().stream()
-                        .map(authorDto -> AuthorMapper.mapDtoToEntity(authorDto)).collect(Collectors.toSet()) : null)
-                .year(LocalDate.parse(dto.year()+ "-01-01"))
-                .description(dto.description())
-                .volumeNumber(dto.volume())
-                .build();
+    private final DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy");
+
+    public static Book dtoToEntity(BookDto dto) {
+        if (dto != null)
+            return Book.builder()
+                    .id(dto.id())
+                    .title(dto.title())
+                    .authors(AuthorMapper.dtosToEntities(dto.authors()))
+                    .genre(GenreMapper.dtoToEntity(dto.genre()))
+                    .series(SeriesMapper.maptoToEntity(dto.series()))
+                    .place(PlaceMapper.mapDtoToEntity(dto.place()))
+                    .year(dto.year())
+                    .description(dto.description())
+                    .volumeNumber(dto.volume())
+                    .build();
+        return null;
     }
 
-    public static BookDto mapEntityToDto(Book entity) {
-        return BookDto
+    public static BookDto entityToDto(Book entity) {
+        if(entity != null)
+            return BookDto
+                .builder()
+                .id(entity.getId())
+                .title(entity.getTitle())
+                .genre(GenreMapper.entityToDto(entity.getGenre()))
+                .authors(AuthorMapper.entitiesToDtos(entity.getAuthors()))
+                .place(PlaceMapper.mapEntityToDto(entity.getPlace()))
+                .year(entity.getYear())
+                .description(entity.getDescription())
+                .volume(entity.getVolumeNumber())
+                .build();
+        return null;
+    }
+
+
+    public static BookResponse entityToResponse(Book entity) {
+        if(entity != null)
+            return BookResponse
                 .builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .year(entity.getYear().toString())
                 .description(entity.getDescription())
                 .volume(entity.getVolumeNumber())
-                .build();
-    }
-
-
-    public static BookResponse mapEntityToResponse(Book entity) {
-        return BookResponse
-                .builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .year(entity.getYear().toString())
-                .description(entity.getDescription())
-                .volume(entity.getVolumeNumber())
-                .genre(GenreMapper.mapEntityToDto(entity.getGenre()))
-                .authors(entity.getAuthors().stream().map(e -> AuthorMapper.mapEntityToDto(e)).collect(Collectors.toSet()))
-                .series(SeriesMapper.mapEntityToDto(entity.getSeries()))
+                .genre(GenreMapper.entityToDto(entity.getGenre()))
+                .authors(getAuthorsDto(entity.getAuthors()))
+                .series(SeriesMapper.entityToDto(entity.getSeries()))
                 .place(PlaceMapper.mapEntityToDto(entity.getPlace()))
                 .build();
+        return null;
     }
 
-    public static BookPageResponse mapEntityToResponse(Page<Book> pageEntity) {
-        return BookPageResponse.builder()
-                .books(pageEntity.getContent().stream().map(e -> BookMapper.mapEntityToResponse(e)).toList())
+    public static BookPageResponse entityToResponse(Page<Book> pageEntity) {
+        if(pageEntity.getContent() != null || pageEntity.getContent().size() > 0)
+            return BookPageResponse.builder()
+                .books(pageEntity.getContent().stream().map(e -> BookMapper.entityToResponse(e)).toList())
                 .pageNumber(pageEntity.getNumber())
                 .pageSize(pageEntity.getSize())
                 .total(pageEntity.getTotalPages())
                 .build();
+        return null;
+    }
+
+    private static List<AuthorDto> getAuthorsDto(List<Author> authors) {
+        if(authors == null) return null;
+        return authors.stream().map(e -> AuthorMapper.entityToDto(e)).collect(Collectors.toList());
     }
 }

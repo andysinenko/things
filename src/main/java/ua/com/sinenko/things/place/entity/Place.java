@@ -13,7 +13,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "places", schema="things")
-@Data
+@Getter@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,9 +47,9 @@ public class Place {
     @Column(name = "level")
     private Long level; // 1 - flat, house etc., 2 - room, premices, 3 - shelf
 
-    /*@ToString.Exclude
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-    private Set<Book> books = new HashSet<>();*/
+    private Set<Book> books = new HashSet<>();
 
 }

@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ua.com.sinenko.things.book.dto.GenreDto;
 import ua.com.sinenko.things.book.dto.GenreMapper;
-import ua.com.sinenko.things.book.dto.SeriesDto;
-import ua.com.sinenko.things.book.dto.SeriesMapper;
 import ua.com.sinenko.things.book.service.GenreService;
-import ua.com.sinenko.things.book.service.SeriesService;
 
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class GenreController {
     @ResponseBody
     public ResponseEntity<List<GenreDto>> getAllSeries() {
         var genreList = genreService.getAllSeries();
-        var genresDtos = genreList.stream().map(GenreMapper::mapEntityToDto).toList();
+        var genresDtos = genreList.stream().map(GenreMapper::entityToDto).toList();
 
         return new ResponseEntity<>(genresDtos, HttpStatus.OK);
     }

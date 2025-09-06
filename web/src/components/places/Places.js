@@ -55,7 +55,7 @@ const Places = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchAllPlaces(0, 20));
+        dispatch(fetchAllPlaces());
     }, [dispatch]);
 
     const handleAddPlace = () => {
@@ -88,26 +88,6 @@ const Places = () => {
             </div>
         </div>);
 
-    function buildTree(data) {
-        const map = new Map();
-        const roots = [];
-
-        data.forEach(item => {
-            map.set(item.id, {...item, children: []});
-        });
-
-        map.forEach(item => {
-            if (item.parent && map.has(item.parent.id)) {
-                map.get(item.parent.id).children.push(item);
-            } else {
-                roots.push(item);
-            }
-        });
-
-        return roots;
-    }
-
-    const tree = buildTree(places);
 
     const onNodeClick = (event, node) => {
         console.log("Edit node:", node)
@@ -142,7 +122,7 @@ const Places = () => {
                 </table>
             </section>
             <PlaceModal
-                data={tree}
+                places={places}
                 onCrossClick={onNodeClick}
                 isOpen={isModalOpen}
                 onClose={closeModal}

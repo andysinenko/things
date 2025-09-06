@@ -1,28 +1,61 @@
-import React from "react";
+import React, {useState} from "react";
+import PlaceModal from "../../places/modal/PlaceModal";
 
 const BookModal = ({
-                          isOpen,
-                          onClose,
-                          onSubmit,
-                          formData,
-                          setFormData,
-                          modalType,
-                          selectedBook,
-                          genres,
-                          series,
-                          authors = []
-                      }) => {
-    if (!isOpen) return null;
+                      isOpen,
+                      onClose,
+                      onSubmit,
+                      modalType,
+                      selectedBook,
+                      setSelectedBook,
+                      genres,
+                      series,
+                      authors = [],
+                       places
+                      }) =>
+{
+    const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
 
     const handleChange = (e) => {
         if (e !== undefined && e.target !== undefined) {
             const {name, value} = e.target;
-            setFormData((prev) => ({...prev, [name]: value}));
+            setSelectedBook((prev) => ({...prev, [name]: value}));
         } else {
             onClose();
         }
     };
 
+    const onNodeSelect = (nodePlace) => {
+        console.log("nodePlace",  nodePlace);
+        setSelectedBook({...selectedBook, place: nodePlace});
+        setIsTreeModalOpen(false);
+    };
+
+    const closeTreeModal = () => {
+        setIsTreeModalOpen(false);
+    };
+
+    const handleTreeSubmit = (e) => {
+        setIsTreeModalOpen(false);
+    };
+
+    const onPlacesOpenDialogBox = (e) => {
+        e.preventDefault();
+        setIsTreeModalOpen(true);
+    };
+
+    const getFullPlacePath = (place) => {
+        if (!place) return '';
+        const names = [];
+        let current = place;
+        while (current) {
+            names.unshift(current.name);
+            current = current.parent;
+        }
+        return names.join(' -> ');
+    }
+
+    if (!isOpen) return null;
 
     const renderContent = () => {
         switch (modalType) {
@@ -37,10 +70,13 @@ const BookModal = ({
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={formData.id} readOnly={true} disabled={true}/>
-                                    <input className="th-main-input" type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Enter title of book"/>
-                                    <input className="th-main-input" type="text" name="volume" value={formData.volume} onChange={handleChange} placeholder="Enter volume of book"/>
-                                    <select aria-label="Genre name" value={formData.genre} onChange={(e) => setFormData({ ...formData, genre: e.target.value })} aria-placeholder="Select genre">
+                                    <input placeholder="id" className="th-main-input" name="id" value={selectedBook.id} readOnly={true} disabled={true}/>
+                                    <input className="th-main-input" type="text" name="title" value={selectedBook.title} onChange={handleChange} placeholder="Enter title of book"/>
+                                    <input className="th-main-input" type="text" name="volume" value={selectedBook.volume} onChange={handleChange} placeholder="Enter volume of book"/>
+                                    <select aria-label="Genre name" value={setSelectedBook.genre} onChange={(e) => {
+                                        const selectedGenre = genres.find(g => g.id === Number(e.target.value));
+                                        setSelectedBook(prev => ({ ...prev, genre: selectedGenre }));
+                                    }} aria-placeholder="Select genre">
                                         <option value="" disabled hidden>Genre name</option>
                                         {genres.map((genre) => (
                                             <option key={genre.id} value={genre.id}>
@@ -49,11 +85,11 @@ const BookModal = ({
                                         ))}
                                     </select>
                                     <select multiple aria-label="Authors"
-                                                 value={formData.author?.map(a => a.id)} // value — массив id
+                                            value={selectedBook.authors?.map(a => a.id) || []} // value — массив id
                                                  onChange={(e) => {
                                                      const selectedIds = Array.from(e.target.selectedOptions, option => Number(option.value));
                                                      const selectedAuthors = authors.filter(author => selectedIds.includes(author.id));
-                                                     setFormData({...formData, author: selectedAuthors});
+                                                     setSelectedBook({...selectedBook, authors: selectedAuthors});
                                                  }}>
                                         <option value="" disabled hidden>Authors</option>
                                         {authors.map((author) => (
@@ -62,19 +98,21 @@ const BookModal = ({
                                             </option>
                                         ))}
                                     </select>
-                                    <select aria-label="Series" value={formData.series}
-                                                 onChange={(e) => setFormData({
-                                                     ...formData,
-                                                     series: e.target.value
-                                                 })}>
+                                    <select aria-label="Series" value={selectedBook.series}
+                                                 onChange={(e) => setSelectedBook({ ...selectedBook, series: series.find(g => g.id === Number(e.target.value)) })}>
                                         {series.map((series) => (
                                             <option key={series.id} value={series.id}>
                                                 {series.name}
                                             </option>
                                         ))}
                                     </select>
-                                    <input className="modal-input" type="text" name="year" onChange={handleChange} placeholder="Enter year of release" value={formData.year}/>
-                                    <input className="modal-input" type="text" name="description" onChange={handleChange} placeholder="Enter description" value={formData.description}/>
+                                    {selectedBook.place !== null && selectedBook.place !== undefined ? (
+                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedBook.place)} ✅</button>
+                                    ) : (
+                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>What a place ❓</button>
+                                    )}
+                                    <input className="modal-input" type="text" name="year" onChange={handleChange} placeholder="Enter year of release" value={selectedBook.year.substring(0, 4)}/>
+                                    <input className="modal-input" type="text" name="description" onChange={handleChange} placeholder="Enter description" value={selectedBook.description}/>
                                 </form>
                             </div>
                             <div className="modal-footer">
@@ -113,7 +151,7 @@ const BookModal = ({
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
                                     <input className="modal-input" type="file" name="csv" accept=".csv"
-                                                  onChange={(e) => setFormData((prev) => ({
+                                                  onChange={(e) => setSelectedBook((prev) => ({
                                                       ...prev,
                                                       csv: e.target.files[0]
                                                   }))}
@@ -131,9 +169,20 @@ const BookModal = ({
         }
     };
     return (
-        <div className="th-modal-overlay">
-            <div className="th-modal-content">{renderContent()}</div>
-        </div>
+        <>
+            <div className="th-modal-overlay">
+                <div className="th-modal-content">{renderContent()}</div>
+            </div>
+
+            <PlaceModal
+                places={places}
+                onCrossClick={onNodeSelect}
+                isOpen={isTreeModalOpen}
+                onClose={closeTreeModal}
+                onSubmit={handleTreeSubmit}
+                onAddChild={null}
+            />
+        </>
     );
 };
 

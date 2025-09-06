@@ -1,5 +1,6 @@
 package ua.com.sinenko.things.book.repository;
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.com.sinenko.things.book.entity.Book;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
+@BatchSize(size = 20)
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByAuthorsName(String name);
 

@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     books: {
-        books: [], // Ensure the books array is initialized
+        books: [],
         total: 0,
         pageNumber: 0,
         loading: false,
@@ -35,20 +35,36 @@ const booksSlice = createSlice({
             state.books = state.booksReducer.books.filter(book => book.id !== bookId);
         },
 
+        updateBookStart(state) {
+            state.loading = true;
+            state.error = null;
+        },
+        updateBookSuccess(state, action) {
+            state.loading = false;
+            state.error = null;
+            state.books = state.booksReducer.books.map(book =>
+                book.id === action.payload.id ? action.payload : book
+            );
+        },
+        updateBookFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
+
         sortBooksByTitle(state) {
             console.log(state.books);
-            state.books = [...state.books].sort((a, b) => b.id - a.id);
+            state.books.books = [...state.books.books].sort((a, b) => b.id - a.id);
         },
 
         sortBooksById: (state) => {
-            state.books.sort((book1, book2) => book1.id - book2.id);
+            state.books.books.sort((book1, book2) => book1.id - book2.id);
         },
 
         sortBooksByIdReverse: (state) => {
-            state.books.sort((book1, book2) => book2.id - book1.id);
+            state.books.books.sort((book1, book2) => book2.id - book1.id);
         },
         sortBooksByGenre: (state) => {
-            state.books.sort((book1, book2) => book1.genre.name.localeCompare(book2.genre.name));
+            state.books.books.sort((book1, book2) => book1.genre.name.localeCompare(book2.genre.name));
         },
 
         deleteBookSuccess(state, action) {
@@ -68,6 +84,9 @@ export const {
     fetchBooksSuccess,
     fetchBooksFailure,
     deleteBook,
+    updateBookStart,
+    updateBookSuccess,
+    updateBookFailure,
     sortBooksByTitle,
     sortBooksById,
     sortBooksByIdReverse,

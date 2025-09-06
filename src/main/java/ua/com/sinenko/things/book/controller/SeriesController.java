@@ -24,7 +24,7 @@ public class SeriesController {
     @ResponseBody
     public ResponseEntity<List<SeriesDto>> getAllSeries() {
         var seriesList = seriesService.getAllSeries();
-        var seriesDtos = seriesList.stream().map(SeriesMapper::mapEntityToDto).toList();
+        var seriesDtos = seriesList.stream().map(SeriesMapper::entityToDto).toList();
 
         return new ResponseEntity<>(seriesDtos, HttpStatus.OK);
     }

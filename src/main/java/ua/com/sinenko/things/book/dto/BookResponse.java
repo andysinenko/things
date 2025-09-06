@@ -3,13 +3,13 @@ package ua.com.sinenko.things.book.dto;
 import lombok.Builder;
 import ua.com.sinenko.things.place.dto.PlaceDto;
 
-import java.util.Set;
+import java.util.List;
 
 @Builder
 public record BookResponse(
         Long id,
         String title,
-        Set<AuthorDto> authors,
+        List<AuthorDto> authors,
         GenreDto genre,
         SeriesDto series,
         String year,

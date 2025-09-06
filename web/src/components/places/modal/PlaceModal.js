@@ -1,18 +1,51 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./PlaceModal.css";
 import {TreeView} from "../treeview/TreeView";
 
 const PlaceModal = ({
-                        data,
+                        places,
                         onCrossClick,
                         isOpen,
                         onClose,
                         onSubmit,
                         onAddChild
-                    }) => {
+                    }) =>
+{
+    const [data, setData] = useState(null);
+
+
+    useEffect(() => {
+        console.log("PLACES 5 PlaceModal: ", places);
+        const res = buildTree(places);
+
+        console.log("DATA: ", res);
+    }, [places]);
+
+
+    const buildTree = (places) => {
+        console.log("PLACES 6 PlaceModal: ", places);
+        const map = new Map();
+        const roots = [];
+
+        places.forEach(item => {
+            map.set(item.id, {...item, children: []});
+        });
+
+        map.forEach(item => {
+            if (item.parent && map.has(item.parent.id)) {
+                map.get(item.parent.id).children.push(item);
+            } else {
+                roots.push(item);
+            }
+        });
+        console.log("roots 7 PlaceModal: ", roots);
+        setData(roots);
+        return roots;
+    };
+
+
 
     if (!isOpen) return null;
-
     const renderContent = () => {
         return (
             <div className="th-modal-overlay">

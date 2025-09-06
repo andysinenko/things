@@ -5,9 +5,7 @@ import lombok.*;
 import ua.com.sinenko.things.place.entity.Place;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -43,16 +41,17 @@ public class Book {
     @Column(name = "description")
     private String description;
 
-    @ToString.Exclude
+    //@ToString.Exclude
+    @Builder.Default
     @EqualsAndHashCode.Exclude
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "books_authors",
             schema = "things",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private Set<Author> authors = new HashSet<>();
+    private List<Author> authors = new ArrayList<>();;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

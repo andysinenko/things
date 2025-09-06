@@ -1,6 +1,5 @@
 package ua.com.sinenko.things.book.controller;
 
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +10,13 @@ import ua.com.sinenko.things.book.dto.BookDto;
 import ua.com.sinenko.things.book.dto.BookMapper;
 import ua.com.sinenko.things.book.dto.BookPageResponse;
 import ua.com.sinenko.things.book.dto.BookResponse;
+import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.service.BookService;
 import ua.com.sinenko.things.common.exception.aop.ThLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/books")
@@ -28,11 +27,10 @@ public class BookController {
 
     @GetMapping
     @ResponseBody
-    @ThLogger
     public ResponseEntity<BookPageResponse> getAllBooks(@RequestParam(defaultValue = "0") int pageNumber,
                                                         @RequestParam(defaultValue = "20") int pageSize) {
         var booksPage = bookService.getAllBooks(pageNumber, pageSize);
-        var response = BookMapper.mapEntityToResponse(booksPage);
+        var response = BookMapper.entityToResponse(booksPage);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -40,7 +38,7 @@ public class BookController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<BookResponse> addBook(@RequestBody BookDto bookDto) {
-        var bookResponse = BookMapper.mapEntityToResponse(bookService.saveBook(bookDto));
+        var bookResponse = BookMapper.entityToResponse(bookService.saveBook(bookDto));
         return new ResponseEntity<>(bookResponse, HttpStatus.OK);
     }
 
@@ -48,7 +46,7 @@ public class BookController {
     @ResponseBody
     public ResponseEntity<BookDto> getBookById(@PathVariable("id") Long id) {
         var booksEntities = bookService.getBookById(id);
-        var booksDto = BookMapper.mapEntityToDto(booksEntities);
+        var booksDto = BookMapper.entityToDto(booksEntities);
 
         return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
@@ -81,5 +79,13 @@ public class BookController {
     public ResponseEntity<Void> deleteBookById(@PathVariable Long id) {
         bookService.deleteBook(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+        Book book = bookService.updateBook(id, bookDto);
+        var response = BookMapper.entityToResponse(book);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

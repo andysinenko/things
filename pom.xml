@@ -14,7 +14,7 @@
 	<name>Things</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>24</java.version>
+		<java.version>23</java.version>
 		<jjwt.version>0.12.6</jjwt.version>
 	</properties>
 	<dependencies>
@@ -73,6 +73,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+			<version>1.18.36</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -113,16 +114,17 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.0</version>
 				<configuration>
-					<!--jvmArguments>-Dspring.profiles.active=stage</jvmArguments-->
-					<excludes>
-						<exclude>
+					<annotationProcessorPaths>
+						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+							<version>1.18.36</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -17,5 +17,5 @@
     <include file="changeset/create-schema.xml" relativeToChangelogFile="true" />
     <include file="changeset/create-sequences.xml" relativeToChangelogFile="true" />
     <include file="changeset/create-tables.xml" relativeToChangelogFile="true" />
-    <!--<include file="changeset/insert-data.xml" relativeToChangelogFile="true" />-->
+    <include file="changeset/indexes.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -1,4 +1,4 @@
-package ua.com.sinenko.things.place.web;
+package ua.com.sinenko.things.place.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import ua.com.sinenko.things.place.dto.PlaceDto;
 import ua.com.sinenko.things.place.dto.PlaceMapper;
 import ua.com.sinenko.things.place.service.PlaceService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Controller

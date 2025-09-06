@@ -5,11 +5,11 @@ import org.springframework.stereotype.Repository;
 import ua.com.sinenko.things.book.entity.Author;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     Author findByName(String name);
 
-    Set<Author> findByIdIn(Collection<Long> authorIds);
+    List<Author> findByIdIn(Collection<Long> authorIds);
 }

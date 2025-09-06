@@ -13,10 +13,9 @@ import ua.com.sinenko.things.book.entity.Genre;
 import ua.com.sinenko.things.book.entity.Series;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
@@ -34,7 +33,7 @@ class BookRepositoryTest {
     @BeforeEach
     void beforeAll() {
         var author = entityManager.persist(Author.builder().name("Author Name").build());
-        Set<Author> authors = new HashSet<>();
+        List<Author> authors = new ArrayList<>();
         authors.add(author);
 
         var genre = entityManager.persist(Genre.builder().name("Fiction").build());

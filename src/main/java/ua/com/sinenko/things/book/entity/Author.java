@@ -3,8 +3,8 @@ package ua.com.sinenko.things.book.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -36,12 +36,6 @@ public class Author {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany
-    @JoinTable(
-            name = "books_authors",
-            schema = "things",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private Set<Book> books = new HashSet<>();
+    @ManyToMany(mappedBy = "authors")
+    private List<Book> books = new ArrayList<>();
 }

@@ -1,0 +1,155 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- things_users -->
+    <changeSet author="Andrew Sinenko" id="idx-101" >
+        <createIndex   schemaName="things" tableName="things_users" indexName="idx_users_create_date">
+            <column name="create_date"/>
+        </createIndex>
+        <createIndex schemaName="things" tableName="things_users" indexName="idx_users_last_name">
+            <column name="last_name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- authorities -->
+    <changeSet author="Andrew Sinenko" id="idx-102">
+        <createIndex  schemaName="things" tableName="authorities" indexName="idx_authorities_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- user_roles -->
+    <changeSet author="Andrew Sinenko" id="idx-103">
+        <createIndex  schemaName="things" tableName="user_roles" indexName="idx_user_roles_user">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="user_roles" indexName="idx_user_roles_role">
+            <column name="role_id"/>
+        </createIndex>
+        <!-- составной индекс для many-to-many -->
+        <createIndex  schemaName="things" tableName="user_roles" indexName="idx_user_roles_user_role">
+            <column name="user_id"/>
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- things_tokens -->
+    <changeSet author="Andrew Sinenko" id="idx-104">
+        <createIndex  schemaName="things" tableName="things_tokens" indexName="idx_tokens_user">
+            <column name="things_user"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="things_tokens" indexName="idx_tokens_token">
+            <column name="token"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- places -->
+    <changeSet author="Andrew Sinenko" id="idx-105">
+        <createIndex  schemaName="things" tableName="places" indexName="idx_places_name">
+            <column name="name"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="places" indexName="idx_places_parent">
+            <column name="parent_id"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="places" indexName="idx_places_level">
+            <column name="level"/>
+        </createIndex>
+        <!-- составной индекс для иерархии -->
+        <createIndex  schemaName="things" tableName="places" indexName="idx_places_parent_level">
+            <column name="parent_id"/>
+            <column name="level"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- authors -->
+    <changeSet author="Andrew Sinenko" id="idx-106">
+        <createIndex  schemaName="things" tableName="authors" indexName="idx_authors_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- genre -->
+    <changeSet author="Andrew Sinenko" id="idx-107">
+        <createIndex  schemaName="things" tableName="genre" indexName="idx_genre_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- series -->
+    <changeSet author="Andrew Sinenko" id="idx-108">
+        <createIndex  schemaName="things" tableName="series" indexName="idx_series_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- books -->
+    <changeSet author="Andrew Sinenko" id="idx-109">
+        <createIndex  schemaName="things" tableName="books" indexName="idx_books_title">
+            <column name="title"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="books" indexName="idx_books_genre">
+            <column name="genre_id"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="books" indexName="idx_books_series">
+            <column name="series_id"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="books" indexName="idx_books_place">
+            <column name="place_id"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="books" indexName="idx_books_publisher">
+            <column name="publisher"/>
+        </createIndex>
+        <!-- составной индекс для поиска по жанру и серии -->
+        <createIndex  schemaName="things" tableName="books" indexName="idx_books_genre_series">
+            <column name="genre_id"/>
+            <column name="series_id"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- vendors -->
+    <changeSet author="Andrew Sinenko" id="idx-110">
+        <createIndex  schemaName="things" tableName="vendors" indexName="idx_vendors_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- tools -->
+    <changeSet author="Andrew Sinenko" id="idx-111">
+        <createIndex  schemaName="things" tableName="tools" indexName="idx_tools_name">
+            <column name="name"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="tools" indexName="idx_tools_serial_number">
+            <column name="serial_number"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="tools" indexName="idx_tools_vendor">
+            <column name="vendor"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="tools" indexName="idx_tools_place">
+            <column name="place"/>
+        </createIndex>
+        <!-- составной индекс для поиска по vendor+type -->
+        <createIndex  schemaName="things" tableName="tools" indexName="idx_tools_vendor_type">
+            <column name="vendor"/>
+            <column name="tool_type"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- books_authors -->
+    <changeSet author="Andrew Sinenko" id="idx-112">
+        <createIndex  schemaName="things" tableName="books_authors" indexName="idx_books_authors_book">
+            <column name="book_id"/>
+        </createIndex>
+        <createIndex  schemaName="things" tableName="books_authors" indexName="idx_books_authors_author">
+            <column name="author_id"/>
+        </createIndex>
+        <!-- составной индекс для many-to-many -->
+        <createIndex  schemaName="things" tableName="books_authors" indexName="idx_books_authors_book_author">
+            <column name="book_id"/>
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

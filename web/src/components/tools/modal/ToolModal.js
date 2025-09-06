@@ -12,8 +12,8 @@ const ToolModal = ({isOpen,
     selectedTool,
     isTreeModalOpen,
     setIsTreeModalOpen,
-    places=[],
-    brands=[]}) => {
+    places,
+    brands}) => {
 
     const ToolTypes = [
         "DRILL",
@@ -34,8 +34,7 @@ const ToolModal = ({isOpen,
         setIsTreeModalOpen(false);
     };
 
-    const onNodeClick = (nodePlace) => {
-        //setSelectedPlace(nodePlace.id);
+    const onNodeSelect = (nodePlace) => {
         setSelectedPlace(nodePlace);
         const newformData = {...formData, place: nodePlace.id};
         setFormData(newformData);
@@ -62,27 +61,6 @@ const ToolModal = ({isOpen,
         return names.join(' -> ');
     }
 
-    const buildTree = data => {
-        const map = new Map();
-        const roots = [];
-
-        data.forEach(item => {
-            map.set(item.id, {...item, children: []});
-        });
-
-        map.forEach(item => {
-            if (item.parent && map.has(item.parent.id)) {
-                map.get(item.parent.id).children.push(item);
-            } else {
-                roots.push(item);
-            }
-        });
-
-        return roots;
-    };
-
-    const placesTree = buildTree(places);
-
     const onPlacesOpenDialogBox = (e) => {
         e.preventDefault();
         setIsTreeModalOpen(true);
@@ -91,6 +69,8 @@ const ToolModal = ({isOpen,
     const handleTreeSubmit = (e) => {
         setIsTreeModalOpen(false);
     };
+
+    console.log("PLACES 4 ToolModal: ", places);
 
     const renderContent = () => {
         switch (modalType) {
@@ -166,8 +146,7 @@ const ToolModal = ({isOpen,
                                             const newformData = {...formData, vendor: brandId};
                                             setFormData(newformData);
                                             //setSelectedBrand(brandId);
-                                        }
-                                    } aria-placeholder="Select brand">
+                                        }} aria-placeholder="Select brand">
                                         <option value="" defaultValue>Brand name</option>
                                         {brands.map((brand) => (
                                             <option key={brand.id} value={brand.id}>
@@ -238,12 +217,12 @@ const ToolModal = ({isOpen,
             )}
 
             <PlaceModal
-                data={placesTree}
-                onCrossClick={onNodeClick}
+                places={places}
+                onCrossClick={onNodeSelect}
                 isOpen={isTreeModalOpen}
                 onClose={closeTreeModal}
                 onSubmit={handleTreeSubmit}
-                onAddChild={onNodeClick}
+                onAddChild={onNodeSelect}
             />
         </>
     );
