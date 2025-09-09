@@ -63,14 +63,12 @@ public class BookMapper {
     }
 
     public static BookPageResponse entityToResponse(Page<Book> pageEntity) {
-        if(pageEntity.getContent() != null || pageEntity.getContent().size() > 0)
             return BookPageResponse.builder()
                 .books(pageEntity.getContent().stream().map(e -> BookMapper.entityToResponse(e)).toList())
                 .pageNumber(pageEntity.getNumber())
                 .pageSize(pageEntity.getSize())
                 .total(pageEntity.getTotalPages())
                 .build();
-        return null;
     }
 
     private static List<AuthorDto> getAuthorsDto(List<Author> authors) {

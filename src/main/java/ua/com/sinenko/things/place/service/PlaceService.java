@@ -23,12 +23,11 @@ public class PlaceService {
     }
 
     public Place getPlaceById(Long id) {
-        return placeRepository.findById(id).get();
+        return placeRepository.findById(id).orElseGet(null);
     }
 
     @Transactional
     public void savePlace(Place place) {
-        //placeRepository.getPlace(place);
         placeRepository.save(place);
     }
 

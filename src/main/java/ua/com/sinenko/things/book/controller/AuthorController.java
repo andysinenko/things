@@ -3,7 +3,6 @@ package ua.com.sinenko.things.book.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.com.sinenko.things.book.dto.AuthorDto;
 import ua.com.sinenko.things.book.dto.AuthorMapper;
@@ -12,7 +11,7 @@ import ua.com.sinenko.things.book.service.AuthorService;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/authors")
 @AllArgsConstructor
 public class AuthorController {

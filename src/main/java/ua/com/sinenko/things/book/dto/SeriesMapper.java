@@ -28,7 +28,7 @@ public class SeriesMapper {
     }
 
     public static Collection<SeriesDto> entitiesToDtos(Collection<Series> entities) {
-        if(entities != null || entities.size() > 0)
+        if(entities != null && entities.size() > 0)
             return entities.stream()
                 .map(e -> entityToDto(e))
                 .collect(Collectors.toCollection(() -> Set.of()));
@@ -36,7 +36,7 @@ public class SeriesMapper {
     }
 
     public static Collection<Series> dtosToEntities(Collection<SeriesDto> dtos) {
-        if(dtos != null || dtos.size() > 0)
+        if(dtos != null && dtos.size() > 0)
             return dtos.stream()
                 .map(e -> maptoToEntity(e))
                 .collect(Collectors.toCollection(() -> Set.of()));

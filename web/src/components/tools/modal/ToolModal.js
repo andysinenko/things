@@ -1,4 +1,5 @@
 import PlaceModal from "../../places/modal/PlaceModal";
+import React from "react";
 
 const ToolModal = ({isOpen,
     onClose,
@@ -22,16 +23,12 @@ const ToolModal = ({isOpen,
         "CIRCULAR_SAW"
     ];
 
-    if (!isOpen) {
-        return null;
-    }
-
     const closeTreeModal = () => {
         setIsTreeModalOpen(false);
     };
 
     const onNodeSelect = (nodePlace) => {
-        setSelectedTool({...setSelectedTool, place: nodePlace});
+        setSelectedTool({ ...selectedTool, place: nodePlace }); // Fix: Use selectedTool
         setIsTreeModalOpen(false);
     };
 
@@ -44,15 +41,21 @@ const ToolModal = ({isOpen,
         }
     };
 
+
+
     const getFullPlacePath = (place) => {
         if (!place) return '';
-        const names = [];
+        const currentPlaces = [];
         let current = place;
         while (current) {
-            names.unshift(current.name);
+
+            console.log(">>> brands: ", brands);
+            console.log(">>> selectedTool: ", selectedTool);
+
+            currentPlaces.unshift(current.name);
             current = current.parent;
         }
-        return names.join(' -> ');
+        return currentPlaces.join(' -> ');
     }
 
     const onPlacesOpenDialogBox = (e) => {
@@ -66,6 +69,9 @@ const ToolModal = ({isOpen,
 
     console.log("PLACES 4 ToolModal: ", places);
 
+    if (!isOpen) {
+        return null;
+    }
     const renderContent = () => {
         switch (modalType) {
             case "add":
@@ -78,11 +84,17 @@ const ToolModal = ({isOpen,
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
                                     <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true} maxLength="512"/>
-                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name ?? ""} onChange={handleChange} maxLength="512"/>
                                     <select aria-label="Brands" value={selectedTool.vendor} onChange={
                                         (e) => {
-                                            const brandId = e.target.value;
-                                            const newSelectedTool = {...selectedTool, vendor: brandId};
+                                            const brandId = Number(e.target.value);
+                                            const brand = brands.find(brand => brand.id === brandId);
+                                            console.log(">>> brandId: ", brandId);
+                                            console.log(">>> brand: ", brand);
+                                            console.log(">>> brands: ", brands);
+                                            console.log(">>> selectedTool: ", selectedTool);
+
+                                            const newSelectedTool = {...selectedTool, vendor: brand};
                                             setSelectedTool(newSelectedTool);
                                         }
                                     } aria-placeholder="Select brand">
@@ -94,8 +106,8 @@ const ToolModal = ({isOpen,
                                         ))}
                                     </select>
 
-                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber} onChange={handleChange} maxLength="512"/>
-                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber ?? ""} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Year of purchase" type="date" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing ?? ""} onChange={handleChange} maxLength="512"/>
 
                                     {selectedTool.place !== null && selectedTool.place !== undefined ? (
                                         <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedTool.place)} ✅</button>
@@ -113,7 +125,7 @@ const ToolModal = ({isOpen,
                                         ))}
                                     </select>
 
-                                    <input placeholder="Description" className="th-main-input" name="description" value={selectedTool.description} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Description" className="th-main-input" name="description" value={selectedTool.description ?? ""} onChange={handleChange} maxLength="512"/>
                                 </form>
                             </div>
                             <div className="modal-footer">
@@ -133,13 +145,22 @@ const ToolModal = ({isOpen,
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
                                     <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true} maxLength="512"/>
-                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name} onChange={handleChange} maxLength="512"/>
-                                    <select aria-label="Brands" value={selectedTool.vendor} onChange={
-                                        (e) => {
-                                            const brandId = e.target.value;
-                                            const newSelectedTool = {...selectedTool, vendor: brandId};
+                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name ?? ""} onChange={handleChange} maxLength="512"/>
+                                    <select
+                                        aria-label="Brands"
+                                        value={selectedTool.vendor?.id || ""}
+                                        onChange={(e) => {
+                                            const brandId = Number(e.target.value);
+                                            const selectedBrand = brands.find(brand => brand.id === brandId); // Fix: Use find
+                                            console.log(">>> brandId: ", brandId);
+                                            console.log(">>> selectedBrand: ", selectedBrand);
+                                            console.log(">>> brands: ", brands);
+                                            console.log(">>> selectedTool: ", selectedTool);
+                                            const newSelectedTool = { ...selectedTool, vendor: selectedBrand || null };
                                             setSelectedTool(newSelectedTool);
-                                        }} aria-placeholder="Select brand">
+                                        }}
+                                        aria-placeholder="Select brand"
+                                    >
                                         <option value="" defaultValue>Brand name</option>
                                         {brands.map((brand) => (
                                             <option key={brand.id} value={brand.id}>
@@ -148,8 +169,8 @@ const ToolModal = ({isOpen,
                                         ))}
                                     </select>
 
-                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber} onChange={handleChange} maxLength="512"/>
-                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber ?? ""} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Year of purchase" type="date" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing ?? ""} onChange={handleChange} maxLength="512"/>
 
                                     {selectedTool.place !== null && selectedTool.place !== undefined ? (
                                         <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedTool.place)} ✅</button>
@@ -167,7 +188,7 @@ const ToolModal = ({isOpen,
                                         ))}
                                     </select>
 
-                                    <input placeholder="Description" className="th-main-input" name="description" value={selectedTool.description} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Description" className="th-main-input" name="description" value={selectedTool.description ?? ""} onChange={handleChange} maxLength="512"/>
                                 </form>
                             </div>
                             <div className="modal-footer">

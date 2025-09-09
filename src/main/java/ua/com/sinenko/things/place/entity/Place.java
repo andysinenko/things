@@ -39,7 +39,7 @@ public class Place {
     private Place parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Place> children = new ArrayList<>();
+    private final List<Place> children = new ArrayList<>();
 
     @Column(name = "description")
     private String description;

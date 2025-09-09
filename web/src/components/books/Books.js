@@ -69,7 +69,7 @@ export const Books = () => {
         setIsModalOpen(false);
         setModalType(null);
         setSelectedBook({id: "", title: "", volume: "", genre: {}, authors: [], series: {}, year: "", place: null, description: ""});
-        setSelectedBook(null);
+        //setSelectedBook(null);
     };
 
 

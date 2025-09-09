@@ -11,7 +11,7 @@ public enum ToolType {
     CIRCULAR_SAW("CIRCULAR_SAW")
     ;
 
-    String type;
+    private final String type;
     ToolType(String type) {
         this.type = type;
     }

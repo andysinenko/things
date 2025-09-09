@@ -1,6 +1,5 @@
 package ua.com.sinenko.things.security.model.service;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,7 +11,7 @@ import java.io.IOException;
 @Component
 public class ThingsAccessDeniedHandler implements AccessDeniedHandler {
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
     }
 }

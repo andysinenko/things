@@ -37,5 +37,5 @@ public class Author {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToMany(mappedBy = "authors")
-    private List<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
 }

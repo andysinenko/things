@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -39,5 +40,5 @@ public class Authority implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "user_id"),
             schema = "things"
     )
-    private List<ThingsUser> thingsUser;
+    private final List<ThingsUser> thingsUser = new ArrayList<>();
 }

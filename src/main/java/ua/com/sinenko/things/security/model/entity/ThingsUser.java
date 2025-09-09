@@ -56,7 +56,7 @@ public class ThingsUser {
     private boolean isEnabled;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<JwtTokenEntity> tokens;
+    private final List<JwtTokenEntity> tokens = new ArrayList<>();
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")

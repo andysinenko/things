@@ -1,29 +1,22 @@
 package ua.com.sinenko.things.book.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ua.com.sinenko.things.book.dto.BookDto;
 import ua.com.sinenko.things.book.dto.BookMapper;
 import ua.com.sinenko.things.book.dto.BookPageResponse;
 import ua.com.sinenko.things.book.dto.BookResponse;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.service.BookService;
-import ua.com.sinenko.things.common.exception.aop.ThLogger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-@Controller
+@RestController
 @RequestMapping("/api/v1/books")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookController {
 
-    private BookService bookService;
+    private final BookService bookService;
 
     @GetMapping
     @ResponseBody

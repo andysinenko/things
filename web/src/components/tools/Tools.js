@@ -19,12 +19,12 @@ export const Tools = () => {
     const [modalType, setModalType] = useState(null);
 
     const [selectedTool, setSelectedTool] = useState({
-        id: Number(""),
+        id: null,
         name: "",
         toolType: "",
         serialNumber:"",
-        vendor: null, //vendor id
-        place: null,  //place id
+        vendor: null,
+        place: null,
         dateOfPurchasing: "",
         description: "",
     });
@@ -66,15 +66,13 @@ export const Tools = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //const vendorObject = brands.find(b => b.id === Number(selectedTool.vendor.id)) || null;
         try {
             if (modalType === "add") {
-                console.log("PLACES 2 Tools: ", places);
+                console.log("ADDED Tool: ", selectedTool);
                 dispatch(addNewTool(selectedTool));
             } else if (modalType === "delete") {
                 dispatch(deleteTool(selectedTool.id));
             } else if (modalType === "edit") {
-                console.log("PLACES 3 Tools: ", places);
                 console.log("EDITED TOOL: ", selectedTool);
                 dispatch(updateTool(selectedTool.id, selectedTool));
             }
@@ -85,6 +83,16 @@ export const Tools = () => {
     };
 
     const handleAddTool = () => {
+        setSelectedTool({
+            id: null,
+            name: "",
+            toolType: "",
+            serialNumber:"",
+            vendor: null,
+            place: null,
+            dateOfPurchasing: "",
+            description: "",
+        });
         openModal("add");
     };
 
@@ -152,6 +160,7 @@ export const Tools = () => {
                 </table>
                 <Paginator />
             </section>
+
             <ToolModal
             isOpen={isModalOpen}
             onClose={closeModal}

@@ -3,6 +3,7 @@ package ua.com.sinenko.things.tool.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -32,6 +33,6 @@ public class Vendor {
     @OneToMany(mappedBy = "vendor")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<Tool> tool;
+    private final List<Tool> tool = new ArrayList<>();
 
 }

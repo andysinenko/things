@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.com.sinenko.things.security.model.entity.Authority;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 @Data
 public class UserDto implements Serializable {
+    @Serial
     private static final long serialVersionUID = 479480883093048690L;
 
     private Long id;

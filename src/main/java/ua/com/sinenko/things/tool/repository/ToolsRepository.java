@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.com.sinenko.things.tool.entity.Tool;
 import ua.com.sinenko.things.tool.entity.ToolType;
-import ua.com.sinenko.things.tool.entity.Vendor;
 
 import java.util.List;
 

@@ -18,8 +18,6 @@ import ua.com.sinenko.things.book.repository.AuthorRepository;
 import ua.com.sinenko.things.book.repository.BookRepository;
 import ua.com.sinenko.things.book.repository.GenreRepository;
 import ua.com.sinenko.things.book.repository.SeriesRepository;
-import ua.com.sinenko.things.common.exception.PlaceNotExistsException;
-import ua.com.sinenko.things.common.exception.aop.ThLogger;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
 
 import java.time.LocalDate;
@@ -53,52 +51,13 @@ public class BookService {
 
     @Transactional
     public Book saveBook(BookDto bookDto) {
-        /*var authors = authorRepository.findByIdIn(bookDto.authors().stream().map(e-> e.id()).collect(Collectors.toList()));
-        var genre = genreRepository.findById(bookDto.genre().id());
-        var series = seriesRepository.findById(bookDto.series().id());
-
-        if (authors.isEmpty() || genre.isEmpty() || series.isEmpty()) {
-            throw new IllegalArgumentException("Author, genre or series not found");
-        }
-
-        Book book = BookMapper.dtoToEntity(bookDto);
-        book.setAuthors(authors);
-        book.setGenre(genre.get());
-        book.setSeries(series.get());
-        book.setYear(LocalDate.parse(bookDto.year() + "-01-01"));
-
-        for (Author author : authors) {
-            author.getBooks().add(book);
-        }*/
         var book = BookMapper.dtoToEntity(bookDto);
-        logger.info("Book before updating: {}", book);
+        logger.debug("Book before updating: {}", book);
 
         return bookRepository.saveAndFlush(book);
     }
 
     public Book updateBook(Long id, BookDto bookDto) {
-        /*var book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
-
-        var genre = genreRepository.findById(bookDto.genre().id()).orElse(null);
-        var series = seriesRepository.findById(bookDto.series().id()).orElse(null);
-        var place = placeRepository.findById(bookDto.place().id()).orElseThrow(() -> new PlaceNotExistsException(bookDto.place().id()));
-
-        var authors = getAuthors(bookDto.authors());
-        logger.info("!!! authors {}", authors);
-
-        book.setAuthors(authors);
-        for (Author author : authors) {
-            author.getBooks().add(book);
-        }
-
-        book.setTitle(bookDto.title());
-        book.setVolumeNumber(bookDto.volume());
-        book.setGenre(genre);
-        book.setSeries(series);
-        book.setYear(bookDto.year());
-        book.setPlace(place);
-        book.setDescription(bookDto.description());*/
         var book = BookMapper.dtoToEntity(bookDto);
         logger.info("Book before updating: {}", book);
 

@@ -3,8 +3,7 @@ package ua.com.sinenko.things.tool.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.sinenko.things.common.exception.PlaceNotExistsException;
-import ua.com.sinenko.things.common.exception.VendorNotExistsException;
+import ua.com.sinenko.things.common.exception.aop.ThLogger;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
 import ua.com.sinenko.things.tool.dto.ToolDto;
 import ua.com.sinenko.things.tool.dto.ToolMapper;
@@ -44,7 +43,7 @@ public class ToolService {
     }
 
     public Tool getToolById(Long id) {
-        return toolsRepository.findById(id).get();
+        return toolsRepository.findById(id).orElseGet(null);
     }
 
     @Transactional

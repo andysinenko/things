@@ -29,10 +29,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(AppExceptionHandler.class);
 
-    public AppExceptionHandler() {
-        super();
-    }
-
     @ExceptionHandler({ResourceNotFoundException.class, EntityNotFoundException.class, UsernameNotFoundException.class})
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException, HttpServletRequest request) {
         ErrorDescription errorDescription = new ErrorDescription();
