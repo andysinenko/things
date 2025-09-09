@@ -70,9 +70,9 @@ const BookModal = ({
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={selectedBook.id} readOnly={true} disabled={true}/>
-                                    <input className="th-main-input" type="text" name="title" value={selectedBook.title} onChange={handleChange} placeholder="Enter title of book"/>
-                                    <input className="th-main-input" type="text" name="volume" value={selectedBook.volume} onChange={handleChange} placeholder="Enter volume of book"/>
+                                    <input placeholder="id" className="th-main-input" name="id" value={selectedBook.id} readOnly={true} disabled={true} maxLength="512"/>
+                                    <input className="th-main-input" type="text" name="title" value={selectedBook.title} onChange={handleChange} placeholder="Enter title of book" maxLength="512"/>
+                                    <input className="th-main-input" type="text" name="volume" value={selectedBook.volume} onChange={handleChange} placeholder="Enter volume of book" maxLength="512"/>
                                     <select aria-label="Genre name" value={setSelectedBook.genre} onChange={(e) => {
                                         const selectedGenre = genres.find(g => g.id === Number(e.target.value));
                                         setSelectedBook(prev => ({ ...prev, genre: selectedGenre }));

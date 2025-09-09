@@ -95,7 +95,7 @@ const Places = () => {
 
     return (
         <main className="main-container">
-            <nav className="th-buttons-toolbar">
+            <nav className="th-buttons-toolbar" aria-label="Places">
                 <button className="th-main-button" onClick={handleAddPlace}>
                     Add place
                 </button>

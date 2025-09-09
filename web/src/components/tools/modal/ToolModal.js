@@ -77,8 +77,8 @@ const ToolModal = ({isOpen,
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true}/>
-                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name} onChange={handleChange}/>
+                                    <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true} maxLength="512"/>
+                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name} onChange={handleChange} maxLength="512"/>
                                     <select aria-label="Brands" value={selectedTool.vendor} onChange={
                                         (e) => {
                                             const brandId = e.target.value;
@@ -94,8 +94,8 @@ const ToolModal = ({isOpen,
                                         ))}
                                     </select>
 
-                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber} onChange={handleChange}/>
-                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing} onChange={handleChange}/>
+                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing} onChange={handleChange} maxLength="512"/>
 
                                     {selectedTool.place !== null && selectedTool.place !== undefined ? (
                                         <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedTool.place)} ✅</button>
@@ -132,8 +132,8 @@ const ToolModal = ({isOpen,
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true}/>
-                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name} onChange={handleChange}/>
+                                    <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true} maxLength="512"/>
+                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name} onChange={handleChange} maxLength="512"/>
                                     <select aria-label="Brands" value={selectedTool.vendor} onChange={
                                         (e) => {
                                             const brandId = e.target.value;
@@ -148,8 +148,8 @@ const ToolModal = ({isOpen,
                                         ))}
                                     </select>
 
-                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber} onChange={handleChange}/>
-                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing} onChange={handleChange}/>
+                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber} onChange={handleChange} maxLength="512"/>
+                                    <input placeholder="Year of purchase" type="text" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing} onChange={handleChange} maxLength="512"/>
 
                                     {selectedTool.place !== null && selectedTool.place !== undefined ? (
                                         <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedTool.place)} ✅</button>

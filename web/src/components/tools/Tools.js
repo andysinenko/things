@@ -99,7 +99,6 @@ export const Tools = () => {
     }
 
     return (
-        <>
         <main className="main-container">
             <nav className="th-buttons-toolbar" aria-label="Tools">
                 <button className="th-main-button" variant="light" size="sm" onClick={handleAddTool}>
@@ -153,19 +152,18 @@ export const Tools = () => {
                 </table>
                 <Paginator />
             </section>
+            <ToolModal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            onSubmit={handleSubmit}
+            modalType = {modalType}
+            selectedTool={selectedTool}
+            setSelectedTool={setSelectedTool}
+            isTreeModalOpen={isTreeModalOpen}
+            setIsTreeModalOpen={setIsTreeModalOpen}
+            places={places}
+            brands={brands} />
         </main>
-    <ToolModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onSubmit={handleSubmit}
-        modalType = {modalType}
-        selectedTool={selectedTool}
-        setSelectedTool={setSelectedTool}
-        isTreeModalOpen={isTreeModalOpen}
-        setIsTreeModalOpen={setIsTreeModalOpen}
-        places={places}
-        brands={brands} />
-    </>
     );
 
 }
