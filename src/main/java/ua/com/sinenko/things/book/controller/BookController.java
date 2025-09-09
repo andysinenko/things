@@ -27,8 +27,7 @@ public class BookController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<BookPageResponse> getAllBooks(@RequestParam(defaultValue = "0") int pageNumber,
-                                                        @RequestParam(defaultValue = "20") int pageSize) {
+    public ResponseEntity<BookPageResponse> getAllBooks(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "20") int pageSize) {
         var booksPage = bookService.getAllBooks(pageNumber, pageSize);
         var response = BookMapper.entityToResponse(booksPage);
 
@@ -49,29 +48,6 @@ public class BookController {
         var booksDto = BookMapper.entityToDto(booksEntities);
 
         return new ResponseEntity<>(booksDto, HttpStatus.OK);
-    }
-
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Please upload a CSV file!");
-        }
-
-        if (!file.getOriginalFilename().endsWith(".csv")) {
-            return ResponseEntity.badRequest().body("Only CSV files are allowed!");
-        }
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // Process each line of CSV
-                System.out.println("CSV line: " + line);
-            }
-            return ResponseEntity.ok("CSV uploaded and processed successfully!");
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error reading CSV: " + e.getMessage());
-        }
     }
 
     @DeleteMapping(value = "/{id}")

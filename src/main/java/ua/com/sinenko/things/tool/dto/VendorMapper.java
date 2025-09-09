@@ -1,33 +1,28 @@
 package ua.com.sinenko.things.tool.dto;
 
 import ua.com.sinenko.things.tool.entity.Vendor;
-
 import java.util.List;
 
 public class VendorMapper {
-    public static VendorDto toVendorDto(Vendor vendor) {
-        if (vendor == null) {
+    public static VendorDto entityToDto(Vendor entity) {
+        if (entity == null) {
             return null;
         }
-        return new VendorDto(vendor.getId(), vendor.getName());
+        return new VendorDto(entity.getId(), entity.getName());
     }
 
-    public static Vendor toVendorEntity(VendorDto vendorDto) {
-        if (vendorDto == null) {
-            return null;
-        }
-        Vendor vendor = new Vendor();
-        vendor.setId(vendorDto.id());
-        vendor.setName(vendorDto.name());
-        return vendor;
+    public static Vendor dtoToEntity(VendorDto dto) {
+        if (dto == null) return null;
+        return Vendor.builder()
+                .id(dto.id())
+                .name(dto.name())
+                .build();
     }
 
-    public static List<VendorDto> toVendorDtoList(List<Vendor> vendors) {
-        if (vendors == null || vendors.isEmpty()) {
-            return List.of();
-        }
+    public static List<VendorDto> entitiesToDtos(List<Vendor> vendors) {
+        if (vendors == null || vendors.isEmpty()) return List.of();
         return vendors.stream()
-                .map(VendorMapper::toVendorDto)
+                .map(VendorMapper::entityToDto)
                 .toList();
     }
 }

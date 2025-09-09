@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.com.sinenko.things.common.exception.aop.ThLogger;
 import ua.com.sinenko.things.tool.dto.*;
 import ua.com.sinenko.things.tool.service.ToolService;
 import ua.com.sinenko.things.tool.service.VendorService;
@@ -26,7 +25,7 @@ public class ToolController {
     @ResponseBody
     public ResponseEntity<List<ToolResponse>> getAllTools() {
         var tools = toolService.getAllTools();
-        var toolsDto = ToolMapper.mapEntitiesToDtos(tools);
+        var toolsDto = ToolMapper.entitiesToResponses(tools);
         return new ResponseEntity<>(toolsDto, HttpStatus.OK);
     }
 
@@ -41,7 +40,7 @@ public class ToolController {
     @ResponseBody
     public ResponseEntity<ToolResponse> updateTool(@PathVariable Long id, @RequestBody ToolDto toolDto) {
         var tool = toolService.updateTool(id, toolDto);
-        var toolResponse = ToolMapper.mapEntityToDto(tool);
+        var toolResponse = ToolMapper.entityToResponse(tool);
         return new ResponseEntity<>(toolResponse, HttpStatus.CREATED);
     }
 
@@ -61,7 +60,7 @@ public class ToolController {
     @GetMapping(value = "/brands", produces = "application/json")
     public ResponseEntity<List<VendorDto>> getToolBrands() {
         var vendors = vendorService.getAllVendors();
-        var vendorDtos = VendorMapper.toVendorDtoList(vendors);
+        var vendorDtos = VendorMapper.entitiesToDtos(vendors);
         return new ResponseEntity<>(vendorDtos, HttpStatus.OK);
     }
 

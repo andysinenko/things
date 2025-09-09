@@ -21,7 +21,7 @@ public class PlaceController {
     @ResponseBody
     public ResponseEntity<List<PlaceDto>> getAllPlaces() {
         var places = placeService.getAllPlaces();
-        var placesDto = PlaceMapper.mapEntitiesToDtos(places);
+        var placesDto = PlaceMapper.entitiesToDtos(places);
         return new ResponseEntity<>(placesDto, HttpStatus.OK);
     }
 
@@ -29,14 +29,14 @@ public class PlaceController {
     @ResponseBody
     public ResponseEntity<List<PlaceDto>> getPlaceById(@PathVariable("id") Long id) {
         var place = placeService.getPlaceById(id);
-        var placeDto = PlaceMapper.mapEntityToDto(place);
+        var placeDto = PlaceMapper.entityToDto(place);
         return new ResponseEntity<>(List.of(placeDto), HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseBody
     public ResponseEntity<Void> addNewPlace(@RequestBody PlaceDto placeDto) {
-        var place = PlaceMapper.mapDtoToEntity(placeDto);
+        var place = PlaceMapper.dtoToEntity(placeDto);
         placeService.savePlace(place);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -45,7 +45,7 @@ public class PlaceController {
     @PutMapping
     @ResponseBody
     public ResponseEntity<Void> updatePlace(@RequestBody PlaceDto placeDto) {
-        var place = PlaceMapper.mapDtoToEntity(placeDto);
+        var place = PlaceMapper.dtoToEntity(placeDto);
         placeService.savePlace(place);
 
         return new ResponseEntity<>(HttpStatus.OK);

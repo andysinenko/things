@@ -5,6 +5,7 @@ import {addNewTool, deleteTool, fetchBrands, fetchTools, updateTool} from "./api
 import ToolModal from "./modal/ToolModal";
 import {fetchAllPlaces} from "../places/api/api";
 import {Paginator} from "../layout/pagination/Paginator";
+import {sortByBrand, sortById, sortByName, sortByType} from "./reducer/ToolsSlice";
 
 
 export const Tools = () => {
@@ -16,8 +17,9 @@ export const Tools = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
-    const [formData, setFormData] = useState({
-        id: "",
+
+    const [selectedTool, setSelectedTool] = useState({
+        id: Number(""),
         name: "",
         toolType: "",
         serialNumber:"",
@@ -26,10 +28,6 @@ export const Tools = () => {
         dateOfPurchasing: "",
         description: "",
     });
-
-    const [selectedTool, setSelectedTool] = useState(null);
-    const [selectedPlace, setSelectedPlace] = useState(null);
-    const [selectedBrand, setSelectedBrand] = useState(null);
 
     const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
 
@@ -54,58 +52,31 @@ export const Tools = () => {
             </div>
         </div>);
 
-    const openModal = (modalType, tool = null) => {
+    const openModal = (modalType) => {
         console.log("PLACES 1 Tools: ", places);
         setModalType(modalType);
-        setSelectedTool(tool);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
-        setFormData({
-            id: "", name: "", toolType: "", serialNumber:"", vendor: "", place: "", dateOfPurchasing: "", description: "",
-        });
         setSelectedTool(null);
-        setSelectedBrand(null);
-        setSelectedPlace(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const vendorObject = brands.find(b => b.id === Number(selectedBrand)) || null;
+        //const vendorObject = brands.find(b => b.id === Number(selectedTool.vendor.id)) || null;
         try {
             if (modalType === "add") {
                 console.log("PLACES 2 Tools: ", places);
-
-                const newTool = {
-                    id: formData.id,
-                    name: formData.name,
-                    toolType: formData.toolType,
-                    serialNumber: formData.serialNumber,
-                    vendor: formData.vendor,
-                    place: formData.place,
-                    dateOfPurchasing: `${formData.dateOfPurchasing}-01-01`,
-                    description: formData.description,
-                };
-                dispatch(addNewTool(newTool));
+                dispatch(addNewTool(selectedTool));
             } else if (modalType === "delete") {
                 dispatch(deleteTool(selectedTool.id));
             } else if (modalType === "edit") {
                 console.log("PLACES 3 Tools: ", places);
-                const editedTool = {
-                    id: Number(formData.id),
-                    name: formData.name,
-                    toolType: formData.toolType,
-                    serialNumber: formData.serialNumber,
-                    vendor: formData.vendor,
-                    place: formData.place.id,
-                    dateOfPurchasing: `${formData.dateOfPurchasing}-01-01`,
-                    description: formData.description,
-                };
-                console.log("EDITED TOOL: ", editedTool);
-                dispatch(updateTool(editedTool.id, editedTool));
+                console.log("EDITED TOOL: ", selectedTool);
+                dispatch(updateTool(selectedTool.id, selectedTool));
             }
             closeModal();
         } catch (error) {
@@ -118,22 +89,12 @@ export const Tools = () => {
     };
 
     const handleEditTool = (tool) => {
-        const newSelectedTool = {
-            id:             Number(tool.id),
-            name:           tool.name,
-            toolType:       tool.toolType,
-            serialNumber:   tool.serialNumber,
-            vendor:         tool.vendor.id,
-            place:          tool.place,
-            dateOfPurchasing: tool.dateOfPurchasing.substring(0, 4),
-            description:    tool.description,
-        };
-        setFormData(newSelectedTool);
-        setSelectedPlace(tool.place);
-        openModal("edit", tool);
+        setSelectedTool(tool);
+        openModal("edit");
     }
 
     const handleDelTool = (tool) => {
+        setSelectedTool(tool);
         openModal("delete", tool);
     }
 
@@ -149,10 +110,10 @@ export const Tools = () => {
                 <table className="table">
                     <thead>
                     <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Brand</th>
-                        <th scope="col">Tool type</th>
+                        <th scope="col" onClick={() => dispatch(sortById())}>ID &#x25be;&#x25b4;</th>
+                        <th scope="col" onClick={() => dispatch(sortByName())}>Name  &#x25be;&#x25b4;</th>
+                        <th scope="col" onClick={() => dispatch(sortByBrand())}>Brand  &#x25be;&#x25b4;</th>
+                        <th scope="col" onClick={() => dispatch(sortByType())}>Tool type  &#x25be;&#x25b4;</th>
                         <th scope="col">Serial number</th>
                         <th scope="col">Purchasing date</th>
                         <th scope="col">Place</th>
@@ -171,7 +132,7 @@ export const Tools = () => {
                             <td>{tool.vendor?.name}</td>
                             <td>{tool.toolType}</td>
                             <td>{tool.serialNumber}</td>
-                            <td>{tool.dateOfPurchasing}</td>
+                            <td>{tool.dateOfPurchasing?.substring(0, 4)}</td>
                             <td>{tool.place?.description}</td>
                             <td>{tool.description}</td>
                             <td>
@@ -197,13 +158,9 @@ export const Tools = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         onSubmit={handleSubmit}
-        formData={formData}
-        setFormData={setFormData}
         modalType = {modalType}
         selectedTool={selectedTool}
-        selectedPlace={selectedPlace}
-        setSelectedPlace={setSelectedPlace}
-        setSelectedBrand={setSelectedBrand}
+        setSelectedTool={setSelectedTool}
         isTreeModalOpen={isTreeModalOpen}
         setIsTreeModalOpen={setIsTreeModalOpen}
         places={places}

@@ -5,7 +5,6 @@ import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.place.dto.PlaceMapper;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +20,7 @@ public class BookMapper {
                     .authors(AuthorMapper.dtosToEntities(dto.authors()))
                     .genre(GenreMapper.dtoToEntity(dto.genre()))
                     .series(SeriesMapper.maptoToEntity(dto.series()))
-                    .place(PlaceMapper.mapDtoToEntity(dto.place()))
+                    .place(PlaceMapper.dtoToEntity(dto.place()))
                     .year(dto.year())
                     .description(dto.description())
                     .volumeNumber(dto.volume())
@@ -37,7 +36,7 @@ public class BookMapper {
                 .title(entity.getTitle())
                 .genre(GenreMapper.entityToDto(entity.getGenre()))
                 .authors(AuthorMapper.entitiesToDtos(entity.getAuthors()))
-                .place(PlaceMapper.mapEntityToDto(entity.getPlace()))
+                .place(PlaceMapper.entityToDto(entity.getPlace()))
                 .year(entity.getYear())
                 .description(entity.getDescription())
                 .volume(entity.getVolumeNumber())
@@ -58,7 +57,7 @@ public class BookMapper {
                 .genre(GenreMapper.entityToDto(entity.getGenre()))
                 .authors(getAuthorsDto(entity.getAuthors()))
                 .series(SeriesMapper.entityToDto(entity.getSeries()))
-                .place(PlaceMapper.mapEntityToDto(entity.getPlace()))
+                .place(PlaceMapper.entityToDto(entity.getPlace()))
                 .build();
         return null;
     }

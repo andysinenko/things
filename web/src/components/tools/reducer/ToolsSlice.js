@@ -14,7 +14,7 @@ const toolsSlice = createSlice({
         },
         fetchToolsSuccess(state, action) {
             state.loading = false;
-            state.tools = action.payload;
+            state.tools = action.payload.sort((a, b) => a.id - b.id);
             state.error = null;
         },
         fetchToolsFailure(state, action) {
@@ -52,6 +52,22 @@ const toolsSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+
+        sortById(state) {
+            state.tools = [...state.tools].sort((a, b) => a.id - b.id);
+        },
+
+        sortByName(state) {
+            state.tools = [...state.tools].sort((a, b) => a.name.localeCompare(b.name));
+        },
+
+        sortByBrand(state) {
+            state.tools = [...state.tools].sort((a, b) => a.vendor?.name.localeCompare(b.vendor?.name));
+        },
+
+        sortByType(state) {
+            state.tools = [...state.tools].sort((a, b) => a.toolType.localeCompare(b.toolType));
+        },
     },
 });
 
@@ -65,6 +81,10 @@ export const {
     updateToolStart,
     updateToolSuccess,
     addToolSuccess,
+    sortById,
+    sortByName,
+    sortByBrand,
+    sortByType
 } = toolsSlice.actions;
 
 export default toolsSlice.reducer;

@@ -112,7 +112,7 @@ const BookModal = ({
                                         <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>What a place ❓</button>
                                     )}
                                     <input className="modal-input" type="text" name="year" onChange={handleChange} placeholder="Enter year of release" value={selectedBook.year.substring(0, 4)}/>
-                                    <input className="modal-input" type="text" name="description" onChange={handleChange} placeholder="Enter description" value={selectedBook.description}/>
+                                    <input className="modal-input" type="text" name="description" onChange={handleChange} placeholder="Description" value={selectedBook.description} maxLength="512"/>
                                 </form>
                             </div>
                             <div className="modal-footer">
@@ -141,29 +141,6 @@ const BookModal = ({
                         </div>
                     </div>
                 );
-            case "csv":
-                return (
-                    <div className="th-modal-overlay">
-                        <div className="th-modal-content">
-                            <div className="th-modal-header">
-                                <h5>CSV upload....</h5>
-                            </div>
-                            <div className="modal-body">
-                                <form onSubmit={onSubmit}>
-                                    <input className="modal-input" type="file" name="csv" accept=".csv"
-                                                  onChange={(e) => setSelectedBook((prev) => ({
-                                                      ...prev,
-                                                      csv: e.target.files[0]
-                                                  }))}
-                                                  required placeholder="Choose your csv file"/>
-                                </form>
-                            </div>
-                            <div className="modal-footer">
-                                <button className="th-main-button" onClick={onClose}>Close</button>
-                                <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
-                            </div>
-                        </div>
-                    </div>);
             default:
                 return <p>Unknown action</p>;
         }

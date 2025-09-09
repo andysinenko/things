@@ -13,8 +13,8 @@ public record ToolDto(
         String name,
         ToolType toolType,
         String serialNumber,
-        Long vendor,
-        Long place,
+        VendorDto vendor,
+        PlaceDto place,
         LocalDate dateOfPurchasing,
         String description) {
 }

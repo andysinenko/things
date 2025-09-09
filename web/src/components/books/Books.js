@@ -103,11 +103,6 @@ export const Books = () => {
         openModal("delete", book);
     };
 
-    const handleUploadCSV = () => {
-        console.log("Opening CSV Upload Modal");
-        openModal("csv");
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -117,8 +112,6 @@ export const Books = () => {
             } else if (modalType === "delete") {
                 console.log("Deleting book:", selectedBook.id);
                 dispatch(deleteBook(selectedBook.id));
-            } else if (modalType === "csv") {
-                //console.log("Uploading CSV:", selectedBook.csv);
             } else if (modalType === "edit") {
                 dispatch(updateBook(selectedBook.id, selectedBook, pageNumber, pageSize));
             }
@@ -171,9 +164,6 @@ export const Books = () => {
                 <button className="th-main-button" variant="light" size="sm" onClick={handleAddBook}>
                     Add book
                 </button>
-                <button className="th-main-button" variant="light" size="sm" onClick={handleUploadCSV}>
-                    CSV upload....
-                </button>
                 <button className="th-main-button" variant="light" size="sm" onClick={handleDelBook}>
                     Delete book
                 </button>
@@ -222,7 +212,7 @@ export const Books = () => {
                                 <button className="table-action-btn delete-btn" title="Удалить" onClick={() => handleDelBook(book)}>🗑️</button>
                             </td>
                         </tr>
-                    ) : (
+                    ):(
                         <tr>
                             <td colSpan="10" style={{textAlign: "center"}}>
                                 <h5>Book list is empty</h5>

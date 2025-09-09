@@ -7,18 +7,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ToolMapper {
-    public static Tool mapDtoToEntity(ToolDto dto) {
+    public static Tool dtoToEntity(ToolDto dto) {
+        if (dto == null) return null;
         return Tool.builder()
                 .id(dto.id())
                 .name(dto.name())
                 .serialNumber(dto.serialNumber())
                 .dateOfPurchasing(dto.dateOfPurchasing())
                 .type(dto.toolType())
+                .place(PlaceMapper.dtoToEntity(dto.place()))
+                .vendor(VendorMapper.dtoToEntity(dto.vendor()))
                 .description(dto.description())
                 .build();
     }
 
-    public static ToolResponse mapEntityToDto(Tool entity) {
+    public static ToolResponse entityToResponse(Tool entity) {
+        if (entity == null) return null;
         return ToolResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -26,14 +30,15 @@ public class ToolMapper {
                 .toolType(entity.getType())
                 .dateOfPurchasing(entity.getDateOfPurchasing())
                 .serialNumber(entity.getSerialNumber())
-                .vendor(VendorMapper.toVendorDto(entity.getVendor()))
-                .place(PlaceMapper.mapEntityToDto(entity.getPlace()))
+                .vendor(VendorMapper.entityToDto(entity.getVendor()))
+                .place(PlaceMapper.entityToDto(entity.getPlace()))
                 .build();
     }
 
-    public static List<ToolResponse> mapEntitiesToDtos(List<Tool> entity) {
-        return entity.stream()
-                .map(e -> ToolMapper.mapEntityToDto(e))
+    public static List<ToolResponse> entitiesToResponses(List<Tool> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(e -> ToolMapper.entityToResponse(e))
                 .collect(Collectors.toList());
     }
 }

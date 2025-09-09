@@ -28,11 +28,7 @@ public class ToolService {
 
     @Transactional
     public void saveTool(ToolDto toolDto) {
-        var tool = ToolMapper.mapDtoToEntity(toolDto);
-        var place = placeRepository.findById(toolDto.place()).orElseThrow(() -> new PlaceNotExistsException(toolDto.place()));
-        var vendor = vendorRepository.findById(toolDto.vendor()).orElseThrow(() -> new VendorNotExistsException(toolDto.vendor()));
-        tool.setVendor(vendor);
-        tool.setPlace(place);
+        var tool = ToolMapper.dtoToEntity(toolDto);
         toolsRepository.save(tool);
     }
 
@@ -53,21 +49,12 @@ public class ToolService {
 
     @Transactional
     public Tool updateTool(Long id, ToolDto toolDto) {
-        Tool tool = toolsRepository.findById(id)
+        toolsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tool not found"));
 
-        var place = placeRepository.findById(toolDto.place()).orElseThrow(() -> new PlaceNotExistsException(toolDto.place()));
-        var vendor = vendorRepository.findById(toolDto.vendor()).orElseThrow(() -> new VendorNotExistsException(toolDto.vendor()));
+        var tool = ToolMapper.dtoToEntity(toolDto);
 
-        tool.setName(toolDto.name());
-        tool.setSerialNumber(toolDto.serialNumber());
-        tool.setType(toolDto.toolType());
-        tool.setDescription(toolDto.description());
-        tool.setDateOfPurchasing(toolDto.dateOfPurchasing());
-        tool.setVendor(vendor);
-        tool.setPlace(place);
-
-        return toolsRepository.save(tool);
+        return toolsRepository.saveAndFlush(tool);
     }
 
     public List<Tool> getToolsByDescription(String description) {
