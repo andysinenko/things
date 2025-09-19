@@ -18,4 +18,7 @@
     <include file="changeset/create-sequences.xml" relativeToChangelogFile="true" />
     <include file="changeset/create-tables.xml" relativeToChangelogFile="true" />
     <include file="changeset/indexes.xml" relativeToChangelogFile="true"/>
+    <include file="changeset/create-categories.xml" relativeToChangelogFile="true"/>
+    <include file="changeset/pdfbooks-categories-indexes.xml" relativeToChangelogFile="true"/>
+    <include file="changeset/create-pdfauthors.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -1,0 +1,52 @@
+{
+  "mappings": {
+    "properties": {
+      "authors": {
+        "type": "nested",
+        "properties": {
+          "authorId": {
+            "type": "integer"
+          },
+          "authorName": {
+            "type": "text",
+            "fields": {
+              "raw": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "category": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "name": {
+            "type": "text"
+          }
+        }
+      },
+      "content": {
+        "type": "text"
+      },
+      "filePath": {
+        "type": "keyword"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "text",
+        "fields": {
+          "raw": {
+            "type": "keyword"
+          }
+        }
+      },
+      "uploadDate": {
+        "type": "date"
+      }
+    }
+  }
+}

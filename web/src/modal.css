@@ -1,3 +1,7 @@
+* {
+    pointer-events: auto !important;
+}
+
 .th-modal-overlay {
   position: fixed;
   top: 0;
@@ -20,6 +24,43 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.th-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.th-modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-button:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-body {
+    margin-bottom: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .th-modal-content h6 {

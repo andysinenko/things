@@ -76,7 +76,7 @@ const BookModal = ({
                                     <select aria-label="Genre name" value={setSelectedBook.genre} onChange={(e) => {
                                         const selectedGenre = genres.find(g => g.id === Number(e.target.value));
                                         setSelectedBook(prev => ({ ...prev, genre: selectedGenre }));
-                                    }} aria-placeholder="Select genre">
+                                    }} placeholder="Select genre">
                                         <option value="" disabled hidden>Genre name</option>
                                         {genres.map((genre) => (
                                             <option key={genre.id} value={genre.id}>
@@ -90,7 +90,8 @@ const BookModal = ({
                                                      const selectedIds = Array.from(e.target.selectedOptions, option => Number(option.value));
                                                      const selectedAuthors = authors.filter(author => selectedIds.includes(author.id));
                                                      setSelectedBook({...selectedBook, authors: selectedAuthors});
-                                                 }}>
+                                                 }}
+                                    >
                                         <option value="" disabled hidden>Authors</option>
                                         {authors.map((author) => (
                                             <option key={author.id} value={author.id}>

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import "./PlaceModal.css";
 import {TreeView} from "../treeview/TreeView";
 
 const PlaceModal = ({

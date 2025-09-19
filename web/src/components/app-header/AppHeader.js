@@ -37,6 +37,7 @@ const AppHeader = () => {
                             <li className="li-header-my"><NavLink to="/books"     className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Books</NavLink></li>
                             <li className="li-header-my"><NavLink to="/tools"     className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Tools</NavLink></li>
                             <li className="li-header-my"><NavLink to="/places"    className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Places</NavLink></li>
+                            <li className="li-header-my"><NavLink to="/pdfbook"    className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Pdf books</NavLink></li>
                         </ul>) : ''}
             </div>
             <div className="header-title"><span>Things</span></div>

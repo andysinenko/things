@@ -7,6 +7,9 @@ import authorsReducer from "../components/books/reducer/AuthorsSlice";
 import genresReducer from "../components/books/reducer/GenresSlice";
 import seriesReducer from "../components/books/reducer/SeriesSlice";
 import brandsReducer from "../components/tools/reducer/BrandsSlice";
+import pdfAuthorsReducer from "../components/pdfbooks/reducer/PdfAuthorsSlice";
+import categoriesReducer from "../components/pdfbooks/reducer/CategoriesSlice";
+import pdfBooksReducer from "../components/pdfbooks/reducer/PdfBooksSlice";
 
 
 const rootReducer = combineReducers({
@@ -17,7 +20,10 @@ const rootReducer = combineReducers({
     authorsReducer: authorsReducer,
     genresReducer: genresReducer,
     seriesReducer: seriesReducer,
-    brandsReducer: brandsReducer
+    brandsReducer: brandsReducer,
+    pdfAuthorsReducer: pdfAuthorsReducer,
+    categoriesReducer: categoriesReducer,
+    pdfBooksReducer: pdfBooksReducer
 });
 
 

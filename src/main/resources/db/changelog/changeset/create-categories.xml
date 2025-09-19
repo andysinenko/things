@@ -1,0 +1,138 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro
+        http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="1-create-pdfbooks-categories" author="Andrew Sinenko">
+        <createTable tableName="pdfbooks_categories" schemaName="things">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2-insert-pdfbooks-categories" author="Andrew Sinenko">
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Textbooks"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Tutorials"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Reference Guides"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="Cookbooks"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="Monographs"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="6"/>
+            <column name="name" value="White Papers"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="7"/>
+            <column name="name" value="Beginner Level"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="Intermediate Level"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="9"/>
+            <column name="name" value="Advanced Level"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="10"/>
+            <column name="name" value="Theoretical"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="11"/>
+            <column name="name" value="Practical"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="12"/>
+            <column name="name" value="Case Studies"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="13"/>
+            <column name="name" value="Programming"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="14"/>
+            <column name="name" value="DevOps, System Administration"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="15"/>
+            <column name="name" value="Networkin, Security"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="16"/>
+            <column name="name" value="Databases, Data Storage"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="17"/>
+            <column name="name" value="Data Science, Machine Learning"/>
+        </insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories">
+            <column name="id" valueNumeric="18"/>
+            <column name="name" value="Software Architecture"/>
+        </insert>
+
+        <!-- Programming Languages -->
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="19"/><column name="name" value="Java"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="20"/><column name="name" value="JavaScript"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="21"/><column name="name" value="Python"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="22"/><column name="name" value="C"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="23"/><column name="name" value="C++"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="24"/><column name="name" value="C#"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="25"/><column name="name" value="Go"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="26"/><column name="name" value="Rust"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="27"/><column name="name" value="Kotlin"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="28"/><column name="name" value="Swift"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="29"/><column name="name" value="PHP"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="30"/><column name="name" value="Ruby"/></insert>
+
+        <!-- Database Types -->
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="31"/><column name="name" value="Relational Databases"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="32"/><column name="name" value="NoSQL Databases"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="33"/><column name="name" value="Key-Value Stores"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="34"/><column name="name" value="Document Databases"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="35"/><column name="name" value="Columnar Databases"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="36"/><column name="name" value="Graph Databases"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="37"/><column name="name" value="Time-Series Databases"/></insert>
+
+        <!-- Concrete Databases -->
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="38"/><column name="name" value="PostgreSQL"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="39"/><column name="name" value="MySQL"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="40"/><column name="name" value="MariaDB"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="41"/><column name="name" value="Oracle Database"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="42"/><column name="name" value="Microsoft SQL Server"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="43"/><column name="name" value="SQLite"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="44"/><column name="name" value="MongoDB"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="45"/><column name="name" value="Redis"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="46"/><column name="name" value="Cassandra"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="47"/><column name="name" value="CouchDB"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="48"/><column name="name" value="Elasticsearch"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="49"/><column name="name" value="Neo4j"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="50"/><column name="name" value="InfluxDB"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="51"/><column name="name" value="DynamoDB"/></insert>
+        <insert  schemaName="things" tableName="pdfbooks_categories"><column name="id" valueNumeric="52"/><column name="name" value="Firebase Realtime Database"/></insert>
+    </changeSet>
+</databaseChangeLog>

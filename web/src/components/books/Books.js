@@ -31,10 +31,10 @@ export const Books = () => {
     const pageNumber =  useSelector(state => state.booksReducer.books.pageNumber);
     const pageSize = 15;
 
-    const {series, seriesLoading, seriesError} = useSelector(state => state.seriesReducer);
-    const {genres, genresLoading, genresError} = useSelector(state => state.genresReducer);
-    const {authors, authorsLoading, authorsError} = useSelector(state => state.authorsReducer);
-    const {places, ploading, perror} = useSelector(state => state.placeReducer);
+    const {series} = useSelector(state => state.seriesReducer);
+    const {genres} = useSelector(state => state.genresReducer);
+    const {authors } = useSelector(state => state.authorsReducer);
+    const {places} = useSelector(state => state.placeReducer);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
