@@ -3,6 +3,8 @@ import {fetchPdfBooksFailure, fetchPdfBooksStart, fetchPdfBooksSuccess} from "..
 import {fetchCategoriesError, fetchCategoriesSuccess} from "../reducer/CategoriesSlice";
 import {fetchPdfAuthorsFailure, fetchPdfAuthorsStart, fetchPdfAuthorsSuccess} from "../reducer/PdfAuthorsSlice";
 import {fetchSeriesStart} from "../../books/reducer/SeriesSlice";
+import store from "../../../store/storeConfig";
+import {fetchBooksFailure, fetchBooksSuccess} from "../../books/reducer/BooksSlice";
 
 
 export const fetchPdfBooks= (pageNumber, pageSize) => async (dispatch) => {
@@ -37,7 +39,7 @@ export const fetchCategories = () => async (dispatch) => {
 export const fetchPdfAuthors = () => async (dispatch) => {
     dispatch(fetchPdfAuthorsStart());
     try {
-        const response = await axios.get("http://localhost:8080/api/v1/pdfbooks/authors");
+        const response = await axios.get("http://localhost:8080/api/v1/pdfbooks/pdfautors");
         if (response.status === 200) {
             console.log("Success on fetching genres: ", response.status);
             dispatch(fetchPdfAuthorsSuccess(response.data));
@@ -51,6 +53,23 @@ export const fetchPdfAuthors = () => async (dispatch) => {
             console.log("Request headers on error:", error.config.headers);
         }
         dispatch(fetchPdfAuthorsFailure(error.message));
+    }
+};
+
+export const uploadPdfBook = (formData) => async (dispatch) => {
+    try {
+        const response = await axios.post("http://localhost:8080/api/v1/pdfbooks/upload", formData);
+        if (response.status === 200 || response.status === 201) {
+            console.log("Success on adding new pdfbook: ", response.status);
+            const currentBooks = store.getState().pdfBooksReducer.books;
+            dispatch(fetchBooksSuccess([...currentBooks, response.data]));
+        } else {
+            console.log("Error on adding new pdfbook: ", response.status);
+            dispatch(fetchBooksFailure(`Error: ${response.status}`));
+        }
+    } catch (error) {
+        console.log("Error on adding new pdfbook, catch section: ", error.message);
+        dispatch(fetchBooksFailure(error.message));
     }
 };
 

@@ -1,11 +1,23 @@
 package ua.com.sinenko.things.pdfbook.service;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.sax.BodyContentHandler;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ua.com.sinenko.things.common.exception.aop.ThLogger;
+import ua.com.sinenko.things.pdfbook.dto.CategoryDto;
+import ua.com.sinenko.things.pdfbook.dto.CategoryMapper;
+import ua.com.sinenko.things.pdfbook.dto.PdfAuthorDto;
+import ua.com.sinenko.things.pdfbook.dto.PdfAuthorMapper;
+import ua.com.sinenko.things.pdfbook.entity.PdfAuthor;
+import ua.com.sinenko.things.pdfbook.repository.CategoryRepository;
+import ua.com.sinenko.things.pdfbook.repository.PdfAuthorRepository;
 import ua.com.sinenko.things.pdfbook.schema.AuthorSchema;
 import ua.com.sinenko.things.pdfbook.schema.CategorySchema;
 import ua.com.sinenko.things.pdfbook.schema.PdfBook;
@@ -17,12 +29,18 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PdfBookService {
-
     private final PdfBookRepository pdfBookRepository;
+    private final PdfAuthorRepository pdfAuthorRepository;
+    private final CategoryRepository categoryRepository;
 
-    public PdfBookService(PdfBookRepository pdfBookRepository) {
-        this.pdfBookRepository = pdfBookRepository;
+    public List<CategoryDto> getCategories() {
+        return CategoryMapper.toDtoList(categoryRepository.findAll());
+    }
+
+    public List<PdfAuthorDto> getPdfAuthors() {
+        return PdfAuthorMapper.toDtoList(pdfAuthorRepository.findAll());
     }
 
     public PdfBook save(MultipartFile file, CategorySchema category, Integer yearOfRelease, String language, String inputedTitle, List<AuthorSchema> inputedAuthors) throws Exception {
@@ -40,29 +58,44 @@ public class PdfBookService {
         String author = metadata.get("Author");
         List<String> authorsFromMetadata = author != null ? Arrays.asList(author.split(",")) : null;
 
-        PdfBook book = new PdfBook();
-        book.setId(id);
-        book.setCategory(category);
+
+        PdfBook pdfBook = new PdfBook();
+        pdfBook.setId(id);
+        pdfBook.setCategory(category);
 
         if(!title.isEmpty() || !title.isBlank()) {
-            book.setTitle(title);
+            pdfBook.setTitle(title);
         } else {
-            book.setTitle(inputedTitle);
+            pdfBook.setTitle(inputedTitle);
         }
-        book.setAuthors(authorsFromMetadata.stream().map(e -> new AuthorSchema(e.get)));
-        book.setYearOfRelease(yearOfRelease);
-        book.setLanguage(language);
-        book.setContent(handler.toString());
 
-        return pdfBookRepository.save(book);
+        if(authorsFromMetadata != null) {
+            List<PdfAuthor> authors = pdfAuthorRepository.findByNameIn(authorsFromMetadata);
+            if(authors != null) {
+                pdfBook.setAuthors(authors.stream().map(a -> new AuthorSchema(a.getId(), a.getName())).toList());
+            } else {
+
+                pdfBook.setAuthors(inputedAuthors);
+            }
+        } else {
+            pdfBook.setAuthors(inputedAuthors);
+        }
+
+        pdfBook.setYearOfRelease(yearOfRelease);
+        pdfBook.setLanguage(language);
+        pdfBook.setContent(handler.toString());
+
+        return pdfBookRepository.save(pdfBook);
     }
 
     public PdfBook getBook(String id) {
         return pdfBookRepository.findById(id).orElse(null);
     }
 
-    public Iterable<PdfBook> getBooks() {
-        return pdfBookRepository.findAll();
+    @ThLogger
+    public Page<PdfBook> getBooks(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return pdfBookRepository.findAll(pageable);
     }
 
     public void deleteBook(String id) {

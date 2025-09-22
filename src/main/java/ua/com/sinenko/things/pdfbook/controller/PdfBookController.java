@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.com.sinenko.things.pdfbook.dto.CategoryDto;
+import ua.com.sinenko.things.pdfbook.dto.PdfAuthorDto;
+import ua.com.sinenko.things.pdfbook.dto.PdfBookMapper;
+import ua.com.sinenko.things.pdfbook.dto.PdfBookPageResponse;
 import ua.com.sinenko.things.pdfbook.schema.AuthorSchema;
 import ua.com.sinenko.things.pdfbook.schema.CategorySchema;
 import ua.com.sinenko.things.pdfbook.schema.PdfBook;
@@ -39,8 +43,8 @@ public class PdfBookController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<PdfBook>> list() {
-        return ResponseEntity.ok(pdfBookService.getBooks());
+    public ResponseEntity<PdfBookPageResponse> list() {
+        return ResponseEntity.ok(PdfBookMapper.entityToResponse(pdfBookService.getBooks(0, 20)));
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +54,12 @@ public class PdfBookController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<Iterable<PdfBook>> categories() {
-        return ResponseEntity.ok(pdfBookService.getBooks());
+    public ResponseEntity<List<CategoryDto>> categories() {
+        return ResponseEntity.ok(pdfBookService.getCategories());
+    }
+
+    @GetMapping("/pdfautors")
+    public ResponseEntity<List<PdfAuthorDto>> pdfAuthors() {
+        return ResponseEntity.ok(pdfBookService.getPdfAuthors());
     }
 }

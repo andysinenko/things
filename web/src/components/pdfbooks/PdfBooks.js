@@ -8,7 +8,7 @@ export const PdfBooks = () => {
     const pageNumber =  useSelector(state => state.pdfBooksReducer.pdfbooks.pageNumber);
     const {pdfauthors, pdfAuthLoading, pdfAuthError} = useSelector(state => state.pdfAuthorsReducer);
     const {categories, catLoading, catError} = useSelector(state => state.categoriesReducer);
-    const {pdfbooks, loading, error} = useSelector(state => state.pdfBooksReducer);
+    const {pdfbooks, loading, error} = useSelector(state => state.pdfBooksReducer.pdfbooks);
     const [storingBook, setStortingBook] = useState({
         file: null,
         title: null,
@@ -66,53 +66,93 @@ export const PdfBooks = () => {
         }*/
     };
 
+    console.log("!!! pdfbooks: ", pdfbooks);
 
     return(
         <main className="main-container">
             <nav className="th-buttons-toolbar" title='Pdf books'>
-                <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
-                    <input id="file"  type="file" placeholder="select file" value={storingBook.file} onChange={(e) => setStortingBook({...storingBook, file: e.target.files[0]}) }/>
-                    <input id="title" type="text" className="th-main-input" name="book name" value={storingBook.title} onChange={handleChange}/>
-                    <select id="authors" multiple={true} className="th-main-input" name="authors" aria-label="Authors" value={storingBook.authors}
-                            onChange={(e) => {
-                                console.log(e.target.selectedOptions);
-                                const selectedIds = Array.from(e.target.selectedOptions, option => Number(option.id));
-                                const selectedAuthors = pdfauthors.filter(author => selectedIds.includes(author.id));
-                                setStortingBook({...storingBook, authors: selectedAuthors});
-                            }}>
-                        <option value="" disabled hidden>Authors</option>
-                        {
-                            pdfauthors.map((pdfAuthor) =>
-                                <option key={pdfAuthor.id} value={pdfAuthor}>{pdfAuthor.name}</option>
-                            )
-                        }
-                    </select>
-                    <select className="th-main-input" name="category" aria-label="Category" value={storingBook.category}
-                            onChange={(e) => {
-                                console.log(e.target.value);
-                                setStortingBook({...storingBook, category: category})
-                            }}>
-                        <option value="" disabled hidden>Category</option>
-                        {
-                            pdfauthors.map((category) =>
-                                <option key={category.id} value={category}>{category.name}</option>
-                            )
-                        }
-                    </select>
-                </form>
+
+                <input id="file"  type="file" placeholder="select file" value={storingBook.file} placeholder="file" onChange={(e) => setStortingBook({...storingBook, file: e.target.files[0]}) }/>
+                <input id="title" type="text" className="th-main-input" name="book name" value={storingBook.title} placeholder="title" onChange={handleChange}/>
+
+                <select className="th-main-input" name="category" aria-label="Category" value={storingBook.category} placeholder="category"
+                        onChange={(e) => {
+                            console.log(e.target.value);
+                            setStortingBook({...storingBook, category: e.target.value})
+                        }}>
+                    <option value="" disabled hidden>Category</option>
+                    {
+                        categories.map((category) =>
+                            <option key={category.id} value={category}>{category.name}</option>
+                        )
+                    }
+                </select>
+
+                <select id="authors" multiple={true} className="" name="authors" aria-label="Authors" placeholder="authors"
+                        value={storingBook.authors.map(a => a.id)}
+                        >
+                    <option value="Authors" disabled hidden>Authors</option>
+                    {
+                        pdfauthors.map((pdfAuthor) =>
+                            <option key={pdfAuthor.id} value={pdfAuthor.id}>{pdfAuthor.name}</option>
+                        )
+                    }
+                </select>
+
             </nav>
 
             <section className="tableContainer">
                 <table className="table">
                     <thead>
                         <tr>
+                            <th>id</th>
                             <th>Title</th>
-                            <th>Authors</th>
                             <th>Category</th>
+                            <th>Authors</th>
                             <th>Year of issue</th>
+                            <th>Language</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                        {pdfbooks.length !== 0 ? pdfbooks.map((book) =>
+                            <tr key={book.id}>
+                                <td>{book.id}</td>
+                                <td>{book.title}</td>
+                                <td>{book.category?.name}</td>
+                                <td>
+                                    {book.authors?
+                                        [...book.authors]
+                                            .filter(author => author.name)
+                                            .sort((a, b) => a.name.localeCompare(b.name))
+                                            .map(author => author.name)
+                                            .join(", ")
+                                        : ''}
+                                </td>
+                                <td>{book.yearOfRelease}</td>
+                                <td>{book.language}</td>
+                                <td>
+                                    <button className="table-action-btn edit-btn" title="Редактировать" onClick={() => {
+                                        console.log("Current book", book);
+                                        //handleEditBook(book);
+                                    }} >✏️</button>
+                                </td>
+                                <td>
+                                    <button className="table-action-btn delete-btn" title="Удалить" onClick={() =>
+                                    {
+                                        console.log("Current book", book);
+                                        //handleDelBook(book);
+                                    }
+                                    }>🗑️</button>
+                                </td>
+                            </tr>
+                        ):(
+                            <tr>
+                                <td colSpan="10" style={{textAlign: "center"}}>
+                                    <h5>Book list is empty</h5>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
                 </table>
             </section>
         </main>

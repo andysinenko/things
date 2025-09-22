@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Document(indexName = "pdfbooks")
@@ -19,4 +20,6 @@ public class PdfBook {
     private Integer yearOfRelease;
     private String language;
     private String content;
+    private String filePath;
+    private LocalDate uploadDate;
 }

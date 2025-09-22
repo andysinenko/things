@@ -67,8 +67,8 @@ public class BookService {
     private List<Author> getAuthors(List<AuthorDto> authorDtos) {
         logger.info("!!! authorDtos {}", authorDtos);
         if(authorDtos != null) {
-            Collection<Long> authorIds = authorDtos.stream().map(e -> e.id()).collect(Collectors.toList());
-            List<Author> authors = authorRepository.findByIdIn(authorIds);
+            List<String> authorIds = authorDtos.stream().map(e -> e.name()).collect(Collectors.toList());
+            List<Author> authors = authorRepository.findByNameIn(authorIds);
             return authors;
         }
         return null;

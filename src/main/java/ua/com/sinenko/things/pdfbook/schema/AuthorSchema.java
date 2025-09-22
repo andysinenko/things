@@ -10,6 +10,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Data
 @Document(indexName = "pdfbooks")
 public class AuthorSchema {
-    private String id;
+    private Long id;
     private String name;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -12,7 +13,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Table(name = "pdfbooks_authors", schema="things")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Data@Builder
 public class PdfAuthor {
     @Id
     private Long id;
