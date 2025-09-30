@@ -15,9 +15,9 @@ spring:
     enabled: true
     change-log: db/changelog/db.changelog-master.xml
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/things
-    username: things_service
-    password: things12345
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   sql:
     init:
@@ -27,15 +27,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-#  elasticsearch:
-#    uris: localhost:9200
-#    username: things_service
-#    password: things12345
-#    client:
-#      reactive:
-#        ssl:
-#          trust-store: classpath:elasticsearch-ca.jks
-#          trust-store-password: 123456
   main:
     banner-mode: off
 things:
@@ -48,9 +39,7 @@ things:
 logging:
   level:
     ua.com.sinenko.things: INFO
-    co:
-      elastic:
-        clients: DEBUG
+    co.elastic.clients: DEBUG
     org:
       springframework:
         data:
