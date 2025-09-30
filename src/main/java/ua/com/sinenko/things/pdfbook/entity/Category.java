@@ -14,7 +14,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data@Builder
-//@Document(indexName = "pdfbooks")
 public class Category {
     @Id
     private Long id;

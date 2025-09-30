@@ -52,7 +52,7 @@ const SignIn = () => {
                        id="password"
                        onChange={(e) => setPassword(e.target.value)}/>
                 <div style={{justifyContent:"space-evenly"}}>
-                    <button className="m-4 btn-signin" type="button" onClick={() => console.log("Google oauth")}>Google</button>
+                    {/*<button className="m-4 btn-signin" type="button" onClick={() => console.log("Google oauth")}>Google</button>*/}
                     <button className="m-4 btn-signin" type="submit">Sign In</button>
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}

@@ -16,6 +16,7 @@ import java.time.Duration;
 @Profile("stage")
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
+
     @Override
     public ClientConfiguration clientConfiguration() {
         try {

@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface PdfAuthorRepository extends JpaRepository<PdfAuthor, Long> {
     Optional<PdfAuthor> findAllByNameIn(Collection<String> names);
     List<PdfAuthor> findByNameIn(Collection<String> names);
+    PdfAuthor findByName(String name);
 }

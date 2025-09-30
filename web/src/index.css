@@ -198,6 +198,14 @@ code {
   margin: 0 4px;
 }
 
+th:nth-last-child(1),
+td:nth-last-child(1),
+th:nth-last-child(2),
+td:nth-last-child(2) {
+    width: 70px;
+    white-space: nowrap;
+}
+
 .edit-btn {
   background-color: #f9f9f9;
 }
@@ -279,4 +287,12 @@ a {
   margin: 5px;
   display: inline-block;
   font-size: 14px;
+}
+
+.th-main-input {
+    width: auto;
+    padding: 10px 20px;
+    font-weight: 600;
+    border: solid #c6c5c5 1px ;
+    border-radius: 0px;
 }

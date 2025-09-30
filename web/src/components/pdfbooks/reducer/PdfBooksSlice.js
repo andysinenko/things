@@ -26,14 +26,35 @@ const pdfBooksSlice = createSlice({
         fetchPdfBooksFailure(state, action) {
             state.loading = false;
             state.error = action.payload;
-        }
+        },
+
+        deletePdfBookSuccess(state, action) {
+            state.loading = false;
+            const bookIdToDelete = action.payload;
+            state.pdfbooks.pdfbooks = state.pdfbooks.pdfbooks.filter(
+                (book) => book.id !== bookIdToDelete
+            );
+        },
+
+        deletePdfBookFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
+
+        addPdfBookSuccess(state, action) {
+            state.loading = false;
+            state.pdfbooks.pdfbooks.push(action.payload);
+        },
     },
 });
 
 export const {
     fetchPdfBooksStart,
     fetchPdfBooksSuccess,
-    fetchPdfBooksFailure} =
+    fetchPdfBooksFailure,
+    deletePdfBookSuccess,
+    deletePdfBookFailure,
+    addPdfBookSuccess} =
     pdfBooksSlice.actions;
 
 export default pdfBooksSlice.reducer;

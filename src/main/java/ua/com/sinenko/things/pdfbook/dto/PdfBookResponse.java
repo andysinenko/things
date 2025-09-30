@@ -9,8 +9,9 @@ public record PdfBookResponse(
         String id,
         String title,
         CategoryDto category,
-        List<PdfAuthorDto> authors,
+        PdfAuthorDto author,
         String yearOfRelease,
         String language,
+        Integer numberOfPages,
         String content
         ) {}

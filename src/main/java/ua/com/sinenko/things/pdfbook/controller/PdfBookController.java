@@ -1,16 +1,15 @@
 package ua.com.sinenko.things.pdfbook.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ua.com.sinenko.things.pdfbook.dto.CategoryDto;
-import ua.com.sinenko.things.pdfbook.dto.PdfAuthorDto;
-import ua.com.sinenko.things.pdfbook.dto.PdfBookMapper;
-import ua.com.sinenko.things.pdfbook.dto.PdfBookPageResponse;
-import ua.com.sinenko.things.pdfbook.schema.AuthorSchema;
-import ua.com.sinenko.things.pdfbook.schema.CategorySchema;
-import ua.com.sinenko.things.pdfbook.schema.PdfBook;
+import ua.com.sinenko.things.book.dto.AuthorDto;
+import ua.com.sinenko.things.pdfbook.dto.*;
+import ua.com.sinenko.things.pdfbook.schema.Author;
+import ua.com.sinenko.things.pdfbook.schema.PdfBookSchema;
 import ua.com.sinenko.things.pdfbook.service.PdfBookService;
 
 import java.util.List;
@@ -19,32 +18,35 @@ import java.util.List;
 @RequestMapping("/api/v1/pdfbooks")
 @RequiredArgsConstructor
 public class PdfBookController {
+    private static final Logger logger = LoggerFactory.getLogger(PdfBookController.class);
     private final PdfBookService pdfBookService;
 
     @PostMapping("/upload")
-    public ResponseEntity<PdfBook> upload(
+    public ResponseEntity<PdfBookResponse> upload(
             @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "category", required = false) CategorySchema category,
-            @RequestParam(value = "yearOfRelease", required = false) Integer yearOfRelease,
+            @RequestParam(value = "category", required = false) Long category,
+            @RequestParam(value = "yearOfRelease", required = false) String yearOfRelease,
             @RequestParam(value = "language", required = false) String language,
             @RequestParam(value = "title", required = false) String title,
-            @RequestParam(value = "authors", required = false) List<AuthorSchema> authors
+            @RequestParam(value = "author", required = false) AuthorDto author
 
     ) throws Exception {
-        PdfBook book = pdfBookService.save(file, category, yearOfRelease, language, title, authors);
+        PdfBookResponse book = pdfBookService.save(file, category, yearOfRelease, language, title, author);
         return ResponseEntity.ok(book);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PdfBook> getOne(@PathVariable String id) {
-        PdfBook pdfBook = pdfBookService.getBook(id);
-        if (pdfBook == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(pdfBook);
+    public ResponseEntity<PdfBookSchema> getOne(@PathVariable String id) {
+        PdfBookSchema pdfBookSchema = pdfBookService.getBook(id);
+        if (pdfBookSchema == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(pdfBookSchema);
     }
 
     @GetMapping
     public ResponseEntity<PdfBookPageResponse> list() {
-        return ResponseEntity.ok(PdfBookMapper.entityToResponse(pdfBookService.getBooks(0, 20)));
+        var result = pdfBookService.getBooks(0, 20);
+        logger.debug("content in result ", result.getContent());
+        return ResponseEntity.ok(PdfBookMapper.entityToResponse(result));
     }
 
     @DeleteMapping("/{id}")

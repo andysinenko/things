@@ -21,20 +21,16 @@ public class ThLoggerApect {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         String className = joinPoint.getTarget().getClass().getName();
 
-        //getting annotation from method
         ThLogger annotation = joinPoint.getSignature()
                 .getDeclaringType()
                 .getDeclaredMethod(methodName,
                         methodSignature.getParameterTypes())
                 .getAnnotation(ThLogger.class);
 
-        //getting names of parameters
         String[] parameterNames = methodSignature.getParameterNames();
 
-        // getting value of parameters
         Object[] parameterValues = joinPoint.getArgs();
 
-        // parameter name => parameter value
         StringBuilder paramsLog = new StringBuilder();
         for (int i = 0; i < parameterNames.length; i++) {
             paramsLog.append(parameterNames[i])

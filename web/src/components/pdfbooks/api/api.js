@@ -1,10 +1,10 @@
 import axios from "axios";
-import {fetchPdfBooksFailure, fetchPdfBooksStart, fetchPdfBooksSuccess} from "../reducer/PdfBooksSlice";
+import {addPdfBookSuccess, deletePdfBookFailure, deletePdfBookSuccess, fetchPdfBooksFailure, fetchPdfBooksStart, fetchPdfBooksSuccess} from "../reducer/PdfBooksSlice";
 import {fetchCategoriesError, fetchCategoriesSuccess} from "../reducer/CategoriesSlice";
 import {fetchPdfAuthorsFailure, fetchPdfAuthorsStart, fetchPdfAuthorsSuccess} from "../reducer/PdfAuthorsSlice";
 import {fetchSeriesStart} from "../../books/reducer/SeriesSlice";
 import store from "../../../store/storeConfig";
-import {fetchBooksFailure, fetchBooksSuccess} from "../../books/reducer/BooksSlice";
+import { fetchBooksFailure, fetchBooksSuccess} from "../../books/reducer/BooksSlice";
 
 
 export const fetchPdfBooks= (pageNumber, pageSize) => async (dispatch) => {
@@ -61,15 +61,29 @@ export const uploadPdfBook = (formData) => async (dispatch) => {
         const response = await axios.post("http://localhost:8080/api/v1/pdfbooks/upload", formData);
         if (response.status === 200 || response.status === 201) {
             console.log("Success on adding new pdfbook: ", response.status);
-            const currentBooks = store.getState().pdfBooksReducer.books;
-            dispatch(fetchBooksSuccess([...currentBooks, response.data]));
+            dispatch(addPdfBookSuccess(response.data));
         } else {
             console.log("Error on adding new pdfbook: ", response.status);
-            dispatch(fetchBooksFailure(`Error: ${response.status}`));
+            dispatch(fetchPdfBooksFailure(`Error: ${response.status}`));
         }
     } catch (error) {
         console.log("Error on adding new pdfbook, catch section: ", error.message);
-        dispatch(fetchBooksFailure(error.message));
+        dispatch(fetchPdfBooksFailure(error.message));
+    }
+};
+
+export const deletePdfBook = (id) => async (dispatch) => {
+    try {
+        const resp = await axios.delete(`http://localhost:8080/api/v1/pdfbooks/${id}`);
+        if (resp.status === 200 || resp.status === 204) {
+            console.log("Pdf book deleted:", resp.status);
+            dispatch(deletePdfBookSuccess(id));
+        } else {
+            dispatch(deletePdfBookFailure(`Delete failed: ${resp.status}`));
+        }
+    } catch (err) {
+        console.error("Delete error:", err.message);
+        dispatch(deletePdfBookFailure(err.message));
     }
 };
 

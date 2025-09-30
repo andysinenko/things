@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   profiles:
     active: stage
   docker:
@@ -53,3 +57,19 @@ logging:
           elasticsearch: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      discovery:
+        enabled: on
+  endpoint:
+    shutdown:
+      access:
+        unrestricted: true
+      enabled: on
+  info:
+    env:
+      enabled: true

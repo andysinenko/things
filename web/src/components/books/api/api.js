@@ -26,7 +26,7 @@ export const addNewBook = (book) => async (dispatch) => {
         const response = await axios.post("http://localhost:8080/api/v1/books", book);
         if (response.status === 200 || response.status === 201) {
             console.log("Success on adding new book: ", response.status);
-            const currentBooks = store.getState().booksReducer.books;
+            const currentBooks = store.getState().pdfBooksReducer.pdfbooks.content;
             dispatch(fetchBooksSuccess([...currentBooks, response.data]));
         } else {
             console.log("Error on adding new book: ", response.status);
@@ -111,7 +111,6 @@ export const deleteBook = (id) => async (dispatch) => {
         const resp = await axios.delete(`http://localhost:8080/api/v1/books/${id}`);
         if (resp.status === 200 || resp.status === 204) {
             console.log("Book deleted:", resp.status);
-            // Instead of fetching all books, remove the book from the state
             dispatch(deleteBookSuccess(store.getState().booksReducer.books.filter(book => book.id !== id)));
         } else {
             dispatch(deleteBookFailure(`Delete failed: ${resp.status}`));

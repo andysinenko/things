@@ -67,7 +67,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests)->requests
-                        .requestMatchers("/api/v1/auth/register","/api/v1/auth/authenticate")
+                        .requestMatchers("/api/v1/auth/register","/api/v1/auth/authenticate", "/actuator/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

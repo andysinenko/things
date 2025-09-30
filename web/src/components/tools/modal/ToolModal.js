@@ -28,7 +28,7 @@ const ToolModal = ({isOpen,
     };
 
     const onNodeSelect = (nodePlace) => {
-        setSelectedTool({ ...selectedTool, place: nodePlace }); // Fix: Use selectedTool
+        setSelectedTool({ ...selectedTool, place: nodePlace });
         setIsTreeModalOpen(false);
     };
 
@@ -151,7 +151,7 @@ const ToolModal = ({isOpen,
                                         value={selectedTool.vendor?.id || ""}
                                         onChange={(e) => {
                                             const brandId = Number(e.target.value);
-                                            const selectedBrand = brands.find(brand => brand.id === brandId); // Fix: Use find
+                                            const selectedBrand = brands.find(brand => brand.id === brandId);
                                             console.log(">>> brandId: ", brandId);
                                             console.log(">>> selectedBrand: ", selectedBrand);
                                             console.log(">>> brands: ", brands);

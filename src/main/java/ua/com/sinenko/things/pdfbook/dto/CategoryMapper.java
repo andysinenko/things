@@ -1,6 +1,8 @@
 package ua.com.sinenko.things.pdfbook.dto;
 
 import ua.com.sinenko.things.pdfbook.entity.Category;
+import ua.com.sinenko.things.pdfbook.schema.CategorySchema;
+
 import java.util.List;
 
 public class CategoryMapper {
@@ -13,6 +15,23 @@ public class CategoryMapper {
 
     public static CategoryDto toDto(Category entity) {
         return CategoryDto.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build();
+    }
+
+    public static CategoryDto toDtoFromSchema(CategorySchema schema) {
+        if (schema != null) {
+            return CategoryDto.builder()
+                    .id(schema.getId())
+                    .name(schema.getName())
+                    .build();
+        }
+        return null;
+    }
+
+    public static CategorySchema toSchema(Category entity) {
+        return CategorySchema.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .build();
