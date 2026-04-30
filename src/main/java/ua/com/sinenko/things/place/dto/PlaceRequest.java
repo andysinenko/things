@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record PlaceRequest(
     String name,
-    PlaceRequest parent,
+    Long parent,
     Long level,
     String description
 ) {}

@@ -6,6 +6,7 @@ import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.entity.Genre;
 import ua.com.sinenko.things.book.entity.Series;
+import ua.com.sinenko.things.place.entity.Place;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,25 +23,28 @@ class BookMapperTest {
     @Test
     void dtoToEntity() throws ParseException {
         //given
-        var authorResponse = AuthorRequest.builder()
-                .name("Author Name")
-                .build();
         var bookRequest = BookRequest.builder()
                 .title("Book Name")
-                .series(new SeriesRequest("Series 1"))
+                .series(1L)
+                .genre(1L)
+                .place(1L)
                 .year(LocalDate.parse("2021-01-01"))
                 .description("Description")
                 .volume("1")
-                .authors(List.of(authorResponse))
+                .authors(List.of(1L))
                 .build();
 
         //when
-        var book = BookMapper.dtoToEntity(bookRequest);
+        var book = BookMapper.dtoToEntity(bookRequest, List.of(Author.builder().id(1L).name("name").note("note").build())
+                , Genre.builder().id(1L).name("genre").build(), Series.builder().id(1L).name("series").build()
+                , Place.builder().id(1L).name("place").build());
 
         //then
         assertNotNull(book);
         assertEquals(bookRequest.title(), book.getTitle());
-        assertEquals(bookRequest.series().name(), book.getSeries().getName());
+        assertEquals(bookRequest.series(), book.getSeries().getId());
+        assertEquals(bookRequest.genre(), book.getSeries().getId());
+        assertEquals(bookRequest.place(), book.getPlace().getId());
         assertEquals(bookRequest.year(), book.getYear());
         assertEquals(bookRequest.description(), book.getDescription());
         assertEquals(bookRequest.volume(), book.getVolumeNumber());
@@ -54,10 +58,10 @@ class BookMapperTest {
                 .title("Book Name")
                 .genre(Genre.builder().id(1L).name("Fiction").build())
                 .series(Series.builder().id(1L).name("Series Name").build())
+                .authors(List.of(Author.builder().id(1L).name("Author Name").build()))
                 .year(LocalDate.parse("2021-01-01"))
                 .description("Description")
                 .volumeNumber("1")
-                .authors(List.of(Author.builder().id(1L).name("Author Name").build()))
                 .build();
 
         //when
@@ -79,16 +83,21 @@ class BookMapperTest {
         //given
         var bookRequest = BookRequest.builder()
                 .title("Book Name")
-                .genre(null)
-                .series(null)
-                .authors(null)
+                .genre(1L)
+                .series(1L)
+                .authors(List.of(1L))
                 .year(LocalDate.parse("2021-01-01"))
                 .description("Description")
                 .volume("1")
                 .build();
 
         //when
-        var book = BookMapper.dtoToEntity(bookRequest);
+        var book = BookMapper.dtoToEntity(bookRequest,
+                List.of(Author.builder().id(1L).name("Author Name").build()),
+                Genre.builder().id(1L).name("Fiction").build(),
+                Series.builder().id(1L).name("Series Name").build(),
+                Place.builder().id(1L).name("Place Name").build()
+        );
 
         //then
         assertNotNull(book);

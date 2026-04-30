@@ -56,7 +56,7 @@ public class BookController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = BookRequest.class)))
     @GetMapping(value = "/{bookId}")
     @ResponseBody
-    public ResponseEntity<BookRequest> getBookById(
+    public ResponseEntity<BookResponse> getBookById(
             @Parameter(description = "book's id", example = "42", required = true) @PathVariable("id") Long id
     ) {
         var bookEntities = bookService.getBookById(id);

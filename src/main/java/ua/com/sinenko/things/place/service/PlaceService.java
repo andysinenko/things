@@ -4,6 +4,9 @@ package ua.com.sinenko.things.place.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.sinenko.things.common.exception.PlaceNotExistsException;
+import ua.com.sinenko.things.place.dto.PlaceMapper;
+import ua.com.sinenko.things.place.dto.PlaceRequest;
 import ua.com.sinenko.things.place.entity.Place;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
 
@@ -27,7 +30,9 @@ public class PlaceService {
     }
 
     @Transactional
-    public void savePlace(Place place) {
+    public void savePlace(PlaceRequest placeRequest) {
+        var parent = placeRepository.findById(placeRequest.parent());
+        var place = PlaceMapper.requestToEntity(placeRequest, parent.orElse(null));
         placeRepository.save(place);
     }
 
@@ -35,8 +40,21 @@ public class PlaceService {
         placeRepository.deleteById(id);
     }
 
-    public void updatePlace(Place place) {
+    @Transactional
+    public void updatePlace(PlaceRequest placeRequest, Long id) {
+        var place = placeRepository.findById(id)
+                .orElseThrow(() -> new PlaceNotExistsException(id));
+
+        var parent = placeRequest.parent() != null
+                ? placeRepository.findById(placeRequest.parent())
+                    .orElseThrow(() -> new PlaceNotExistsException(placeRequest.parent()))
+                : null;
+
+        place.setName(placeRequest.name());
+        place.setDescription(placeRequest.description());
+        place.setLevel(placeRequest.level());
+        place.setParent(parent);
+
         placeRepository.save(place);
     }
-
 }

@@ -3,6 +3,9 @@ package ua.com.sinenko.things.tool.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.sinenko.things.book.entity.Book;
+import ua.com.sinenko.things.common.exception.PlaceNotExistsException;
+import ua.com.sinenko.things.common.exception.SeriesNotExistsException;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
 import ua.com.sinenko.things.tool.dto.ToolRequest;
 import ua.com.sinenko.things.tool.dto.ToolMapper;
@@ -27,7 +30,7 @@ public class ToolService {
 
     @Transactional
     public void saveTool(ToolRequest toolRequest) {
-        var tool = ToolMapper.dtoToEntity(toolRequest);
+        var tool = getFullfilledToolEntity(toolRequest);
         toolsRepository.save(tool);
     }
 
@@ -48,11 +51,34 @@ public class ToolService {
 
     @Transactional
     public Tool updateTool(Long id, ToolRequest toolRequest) {
-        toolsRepository.findById(id)
+        var tool = toolsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tool not found"));
-        var tool = ToolMapper.dtoToEntity(toolRequest);
 
-        return toolsRepository.saveAndFlush(tool);
+        var place = placeRepository.findById(toolRequest.place())
+                .orElseThrow(() -> new PlaceNotExistsException(toolRequest.place()));
+
+        var vendor = vendorRepository.findById(toolRequest.vendor())
+                .orElseThrow(() -> new SeriesNotExistsException(toolRequest.vendor()));
+
+        tool.setName(toolRequest.name());
+        tool.setPlace(place);
+        tool.setVendor(vendor);
+        tool.setType(toolRequest.toolType());
+        tool.setSerialNumber(toolRequest.serialNumber());
+        tool.setDateOfPurchasing(toolRequest.dateOfPurchasing());
+        tool.setDescription(toolRequest.description());
+
+        return toolsRepository.save(tool);
+    }
+
+    private Tool getFullfilledToolEntity(ToolRequest toolRequest) {
+        var place = placeRepository.findById(toolRequest.place())
+                .orElseThrow(() -> new PlaceNotExistsException(toolRequest.place()));
+
+        var vendor = vendorRepository.findById(toolRequest.vendor())
+                .orElseThrow(() -> new SeriesNotExistsException(toolRequest.vendor()));
+
+        return ToolMapper.dtoToEntity(toolRequest, place, vendor);
     }
 
     public List<ToolResponse> getToolsByDescription(String description) {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.sinenko.things.book.dto.GenreRequest;
 import ua.com.sinenko.things.book.dto.GenreMapper;
+import ua.com.sinenko.things.book.dto.GenreResponse;
 import ua.com.sinenko.things.book.service.GenreService;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class GenreController {
     )
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<GenreRequest>> getAllGenres() {
+    public ResponseEntity<List<GenreResponse>> getAllGenres() {
         var genreList = genreService.getAllGenres();
         var genresDtos = genreList.stream().map(GenreMapper::entityToDto).toList();
 

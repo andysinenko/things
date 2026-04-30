@@ -14,10 +14,15 @@ import ua.com.sinenko.things.book.dto.BookMapper;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.entity.Genre;
+import ua.com.sinenko.things.book.entity.Series;
 import ua.com.sinenko.things.book.repository.AuthorRepository;
 import ua.com.sinenko.things.book.repository.BookRepository;
 import ua.com.sinenko.things.book.repository.GenreRepository;
 import ua.com.sinenko.things.book.repository.SeriesRepository;
+import ua.com.sinenko.things.common.exception.GenreNotExistsException;
+import ua.com.sinenko.things.common.exception.PlaceNotExistsException;
+import ua.com.sinenko.things.common.exception.SeriesNotExistsException;
+import ua.com.sinenko.things.place.entity.Place;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
 
 import java.time.LocalDate;
@@ -50,17 +55,32 @@ public class BookService {
 
     @Transactional
     public Book saveBook(BookRequest bookRequest) {
-        var book = BookMapper.dtoToEntity(bookRequest);
+        var book = getFullfilledBookEntity(bookRequest);
         logger.debug("Book before updating: {}", book);
 
         return bookRepository.saveAndFlush(book);
     }
 
     public Book updateBook(Long id, BookRequest bookRequest) {
-        var book = BookMapper.dtoToEntity(bookRequest);
+        var book = getFullfilledBookEntity(bookRequest);
         logger.info("Book before updating: {}", book);
 
         return bookRepository.saveAndFlush(book);
+    }
+
+    private Book getFullfilledBookEntity(BookRequest bookRequest) {
+        List<Author> authors = authorRepository.findAllById(bookRequest.authors());
+
+        Genre genre = genreRepository.findById(bookRequest.genre())
+                .orElseThrow(() -> new GenreNotExistsException(bookRequest.genre()));
+
+        Place place = placeRepository.findById(bookRequest.place())
+                .orElseThrow(() -> new PlaceNotExistsException(bookRequest.place()));
+
+        Series series = seriesRepository.findById(bookRequest.series())
+                .orElseThrow(() -> new SeriesNotExistsException(bookRequest.series()));
+
+        return BookMapper.dtoToEntity(bookRequest, authors, genre, series, place);
     }
 
     private List<Author> getAuthors(List<AuthorResponse> authorResponses) {

@@ -1,7 +1,8 @@
 package ua.com.sinenko.things.tool.dto;
 
 import lombok.Builder;
-import ua.com.sinenko.things.place.dto.PlaceDto;
+
+import ua.com.sinenko.things.place.dto.PlaceResponse;
 import ua.com.sinenko.things.tool.entity.ToolType;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public record ToolResponse(
         ToolType toolType,
         String serialNumber,
         VendorRequest vendor,
-        PlaceDto place,
+        PlaceResponse place,
         LocalDate dateOfPurchasing,
         String description) {
 }

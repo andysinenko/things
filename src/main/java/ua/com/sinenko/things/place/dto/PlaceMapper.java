@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlaceMapper {
-    public static Place requestToEntity(PlaceRequest request) {
+    public static Place requestToEntity(PlaceRequest request, Place parent) {
         if (request == null) return null;
         return Place.builder()
                 .name(request.name())
                 .description(request.description())
                 .level(request.level())
-                .parent(PlaceMapper.requestToEntity(request.parent()))
+                .parent(parent)
                 .build();
     }
 

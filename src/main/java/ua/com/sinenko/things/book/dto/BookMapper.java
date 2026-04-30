@@ -3,23 +3,26 @@ package ua.com.sinenko.things.book.dto;
 import org.springframework.data.domain.Page;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
+import ua.com.sinenko.things.book.entity.Genre;
+import ua.com.sinenko.things.book.entity.Series;
 import ua.com.sinenko.things.place.dto.PlaceMapper;
+import ua.com.sinenko.things.place.entity.Place;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BookMapper {
     private final DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy");
 
-    public static Book dtoToEntity(BookRequest request) {
+    public static Book dtoToEntity(BookRequest request, List<Author> authors, Genre genre, Series series, Place place) {
         if (request != null)
             return Book.builder()
                     .title(request.title())
-                    .authors(AuthorMapper.requestsToEntities(request.authors()))
-                    .genre(GenreMapper.dtoToEntity(request.genre()))
-                    .series(SeriesMapper.maptoToEntity(request.series()))
-                    .place(PlaceMapper.requestToEntity(request.place()))
+                    .authors(authors)
+                    .genre(genre)
+                    .series(series)
+                    .place(place)
                     .year(request.year())
                     .description(request.description())
                     .volumeNumber(request.volume())
@@ -63,7 +66,7 @@ public class BookMapper {
 
     public static BookPageResponse entityToResponse(Page<Book> pageEntity) {
             return BookPageResponse.builder()
-                .books(pageEntity.getContent().stream().map(e -> BookMapper.entityToResponse(e)).toList())
+                .books(pageEntity.getContent().stream().map(BookMapper::entityToResponse).toList())
                 .pageNumber(pageEntity.getNumber())
                 .pageSize(pageEntity.getSize())
                 .total(pageEntity.getTotalPages())
@@ -71,7 +74,7 @@ public class BookMapper {
     }
 
     private static List<AuthorResponse> getAuthorsDto(List<Author> authors) {
-        if(authors == null) return null;
-        return authors.stream().map(e -> AuthorMapper.entityToResponse(e)).collect(Collectors.toList());
+        if(authors == null) return Collections.emptyList();
+        return authors.stream().map(e -> AuthorMapper.entityToResponse(e)).toList();
     }
 }

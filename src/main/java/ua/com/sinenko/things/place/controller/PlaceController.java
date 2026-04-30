@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.com.sinenko.things.place.dto.PlaceDto;
 import ua.com.sinenko.things.place.dto.PlaceMapper;
+import ua.com.sinenko.things.place.dto.PlaceRequest;
+import ua.com.sinenko.things.place.dto.PlaceResponse;
 import ua.com.sinenko.things.place.service.PlaceService;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class PlaceController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<PlaceDto>> getAllPlaces() {
+    public ResponseEntity<List<PlaceResponse>> getAllPlaces() {
         var places = placeService.getAllPlaces();
         var placesDto = PlaceMapper.entitiesToResponse(places);
         return new ResponseEntity<>(placesDto, HttpStatus.OK);
@@ -26,7 +27,7 @@ public class PlaceController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<List<PlaceDto>> getPlaceById(@PathVariable("id") Long id) {
+    public ResponseEntity<List<PlaceResponse>> getPlaceById(@PathVariable("id") Long id) {
         var place = placeService.getPlaceById(id);
         var placeDto = PlaceMapper.entityToResponse(place);
         return new ResponseEntity<>(List.of(placeDto), HttpStatus.OK);
@@ -34,18 +35,16 @@ public class PlaceController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Void> addNewPlace(@RequestBody PlaceDto placeDto) {
-        var place = PlaceMapper.requestToEntity(placeDto);
-        placeService.savePlace(place);
+    public ResponseEntity<Void> addNewPlace(@RequestBody PlaceRequest placeRequest) {
+        placeService.savePlace(placeRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping
     @ResponseBody
-    public ResponseEntity<Void> updatePlace(@RequestBody PlaceDto placeDto) {
-        var place = PlaceMapper.requestToEntity(placeDto);
-        placeService.savePlace(place);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> updatePlace(@RequestBody PlaceRequest placeRequest, @PathVariable long id) {
+        placeService.updatePlace(placeRequest, id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

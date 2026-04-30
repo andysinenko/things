@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import ua.com.sinenko.things.book.dto.SeriesDto;
 import ua.com.sinenko.things.book.dto.SeriesMapper;
+import ua.com.sinenko.things.book.dto.SeriesResponse;
 import ua.com.sinenko.things.book.service.SeriesService;
 
 import java.util.List;
@@ -23,7 +23,6 @@ import java.util.List;
 @AllArgsConstructor
 @Tag(name = "Series controller", description = "Operations with series of the books")
 public class SeriesController {
-
     private SeriesService seriesService;
 
     @Operation(
@@ -36,12 +35,12 @@ public class SeriesController {
             description = "Success",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = SeriesDto.class)
+                    schema = @Schema(implementation = SeriesResponse.class)
             )
     )
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<SeriesDto>> getAllSeries() {
+    public ResponseEntity<List<SeriesResponse>> getAllSeries() {
         var seriesList = seriesService.getAllSeries();
         var seriesDtos = seriesList.stream().map(SeriesMapper::entityToDto).toList();
 

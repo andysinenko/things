@@ -13,22 +13,24 @@ class PlaceMapperTest {
     @DisplayName("Map Entity 2 DTO Test")
     void requestToEntity() {
         //given
-        var placeDto = PlaceDto.builder()
-                .id(1L)
+        var placeDto = PlaceRequest.builder()
                 .name("test")
                 .description("test")
-                .parent(PlaceDto.builder().id(2L).name("parent_1_level").description("parent 1st level").build())
+                .parent(1L)
                 .build();
 
         //when
-        var place = PlaceMapper.requestToEntity(placeDto);
+        var place = PlaceMapper.requestToEntity(placeDto, Place.builder()
+                .id(1L)
+                .name("test")
+                .description("test")
+                .parent(null)
+                .build());
 
         //then
         assertNotNull(place);
-        assertEquals(placeDto.id(), place.getId());
         assertEquals(placeDto.name(), place.getName());
         assertEquals(placeDto.description(), place.getDescription());
-        assertEquals(placeDto.parent().id(), place.getParent().getId());
     }
 
     @DisplayName("Map DTO 2 Entity Test")

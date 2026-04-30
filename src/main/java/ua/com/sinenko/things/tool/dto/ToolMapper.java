@@ -1,21 +1,23 @@
 package ua.com.sinenko.things.tool.dto;
 
 import ua.com.sinenko.things.place.dto.PlaceMapper;
+import ua.com.sinenko.things.place.entity.Place;
 import ua.com.sinenko.things.tool.entity.Tool;
+import ua.com.sinenko.things.tool.entity.Vendor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ToolMapper {
-    public static Tool dtoToEntity(ToolRequest dto) {
+    public static Tool dtoToEntity(ToolRequest dto, Place place, Vendor vendor) {
         if (dto == null) return null;
         return Tool.builder()
                 .name(dto.name())
                 .serialNumber(dto.serialNumber())
                 .dateOfPurchasing(dto.dateOfPurchasing())
                 .type(dto.toolType())
-                .place(PlaceMapper.requestToEntity(dto.place()))
-                .vendor(VendorMapper.dtoToEntity(dto.vendor()))
+                .place(place)
+                .vendor(vendor)
                 .description(dto.description())
                 .build();
     }
