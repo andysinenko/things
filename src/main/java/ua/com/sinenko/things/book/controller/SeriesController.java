@@ -39,7 +39,6 @@ public class SeriesController {
             )
     )
     @GetMapping
-    @ResponseBody
     public ResponseEntity<List<SeriesResponse>> getAllSeries() {
         var seriesList = seriesService.getAllSeries();
         var seriesDtos = seriesList.stream().map(SeriesMapper::entityToDto).toList();

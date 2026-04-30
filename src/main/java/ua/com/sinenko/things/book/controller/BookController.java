@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,28 @@ import ua.com.sinenko.things.book.service.BookService;
 public class BookController {
     private final BookService bookService;
 
-    @Operation(summary = "List of Books", description = "Return page of books according to pagination")
-    @ApiResponse(responseCode = "200", description = "Success")
+    @Operation(summary = "Get all books", description = "Returns a paginated list of books")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved page of books",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BookPageResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid pagination parameters",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
     @GetMapping
-    @ResponseBody
     public ResponseEntity<BookPageResponse> getAllBooks(
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int pageNumber,
             @Parameter(description = "Pages size") @RequestParam(defaultValue = "20") int pageSize
@@ -38,52 +57,124 @@ public class BookController {
 
 
     @Operation(summary = "New book", description = "Create a new book")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "BookDto",
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "BookRequest",
             required = true,
             content = @Content(schema = @Schema(implementation = BookRequest.class)))
-    @ApiResponse(responseCode = "201", description = "Book created successfully")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Book created successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BookResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
     @PostMapping
-    @ResponseBody
     public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest) {
         var bookResponse = BookMapper.entityToResponse(bookService.saveBook(bookRequest));
         return new ResponseEntity<>(bookResponse, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get book", description = "Return selected book by id")
-    @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = BookRequest.class)))
-    @GetMapping(value = "/{bookId}")
-    @ResponseBody
+    @Operation(summary = "Get book by id", description = "Returns a single book by its id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved book",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BookResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Book not found",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    @GetMapping("/{id}")
     public ResponseEntity<BookResponse> getBookById(
-            @Parameter(description = "book's id", example = "42", required = true) @PathVariable("id") Long id
-    ) {
+            @Parameter(description = "Book id", example = "42", required = true) @PathVariable Long id) {
         var bookEntities = bookService.getBookById(id);
         var bookDto = BookMapper.entityToDto(bookEntities);
 
         return new ResponseEntity<>(bookDto, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete a book", description = "Delete book by id")
-    @ApiResponse(responseCode = "200", description = "Book deleted successfully")
-    @DeleteMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> deleteBookById(@Parameter(description = "book's id", example = "43", required = true) @PathVariable Long id) {
+    @Operation(summary = "Delete book by id", description = "Deletes a book by its id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Book deleted successfully",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Book not found",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBookById(
+            @Parameter(description = "Book id", example = "43", required = true)
+            @PathVariable Long id
+    ) {
         bookService.deleteBook(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Change a book", description = "Change book by id")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Book dto",
+    @Operation(summary = "Update book by id", description = "Updates a book by its id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Book updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BookResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Book not found",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Book update request",
             required = true,
-            content = @Content(schema = @Schema(implementation = BookRequest.class)))
-    @ApiResponse(responseCode = "201", description = "Book changed successfully")
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = BookRequest.class)
+            )
+    )
     @PutMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<BookResponse> updateBook(@Parameter(description = "book's id", example = "44", required = true) @PathVariable Long id, @RequestBody BookRequest bookRequest) {
+    public ResponseEntity<BookResponse> updateBook(
+            @Parameter(description = "Book id", example = "44", required = true)
+            @PathVariable Long id,
+            @RequestBody BookRequest bookRequest
+    ) {
         Book book = bookService.updateBook(id, bookRequest);
         var response = BookMapper.entityToResponse(book);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

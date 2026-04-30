@@ -29,7 +29,6 @@ public class AuthorController {
             description = "Success",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthorResponse.class)))
     @GetMapping
-    @ResponseBody
     public ResponseEntity<List<AuthorResponse>> getAllBooks() {
         var authors = authorService.getAllAuthors();
         var authorDtos = authors.stream().map(AuthorMapper::entityToResponse).toList();
@@ -43,7 +42,6 @@ public class AuthorController {
             content = @Content(schema = @Schema(implementation = AuthorRequest.class)))
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping
-    @ResponseBody
     public ResponseEntity<Void> addAuthor(@RequestBody AuthorRequest authorRequest) {
         authorService.saveAuthor(AuthorMapper.requestToEntity(authorRequest));
         return new ResponseEntity<>(HttpStatus.CREATED);

@@ -32,7 +32,6 @@ public class ToolController {
     @Operation(summary = "List of tools", description = "Return list of tools")
     @ApiResponse(responseCode = "200", description = "Success")
     @GetMapping
-    @ResponseBody
     public ResponseEntity<List<ToolResponse>> getAllTools() {
         LOGGER.info("get all tools");
         var tools = toolService.getAllTools();
@@ -47,7 +46,6 @@ public class ToolController {
             content = @Content(schema = @Schema(implementation = ToolRequest.class)))
     @ApiResponse(responseCode = "201", description = "Tool created successfully")
     @PostMapping
-    @ResponseBody
     public ResponseEntity<Void> addTool(@RequestBody ToolRequest toolRequest) {
         toolService.saveTool(toolRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -59,7 +57,6 @@ public class ToolController {
             content = @Content(schema = @Schema(implementation = ToolRequest.class)))
     @ApiResponse(responseCode = "201", description = "Book changed successfully")
     @PutMapping("/{id}")
-    @ResponseBody
     public ResponseEntity<ToolResponse> updateTool(@Parameter(description = "tool's id", example = "54", required = true) @PathVariable Long id, @RequestBody ToolRequest toolRequest) {
         var tool = toolService.updateTool(id, toolRequest);
         var toolResponse = ToolMapper.entityToResponse(tool);
@@ -67,13 +64,11 @@ public class ToolController {
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
     public ResponseEntity<ToolResponse> getToolById(@PathVariable("id") String id) {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
     public ResponseEntity<Void> deleteToolById(@PathVariable("id") Long id) {
         toolService.deleteTool(id);
         return new ResponseEntity<>(HttpStatus.OK);
