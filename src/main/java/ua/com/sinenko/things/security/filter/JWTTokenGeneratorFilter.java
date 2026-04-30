@@ -30,6 +30,15 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        String uri = request.getRequestURI();
+        if (uri.startsWith("/v3/api-docs") ||
+                uri.startsWith("/swagger-ui") ||
+                uri.equals("/swagger-ui.html")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             /*Environment env = getEnvironment();

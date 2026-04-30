@@ -6,9 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ua.com.sinenko.things.book.dto.AuthorDto;
+import ua.com.sinenko.things.book.dto.AuthorResponse;
 import ua.com.sinenko.things.pdfbook.dto.*;
-import ua.com.sinenko.things.pdfbook.schema.Author;
 import ua.com.sinenko.things.pdfbook.schema.PdfBookSchema;
 import ua.com.sinenko.things.pdfbook.service.PdfBookService;
 
@@ -28,7 +27,7 @@ public class PdfBookController {
             @RequestParam(value = "yearOfRelease", required = false) String yearOfRelease,
             @RequestParam(value = "language", required = false) String language,
             @RequestParam(value = "title", required = false) String title,
-            @RequestParam(value = "author", required = false) AuthorDto author
+            @RequestParam(value = "author", required = false) AuthorResponse author
 
     ) throws Exception {
         PdfBookResponse book = pdfBookService.save(file, category, yearOfRelease, language, title, author);

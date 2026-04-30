@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
-import ua.com.sinenko.things.tool.dto.ToolDto;
+import ua.com.sinenko.things.tool.dto.ToolRequest;
 import ua.com.sinenko.things.tool.dto.ToolMapper;
+import ua.com.sinenko.things.tool.dto.ToolResponse;
 import ua.com.sinenko.things.tool.entity.Tool;
 import ua.com.sinenko.things.tool.entity.ToolType;
 import ua.com.sinenko.things.tool.repository.ToolsRepository;
@@ -25,8 +26,8 @@ public class ToolService {
     }
 
     @Transactional
-    public void saveTool(ToolDto toolDto) {
-        var tool = ToolMapper.dtoToEntity(toolDto);
+    public void saveTool(ToolRequest toolRequest) {
+        var tool = ToolMapper.dtoToEntity(toolRequest);
         toolsRepository.save(tool);
     }
 
@@ -46,21 +47,24 @@ public class ToolService {
     }
 
     @Transactional
-    public Tool updateTool(Long id, ToolDto toolDto) {
+    public Tool updateTool(Long id, ToolRequest toolRequest) {
         toolsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tool not found"));
-
-        var tool = ToolMapper.dtoToEntity(toolDto);
+        var tool = ToolMapper.dtoToEntity(toolRequest);
 
         return toolsRepository.saveAndFlush(tool);
     }
 
-    public List<Tool> getToolsByDescription(String description) {
-        return toolsRepository.findByDescription(description);
+    public List<ToolResponse> getToolsByDescription(String description) {
+        var toolEntity = toolsRepository.findByDescription(description);
+        var toolResponses = ToolMapper.entitiesToResponses(toolEntity);
+        return toolResponses;
     }
 
-    public List<Tool> getToolsByName(String name) {
-        return toolsRepository.findByName(name);
+    public List<ToolResponse> getToolsByName(String name) {
+        var toolEntity = toolsRepository.findByName(name);
+        var toolResponses = ToolMapper.entitiesToResponses(toolEntity);
+        return toolResponses;
     }
 
     public List<Tool> getToolsByVendor(String vendorName) {

@@ -1,6 +1,6 @@
 package ua.com.sinenko.things.pdfbook.dto;
 
-import ua.com.sinenko.things.book.dto.AuthorDto;
+import ua.com.sinenko.things.book.dto.AuthorResponse;
 import ua.com.sinenko.things.pdfbook.entity.PdfAuthor;
 import ua.com.sinenko.things.pdfbook.schema.Author;
 
@@ -36,7 +36,7 @@ public class PdfAuthorMapper {
                 .build();
     }
 
-    public static Author toSchemaFromDto(AuthorDto dto) {
+    public static Author toSchemaFromDto(AuthorResponse dto) {
         return Author.builder()
                 .id(dto.id())
                 .name(dto.name())

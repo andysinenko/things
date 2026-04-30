@@ -4,22 +4,21 @@ import ua.com.sinenko.things.tool.entity.Vendor;
 import java.util.List;
 
 public class VendorMapper {
-    public static VendorDto entityToDto(Vendor entity) {
+    public static VendorRequest entityToDto(Vendor entity) {
         if (entity == null) {
             return null;
         }
-        return new VendorDto(entity.getId(), entity.getName());
+        return new VendorRequest(entity.getName());
     }
 
-    public static Vendor dtoToEntity(VendorDto dto) {
+    public static Vendor dtoToEntity(VendorRequest dto) {
         if (dto == null) return null;
         return Vendor.builder()
-                .id(dto.id())
                 .name(dto.name())
                 .build();
     }
 
-    public static List<VendorDto> entitiesToDtos(List<Vendor> vendors) {
+    public static List<VendorRequest> entitiesToDtos(List<Vendor> vendors) {
         if (vendors == null || vendors.isEmpty()) return List.of();
         return vendors.stream()
                 .map(VendorMapper::entityToDto)

@@ -13,24 +13,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class AuthorMapperTest {
 
     @Test
-    void dtoToEntity() {
+    void requestToEntity() {
         //given
-        var authorDto = AuthorDto.builder()
-                .id(1L)
+        var authorDto = AuthorRequest.builder()
                 .name("test")
                 .build();
 
         //when
-        var author = AuthorMapper.dtoToEntity(authorDto);
+        var author = AuthorMapper.requestToEntity(authorDto);
 
         //then
         assertNotNull(author);
-        assertEquals(authorDto.id(), author.getId());
         assertEquals(authorDto.name(), author.getName());
     }
 
     @Test
-    void entityToDto() {
+    void entityToResponse() {
         //given
         var author = Author.builder()
                 .id(1L)
@@ -38,7 +36,7 @@ class AuthorMapperTest {
                 .build();
 
         //when
-        var authorDto = AuthorMapper.entityToDto(author);
+        var authorDto = AuthorMapper.entityToResponse(author);
 
         //then
         assertNotNull(authorDto);
@@ -47,21 +45,19 @@ class AuthorMapperTest {
     }
 
     @Test
-    void dtosToEntities() {
+    void requestsToEntities() {
         //given
-        var authorDto1 = AuthorDto.builder()
-                .id(1L)
+        var authorDto1 = AuthorRequest.builder()
                 .name("test1")
                 .build();
-        var authorDto2 = AuthorDto.builder()
-                .id(2L)
+        var authorDto2 = AuthorRequest.builder()
                 .name("test2")
                 .build();
 
         var authorDtos = List.of(authorDto1, authorDto2);
 
         //when
-        var authors = AuthorMapper.dtosToEntities(authorDtos);
+        var authors = AuthorMapper.requestsToEntities(authorDtos);
 
         //then
         assertNotNull(authors);
@@ -69,7 +65,7 @@ class AuthorMapperTest {
     }
 
     @Test
-    void entitiesToDtos() {
+    void entitiesToResponses() {
         //given
         var author1 = Author.builder()
                 .id(1L)
@@ -83,7 +79,7 @@ class AuthorMapperTest {
         var authors = List.of(author1, author2);
 
         //when
-        var authorDtos = AuthorMapper.entitiesToDtos(authors);
+        var authorDtos = AuthorMapper.entitiesToResponses(authors);
 
         //then
         assertNotNull(authorDtos);

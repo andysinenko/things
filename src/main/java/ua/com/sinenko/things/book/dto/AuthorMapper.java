@@ -6,40 +6,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AuthorMapper {
-    public static Author dtoToEntity(AuthorDto dto) {
-        if(dto != null)
-            return Author.builder()
-                .id(dto.id())
-                .name(dto.name())
-                .build();
-        return null;
-    }
 
-    public static AuthorDto entityToDto(Author entity) {
+    public static AuthorResponse entityToResponse(Author entity) {
         if(entity != null)
-            return AuthorDto.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .build();
+            return AuthorResponse.builder()
+                    .id(entity.getId())
+                    .name(entity.getName())
+                    .build();
         return null;
     }
 
-    public static List<Author> dtosToEntities(List<AuthorDto> dto) {
-        if(dto != null)
-            return dto.stream()
-                        .map(e -> dtoToEntity(e))
-                                .collect(Collectors.toList());
-        return null;
-    }
-
-    public static List<AuthorDto> entitiesToDtos(List<Author> entities) {
+    public static List<AuthorResponse> entitiesToResponses(List<Author> entities) {
         if(entities != null)
             return entities.stream()
-                .map(e -> entityToDto(e))
+                .map(e -> entityToResponse(e))
                 .collect(Collectors.toList());
         return null;
     }
-
 
     public static Author requestToEntity(AuthorRequest authorRequest) {
         if(authorRequest != null)
@@ -50,4 +33,11 @@ public class AuthorMapper {
         return null;
     }
 
+    public static List<Author> requestsToEntities(List<AuthorRequest> request) {
+        if(request != null)
+            return request.stream()
+                    .map(e -> AuthorMapper.requestToEntity(e))
+                    .collect(Collectors.toList());
+        return null;
+    }
 }

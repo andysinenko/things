@@ -3,10 +3,10 @@ package ua.com.sinenko.things.place.dto;
 import lombok.Builder;
 
 @Builder
-public record PlaceDto(
+public record PlaceResponse(
     Long id,
     String name,
-    PlaceDto parent,
+    PlaceResponse parent,
     Long level,
     String description
 ) {}

@@ -17,13 +17,12 @@ import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ua.com.sinenko.things.book.dto.AuthorDto;
+import ua.com.sinenko.things.book.dto.AuthorResponse;
 import ua.com.sinenko.things.pdfbook.dto.*;
 import ua.com.sinenko.things.pdfbook.entity.PdfAuthor;
 import ua.com.sinenko.things.pdfbook.repository.CategoryRepository;
 import ua.com.sinenko.things.pdfbook.repository.PdfAuthorRepository;
 import ua.com.sinenko.things.pdfbook.repository.PdfBookRepository;
-import ua.com.sinenko.things.pdfbook.schema.Author;
 import ua.com.sinenko.things.pdfbook.schema.PdfBookSchema;
 
 import java.io.InputStream;
@@ -78,7 +77,7 @@ public class PdfBookService {
     }
 
     @Transactional
-    public PdfBookResponse save(MultipartFile file, Long categoryId, String yearOfRelease, String language, String inputedTitle, AuthorDto authorDto) throws Exception {
+    public PdfBookResponse save(MultipartFile file, Long categoryId, String yearOfRelease, String language, String inputedTitle, AuthorResponse authorResponse) throws Exception {
         String id = UUID.randomUUID().toString();
 
         AutoDetectParser parser = new AutoDetectParser();
@@ -116,7 +115,7 @@ public class PdfBookService {
                 pdfBookSchema.setAuthor(PdfAuthorMapper.toSchemaFromEntity(authorEntity));
             }
         } else {
-            pdfBookSchema.setAuthor(PdfAuthorMapper.toSchemaFromDto(authorDto));
+            pdfBookSchema.setAuthor(PdfAuthorMapper.toSchemaFromDto(authorResponse));
         }
 
         pdfBookSchema.setYearOfRelease(yearOfReleaseParsed!=null?yearOfReleaseParsed:yearOfRelease);

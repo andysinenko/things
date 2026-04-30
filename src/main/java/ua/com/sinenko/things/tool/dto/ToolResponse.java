@@ -13,7 +13,7 @@ public record ToolResponse(
         String name,
         ToolType toolType,
         String serialNumber,
-        VendorDto vendor,
+        VendorRequest vendor,
         PlaceDto place,
         LocalDate dateOfPurchasing,
         String description) {

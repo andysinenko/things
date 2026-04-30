@@ -49,6 +49,10 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             return;
         }
 
+        if (request.getRequestURI().startsWith("/v3/api-docs") || request.getRequestURI().startsWith("/swagger-ui")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         var key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
 

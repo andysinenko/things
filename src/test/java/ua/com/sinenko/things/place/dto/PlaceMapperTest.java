@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlaceMapperTest {
     @Test
     @DisplayName("Map Entity 2 DTO Test")
-    void dtoToEntity() {
+    void requestToEntity() {
         //given
         var placeDto = PlaceDto.builder()
                 .id(1L)
@@ -21,7 +21,7 @@ class PlaceMapperTest {
                 .build();
 
         //when
-        var place = PlaceMapper.dtoToEntity(placeDto);
+        var place = PlaceMapper.requestToEntity(placeDto);
 
         //then
         assertNotNull(place);
@@ -33,7 +33,7 @@ class PlaceMapperTest {
 
     @DisplayName("Map DTO 2 Entity Test")
     @Test
-    void entityToDto() {
+    void entityToResponse() {
         //given
         var place = Place.builder()
                 .id(1L)
@@ -43,7 +43,7 @@ class PlaceMapperTest {
                 .build();
 
         //when
-        var placeDto = PlaceMapper.entityToDto(place);
+        var placeDto = PlaceMapper.entityToResponse(place);
 
         //then
         assertNotNull(placeDto);

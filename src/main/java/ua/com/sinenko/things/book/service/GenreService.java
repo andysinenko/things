@@ -12,7 +12,11 @@ import java.util.List;
 public class GenreService {
     private GenreRepository genreRepository;
 
-    public List<Genre> getAllSeries() {
+    public List<Genre> getAllGenres() {
         return genreRepository.findAll();
+    }
+
+    public Genre getGenreByName(String name) {
+        return genreRepository.findGenreByName(name);
     }
 }

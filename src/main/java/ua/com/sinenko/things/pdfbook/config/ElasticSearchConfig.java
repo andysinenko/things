@@ -1,8 +1,6 @@
 package ua.com.sinenko.things.pdfbook.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperties;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
@@ -39,7 +37,8 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
     @Override
     public ClientConfiguration clientConfiguration() {
-
+        System.out.println("ELASTICSEARCH_HOST = " + host);
+        System.out.println("ELASTICSEARCH_PORT = " + port);
         try {
             KeyStore trustStore = KeyStore.getInstance("JKS");
             trustStore.load(new FileInputStream(keyFile), keyFilePassword.toCharArray());

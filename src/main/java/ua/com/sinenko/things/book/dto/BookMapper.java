@@ -12,34 +12,33 @@ import java.util.stream.Collectors;
 public class BookMapper {
     private final DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy");
 
-    public static Book dtoToEntity(BookDto dto) {
-        if (dto != null)
+    public static Book dtoToEntity(BookRequest request) {
+        if (request != null)
             return Book.builder()
-                    .id(dto.id())
-                    .title(dto.title())
-                    .authors(AuthorMapper.dtosToEntities(dto.authors()))
-                    .genre(GenreMapper.dtoToEntity(dto.genre()))
-                    .series(SeriesMapper.maptoToEntity(dto.series()))
-                    .place(PlaceMapper.dtoToEntity(dto.place()))
-                    .year(dto.year())
-                    .description(dto.description())
-                    .volumeNumber(dto.volume())
+                    .title(request.title())
+                    .authors(AuthorMapper.requestsToEntities(request.authors()))
+                    .genre(GenreMapper.dtoToEntity(request.genre()))
+                    .series(SeriesMapper.maptoToEntity(request.series()))
+                    .place(PlaceMapper.requestToEntity(request.place()))
+                    .year(request.year())
+                    .description(request.description())
+                    .volumeNumber(request.volume())
                     .build();
         return null;
     }
 
-    public static BookDto entityToDto(Book entity) {
+    public static BookResponse entityToDto(Book entity) {
         if(entity != null)
-            return BookDto
+            return BookResponse
                 .builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .genre(GenreMapper.entityToDto(entity.getGenre()))
-                .authors(AuthorMapper.entitiesToDtos(entity.getAuthors()))
-                .place(PlaceMapper.entityToDto(entity.getPlace()))
-                .year(entity.getYear())
-                .description(entity.getDescription())
-                .volume(entity.getVolumeNumber())
+                    .id(entity.getId())
+                    .title(entity.getTitle())
+                    .genre(GenreMapper.entityToDto(entity.getGenre()))
+                    .authors(AuthorMapper.entitiesToResponses(entity.getAuthors()))
+                    .place(PlaceMapper.entityToResponse(entity.getPlace()))
+                    .year(entity.getYear().toString())
+                    .description(entity.getDescription())
+                    .volume(entity.getVolumeNumber())
                 .build();
         return null;
     }
@@ -57,7 +56,7 @@ public class BookMapper {
                 .genre(GenreMapper.entityToDto(entity.getGenre()))
                 .authors(getAuthorsDto(entity.getAuthors()))
                 .series(SeriesMapper.entityToDto(entity.getSeries()))
-                .place(PlaceMapper.entityToDto(entity.getPlace()))
+                .place(PlaceMapper.entityToResponse(entity.getPlace()))
                 .build();
         return null;
     }
@@ -71,8 +70,8 @@ public class BookMapper {
                 .build();
     }
 
-    private static List<AuthorDto> getAuthorsDto(List<Author> authors) {
+    private static List<AuthorResponse> getAuthorsDto(List<Author> authors) {
         if(authors == null) return null;
-        return authors.stream().map(e -> AuthorMapper.entityToDto(e)).collect(Collectors.toList());
+        return authors.stream().map(e -> AuthorMapper.entityToResponse(e)).collect(Collectors.toList());
     }
 }

@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GenreMapper {
-    public static GenreDto entityToDto(Genre entity) {
+    public static GenreResponse entityToDto(Genre entity) {
         if(entity != null)
-            return GenreDto
+            return GenreResponse
                     .builder()
                     .id(entity.getId())
                     .name(entity.getName())
@@ -17,17 +17,16 @@ public class GenreMapper {
         return null;
     }
 
-    public static Genre dtoToEntity(GenreDto dto) {
+    public static Genre dtoToEntity(GenreRequest dto) {
         if(dto != null)
             return Genre
                 .builder()
-                .id(dto.id())
                 .name(dto.name())
                 .build();
         return null;
     }
 
-    public static Collection<GenreDto> entitiesToDtos(Collection<Genre> entities) {
+    public static Collection<GenreResponse> entitiesToDtos(Collection<Genre> entities) {
         if(entities != null && entities.size() != 0)
             return entities.stream()
                 .map(e -> entityToDto(e))
@@ -35,7 +34,7 @@ public class GenreMapper {
         return null;
     }
 
-    public static Collection<Genre> dtosToEntities(Collection<GenreDto> dtos) {
+    public static Collection<Genre> dtosToEntities(Collection<GenreRequest> dtos) {
         if(dtos != null && dtos.size() > 0)
             return dtos.stream()
                 .map(e -> dtoToEntity(e))

@@ -8,8 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.sinenko.things.book.dto.AuthorDto;
-import ua.com.sinenko.things.book.dto.BookDto;
+import ua.com.sinenko.things.book.dto.AuthorResponse;
+import ua.com.sinenko.things.book.dto.BookRequest;
 import ua.com.sinenko.things.book.dto.BookMapper;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
@@ -21,7 +21,6 @@ import ua.com.sinenko.things.book.repository.SeriesRepository;
 import ua.com.sinenko.things.place.repository.PlaceRepository;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,24 +49,24 @@ public class BookService {
     }
 
     @Transactional
-    public Book saveBook(BookDto bookDto) {
-        var book = BookMapper.dtoToEntity(bookDto);
+    public Book saveBook(BookRequest bookRequest) {
+        var book = BookMapper.dtoToEntity(bookRequest);
         logger.debug("Book before updating: {}", book);
 
         return bookRepository.saveAndFlush(book);
     }
 
-    public Book updateBook(Long id, BookDto bookDto) {
-        var book = BookMapper.dtoToEntity(bookDto);
+    public Book updateBook(Long id, BookRequest bookRequest) {
+        var book = BookMapper.dtoToEntity(bookRequest);
         logger.info("Book before updating: {}", book);
 
         return bookRepository.saveAndFlush(book);
     }
 
-    private List<Author> getAuthors(List<AuthorDto> authorDtos) {
-        logger.info("!!! authorDtos {}", authorDtos);
-        if(authorDtos != null) {
-            List<String> authorIds = authorDtos.stream().map(e -> e.name()).collect(Collectors.toList());
+    private List<Author> getAuthors(List<AuthorResponse> authorResponses) {
+        logger.info("!!! authorDtos {}", authorResponses);
+        if(authorResponses != null) {
+            List<String> authorIds = authorResponses.stream().map(e -> e.name()).collect(Collectors.toList());
             List<Author> authors = authorRepository.findByNameIn(authorIds);
             return authors;
         }

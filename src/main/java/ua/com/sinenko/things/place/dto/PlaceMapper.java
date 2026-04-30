@@ -6,37 +6,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlaceMapper {
-    public static Place dtoToEntity(PlaceDto dto) {
-        if (dto == null) return null;
+    public static Place requestToEntity(PlaceRequest request) {
+        if (request == null) return null;
         return Place.builder()
-                .id(dto.id())
-                .name(dto.name())
-                .description(dto.description())
-                .level(dto.level())
-                .parent(PlaceMapper.dtoToEntity(dto.parent()))
+                .name(request.name())
+                .description(request.description())
+                .level(request.level())
+                .parent(PlaceMapper.requestToEntity(request.parent()))
                 .build();
     }
 
-    public static PlaceDto entityToDto(Place entity) {
+    public static PlaceResponse entityToResponse(Place entity) {
         if (entity == null) return null;
-        return PlaceDto.builder()
+        return PlaceResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .level(entity.getLevel())
-                .parent(PlaceMapper.entityToDto(entity.getParent()))
+                .parent(PlaceMapper.entityToResponse(entity.getParent()))
                 .build();
     }
 
-    public static List<PlaceDto> entitiesToDtos(List<Place> entity) {
+    public static List<PlaceResponse> entitiesToResponse(List<Place> entity) {
         return entity.stream()
-                .map(e -> PlaceMapper.entityToDto(e))
-                .collect(Collectors.toList());
-    }
-
-    public static List<Place> dtosToEntities(List<PlaceDto> dto) {
-        return dto.stream()
-                .map(e -> PlaceMapper.dtoToEntity(e))
+                .map(e -> PlaceMapper.entityToResponse(e))
                 .collect(Collectors.toList());
     }
 }

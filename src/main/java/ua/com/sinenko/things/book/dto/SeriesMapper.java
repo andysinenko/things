@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SeriesMapper {
-    public static SeriesDto entityToDto(Series entity) {
+    public static SeriesResponse entityToDto(Series entity) {
         if(entity != null)
-            return SeriesDto
+            return SeriesResponse
                 .builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -17,17 +17,16 @@ public class SeriesMapper {
         return null;
     }
 
-    public static Series maptoToEntity(SeriesDto dto) {
-        if(dto != null)
+    public static Series maptoToEntity(SeriesRequest request) {
+        if(request != null)
             return Series
                 .builder()
-                .id(dto.id())
-                .name(dto.name())
+                .name(request.name())
                 .build();
         return null;
     }
 
-    public static Collection<SeriesDto> entitiesToDtos(Collection<Series> entities) {
+    public static Collection<SeriesResponse> entitiesToDtos(Collection<Series> entities) {
         if(entities != null && entities.size() > 0)
             return entities.stream()
                 .map(e -> entityToDto(e))
@@ -35,7 +34,7 @@ public class SeriesMapper {
         return null;
     }
 
-    public static Collection<Series> dtosToEntities(Collection<SeriesDto> dtos) {
+    public static Collection<Series> dtosToEntities(Collection<SeriesRequest> dtos) {
         if(dtos != null && dtos.size() > 0)
             return dtos.stream()
                 .map(e -> maptoToEntity(e))

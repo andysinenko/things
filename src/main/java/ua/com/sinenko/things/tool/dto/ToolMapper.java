@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ToolMapper {
-    public static Tool dtoToEntity(ToolDto dto) {
+    public static Tool dtoToEntity(ToolRequest dto) {
         if (dto == null) return null;
         return Tool.builder()
-                .id(dto.id())
                 .name(dto.name())
                 .serialNumber(dto.serialNumber())
                 .dateOfPurchasing(dto.dateOfPurchasing())
                 .type(dto.toolType())
-                .place(PlaceMapper.dtoToEntity(dto.place()))
+                .place(PlaceMapper.requestToEntity(dto.place()))
                 .vendor(VendorMapper.dtoToEntity(dto.vendor()))
                 .description(dto.description())
                 .build();
@@ -31,7 +30,7 @@ public class ToolMapper {
                 .dateOfPurchasing(entity.getDateOfPurchasing())
                 .serialNumber(entity.getSerialNumber())
                 .vendor(VendorMapper.entityToDto(entity.getVendor()))
-                .place(PlaceMapper.entityToDto(entity.getPlace()))
+                .place(PlaceMapper.entityToResponse(entity.getPlace()))
                 .build();
     }
 
