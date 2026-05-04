@@ -97,7 +97,7 @@ const ToolModal = ({isOpen,
                                             const newSelectedTool = {...selectedTool, vendor: brand};
                                             setSelectedTool(newSelectedTool);
                                         }
-                                    } aria-placeholder="Select brand">
+                                    }>
                                         <option value="" defaultValue>Brand name</option>
                                         {brands.map((brand) => (
                                             <option key={brand.id} value={brand.id}>
@@ -116,7 +116,7 @@ const ToolModal = ({isOpen,
                                     )}
 
                                     <select id="toolType" value={selectedTool.toolType} onChange={e =>
-                                        setSelectedTool({...selectedTool, toolType: e.target.value})} aria-placeholder="Select tool type">
+                                        setSelectedTool({...selectedTool, toolType: e.target.value})}>
                                         <option value="" defaultValue>Tool type</option>
                                         {ToolTypes.map((tool) => (
                                             <option key={tool} value={tool}>
@@ -158,9 +158,7 @@ const ToolModal = ({isOpen,
                                             console.log(">>> selectedTool: ", selectedTool);
                                             const newSelectedTool = { ...selectedTool, vendor: selectedBrand || null };
                                             setSelectedTool(newSelectedTool);
-                                        }}
-                                        aria-placeholder="Select brand"
-                                    >
+                                        }}>
                                         <option value="" defaultValue>Brand name</option>
                                         {brands.map((brand) => (
                                             <option key={brand.id} value={brand.id}>
@@ -179,7 +177,7 @@ const ToolModal = ({isOpen,
                                     )}
 
                                     <select id="toolType" value={selectedTool.toolType} onChange={e =>
-                                        setSelectedTool({...selectedTool, toolType: e.target.value})} aria-placeholder="Select tool type">
+                                        setSelectedTool({...selectedTool, toolType: e.target.value})}>
                                         <option value="" defaultValue>Tool type</option>
                                         {ToolTypes.map((tool) => (
                                             <option key={tool} value={tool}>

@@ -20,12 +20,12 @@ import {PdfBooks} from "./components/pdfbooks/PdfBooks";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-    <Provider store={store}>
-        <React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
             <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={<App/>} exect={true}>
+                    <Route path="/" element={<App/>}>
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/places" element={<Places/>}/>
                         <Route path="/books" element={<Books/>}/>
@@ -36,7 +36,7 @@ root.render(
                 </Routes>
             </Router>
             </AuthProvider>
-        </React.StrictMode>
-    </Provider>
+        </Provider>
+    </React.StrictMode>
 );
 

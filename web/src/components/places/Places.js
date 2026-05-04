@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
-import {fetchAllPlaces} from "./api/api";
 import {useDispatch, useSelector} from "react-redux";
 import PlaceModal from "./modal/PlaceModal";
+import {fetchAllPlaces} from "./reducer/PlaceSlice";
 
 const Places = () => {
     const dispatch = useDispatch();

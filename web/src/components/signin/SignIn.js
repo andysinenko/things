@@ -5,7 +5,7 @@ import { AuthContext } from "../auth/AuthProvider";
 
 import './SignIn.css';
 import {useDispatch} from "react-redux";
-import {fetchUser} from "./api/api"; // Assuming you have a CSS file for styling
+import {fetchUser} from "./reducer/UserSlice";
 
 const SignIn = () => {
     const [email, setEmail] = useState("");

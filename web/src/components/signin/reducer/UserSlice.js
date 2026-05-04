@@ -1,4 +1,13 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+export const fetchUser = createAsyncThunk(
+    "user/fetchUser",
+    async (_, { rejectWithValue }) => {
+        const response = await axios.post("http://localhost:8080/api/v1/auth/user");
+        return response.data;
+    }
+);
 
 const userSlice = createSlice({
     name: "user",
@@ -7,28 +16,22 @@ const userSlice = createSlice({
         loading: false,
         error: null,
     },
-    reducers: {
-        fetchUserStart(state) {
-            state.loading = true;
-            state.error = null;
-        },
-
-        fetchUserSuccess(state, action) {
-            state.loading = false;
-            state.user = action.payload;
-        },
-
-        fetchUserFailure(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        }
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchUser.pending,   (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+            })
+            .addCase(fetchUser.rejected,  (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
     },
 });
-
-export const {
-    fetchUserStart,
-    fetchUserSuccess,
-    fetchUserFailure
-} = userSlice.actions;
 
 export default userSlice.reducer;

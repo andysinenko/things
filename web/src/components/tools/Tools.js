@@ -1,11 +1,11 @@
 import './Tools.css'
-import {useDispatch, useSelector} from "react-redux";
-import React, {useEffect, useState} from "react";
-import {addNewTool, deleteTool, fetchBrands, fetchTools, updateTool} from "./api/api";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { fetchTools, addNewTool, updateTool, deleteTool, sortById, sortByName, sortByBrand, sortByType } from "./reducer/ToolsSlice";
+import { fetchBrands } from "./reducer/BrandsSlice";
+import { fetchAllPlaces } from "../places/reducer/PlaceSlice";
 import ToolModal from "./modal/ToolModal";
-import {fetchAllPlaces} from "../places/api/api";
-import {Paginator} from "../layout/pagination/Paginator";
-import {sortByBrand, sortById, sortByName, sortByType} from "./reducer/ToolsSlice";
+import { Paginator } from "../layout/pagination/Paginator";
 
 
 export const Tools = () => {
@@ -68,13 +68,11 @@ export const Tools = () => {
         e.preventDefault();
         try {
             if (modalType === "add") {
-                console.log("ADDED Tool: ", selectedTool);
                 dispatch(addNewTool(selectedTool));
             } else if (modalType === "delete") {
                 dispatch(deleteTool(selectedTool.id));
             } else if (modalType === "edit") {
-                console.log("EDITED TOOL: ", selectedTool);
-                dispatch(updateTool(selectedTool.id, selectedTool));
+                dispatch(updateTool({ id: selectedTool.id, tool: selectedTool }));
             }
             closeModal();
         } catch (error) {

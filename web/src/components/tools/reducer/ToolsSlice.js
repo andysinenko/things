@@ -1,4 +1,55 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { ENDPOINTS } from "@/config/api";
+
+
+export const fetchTools = createAsyncThunk(
+    "tools/fetchAll",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(ENDPOINTS.tools);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const addNewTool = createAsyncThunk(
+    "tools/add",
+    async (tool, { dispatch, rejectWithValue }) => {
+        try {
+            await axios.post(ENDPOINTS.tools, tool);
+            dispatch(fetchTools());
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const updateTool = createAsyncThunk(
+    "tools/update",
+    async ({ id, tool }, { dispatch, rejectWithValue }) => {
+        try {
+            await axios.put(`${ENDPOINTS.tools}/${id}`, tool);
+            dispatch(fetchTools());
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const deleteTool = createAsyncThunk(
+    "tools/delete",
+    async (id, { rejectWithValue }) => {
+        try {
+            await axios.delete(`${ENDPOINTS.tools}/${id}`);
+            return id;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
 
 const toolsSlice = createSlice({
     name: "tools",
@@ -8,83 +59,59 @@ const toolsSlice = createSlice({
         error: null,
     },
     reducers: {
-        fetchToolsStart(state) {
-            state.loading = true;
-            state.error = null;
-        },
-        fetchToolsSuccess(state, action) {
-            state.loading = false;
-            state.tools = action.payload.sort((a, b) => a.id - b.id);
-            state.error = null;
-        },
-        fetchToolsFailure(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        },
-        deleteToolSuccess(state, action) {
-            state.loading = false;
-            state.error = null;
-            state.tools = state.tools.filter(tool => tool.id !== action.payload);
-        },
-        deleteToolFailure(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        },
-
-        addToolSuccess(state, action) {
-            state.loading = false;
-            state.error = null;
-            state.tools.push(action.payload);
-        },
-
-        updateToolStart(state) {
-            state.loading = true;
-            state.error = null;
-        },
-        updateToolSuccess(state, action) {
-            state.loading = false;
-            state.error = null;
-            state.tools = state.tools.map(tool =>
-                tool.id === action.payload.id ? action.payload : tool
-            );
-        },
-        updateToolFailure(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        },
-
         sortById(state) {
             state.tools = [...state.tools].sort((a, b) => a.id - b.id);
         },
-
         sortByName(state) {
             state.tools = [...state.tools].sort((a, b) => a.name.localeCompare(b.name));
         },
-
         sortByBrand(state) {
-            state.tools = [...state.tools].sort((a, b) => a.vendor?.name.localeCompare(b.vendor?.name));
+            state.tools = [...state.tools].sort((a, b) =>
+                a.vendor?.name.localeCompare(b.vendor?.name)
+            );
         },
-
         sortByType(state) {
-            state.tools = [...state.tools].sort((a, b) => a.toolType.localeCompare(b.toolType));
+            state.tools = [...state.tools].sort((a, b) =>
+                a.toolType.localeCompare(b.toolType)
+            );
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            // fetchTools
+            .addCase(fetchTools.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchTools.fulfilled, (state, action) => {
+                state.loading = false;
+                state.tools = action.payload.sort((a, b) => a.id - b.id);
+            })
+            .addCase(fetchTools.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // deleteTool
+            .addCase(deleteTool.fulfilled, (state, action) => {
+                state.tools = state.tools.filter(tool => tool.id !== action.payload);
+            })
+            .addCase(deleteTool.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
+            // addNewTool
+            .addCase(addNewTool.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
+            // updateTool
+            .addCase(updateTool.rejected, (state, action) => {
+                state.error = action.payload;
+            });
     },
 });
 
-export const {
-    fetchToolsStart,
-    fetchToolsSuccess,
-    fetchToolsFailure,
-    deleteToolSuccess,
-    deleteToolFailure,
-    updateToolFailure,
-    updateToolStart,
-    updateToolSuccess,
-    addToolSuccess,
-    sortById,
-    sortByName,
-    sortByBrand,
-    sortByType
-} = toolsSlice.actions;
+export const { sortById, sortByName, sortByBrand, sortByType } = toolsSlice.actions;
 
 export default toolsSlice.reducer;
