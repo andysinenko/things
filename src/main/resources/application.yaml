@@ -35,18 +35,13 @@ things:
     storage-path: ${PDFBOOKS_STORAGE_PATH:./pdfbooks}
   jwt:
     header: Authorization
-    secret-key: your-very-long-random-secret-key-32bytes!
+    secret-key: ${JWT_KEY}
     expiration: 86400000 # a day
     refresh-token:
       expiration: 604800000 # 7 days
 logging:
   level:
     ua.com.sinenko.things: INFO
-    co.elastic.clients: DEBUG
-    org:
-      springframework:
-        data:
-          elasticsearch: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 

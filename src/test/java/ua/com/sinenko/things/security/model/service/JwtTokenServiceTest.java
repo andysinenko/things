@@ -13,10 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JwtTokenServiceTest {
     JwtTokenService jwtTokenService;
+    private final String SUBJECT = "synenko.com";
+    private final String KEY = "your-very-long-random-secret-key-32bytes!";
+    private final Long expiration = 86400000L;
+    private final Long refreshExpiration = 604800000L;
 
     @BeforeEach
     void setDataBeforeTests() {
-        jwtTokenService = new JwtTokenService("secretkeyforjwttokenyforjwttoken", "Authorization", 86400000L, 604800000L);
+        jwtTokenService = new JwtTokenService( refreshExpiration, expiration, KEY);
     }
 
     @Test
@@ -79,10 +83,9 @@ class JwtTokenServiceTest {
         thingsUser.setUsername("test");
 
         String token = jwtTokenService.generateToken(thingsUser);
-        Jws<Claims> claims = jwtTokenService.getCaims(token);
+        Jws<Claims> claims = jwtTokenService.getClaims(token);
         claims.getPayload().entrySet().forEach(e -> System.out.println(e.getKey() + " : " + e.getValue()));
         assertEquals("test", claims.getPayload().getSubject());
-        assertEquals("sinenko.homes", claims.getPayload().getIssuer());
-
+        assertEquals(SUBJECT, claims.getPayload().getIssuer());
     }
 }

@@ -2,7 +2,7 @@ package ua.com.sinenko.things.security.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,16 +22,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private ThingsUserRepository customerRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthService authService;
+    private final ThingsUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody UserDto request) {
@@ -41,21 +37,18 @@ public class LoginController {
 
     @PostMapping("/user")
     public UserDto getUserDetailsAfterLogin(Authentication authentication) {
-        var storedUser = customerRepository.findByUsername(authentication.getName());
-
-        return storedUser.map(thingsUser -> UserDto.builder().id(thingsUser.getId())
-                .username(thingsUser.getUsername())
-                .authorities(thingsUser.getAuthorities().stream()
-                        .map(e -> {
-                            return AuthorityDto
-                                    .builder()
-                                    .name(e.getName())
-                                    .id(e.getId())
-                                    .build();
-                                })
-                        .collect(Collectors.toList()))
-                .build()).orElseThrow();
-
+        return userRepository.findByUsername(authentication.getName())
+                .map(user -> UserDto.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .authorities(user.getAuthorities().stream()
+                                .map(a -> AuthorityDto.builder()
+                                        .id(a.getId())
+                                        .name(a.getName())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .build())
+                .orElseThrow();
     }
 
     @PostMapping("/refresh-token")

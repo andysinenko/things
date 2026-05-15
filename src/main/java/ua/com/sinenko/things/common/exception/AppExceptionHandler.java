@@ -26,7 +26,6 @@ import java.util.Date;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
-
     private static final Logger logger = LoggerFactory.getLogger(AppExceptionHandler.class);
 
     @ExceptionHandler({ResourceNotFoundException.class, EntityNotFoundException.class, UsernameNotFoundException.class})

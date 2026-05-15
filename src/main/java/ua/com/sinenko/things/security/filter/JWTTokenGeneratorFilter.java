@@ -6,6 +6,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,31 +25,25 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static ua.com.sinenko.things.security.filter.Constants.JWT_HEADER;
-import static ua.com.sinenko.things.security.filter.Constants.JWT_ISSUER;
+import static ua.com.sinenko.things.security.filter.Constants.*;
 
 @Component
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JWTTokenGeneratorFilter.class);
 
+    @Autowired
+    private Environment env;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String uri = request.getRequestURI();
-        if (uri.startsWith("/v3/api-docs") ||
-                uri.startsWith("/swagger-ui") ||
-                uri.equals("/swagger-ui.html")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        String keyEnv = env.getProperty(JWT_KEY);
+        logger.info("! JWT_KEY in Generation filter {}", keyEnv);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            /*Environment env = getEnvironment();
-            String keyEnv = env.getProperty(JWT_KEY);*/
-
-            SecretKey key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
+            SecretKey key = Keys.hmacShaKeyFor(keyEnv.getBytes(StandardCharsets.UTF_8));
 
             String jwt = Jwts.builder()
                     .issuer(JWT_ISSUER)

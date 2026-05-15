@@ -6,6 +6,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -22,28 +26,20 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+import static ua.com.sinenko.things.security.filter.Constants.JWT_KEY;
+
 @Component
+@RequiredArgsConstructor
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JWTTokenValidatorFilter.class);
+
     private final UserDetailsService userDetailsService;
     private final JwtTokenService jwtTokenService;
     private final JwtTokenRepository jwtTokenRepository;
 
-    public JWTTokenValidatorFilter(UserDetailsService userDetailsService, JwtTokenService jwtTokenService, JwtTokenRepository jwtTokenRepository) {
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenService = jwtTokenService;
-        this.jwtTokenRepository = jwtTokenRepository;
-    }
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-
-        /*if (request.getServletPath().contains("/api/v1/auth") ) {
-            filterChain.doFilter(request, response);
-            return;
-        }*/
-
-        final String authHeader = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -54,28 +50,23 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             return;
         }
 
-        var key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
+        String keyEnv = getEnvironment().getProperty(JWT_KEY);
 
-        String jwt = request.getHeader("Authorization");
-        if (jwt != null && jwt.startsWith("Bearer ")) {
-            jwt = jwt.substring(7);
-        }
+        logger.info("! JWT_KEY in Validation filter {}", keyEnv);
 
-        logger.info("JWT_KEY: " + Constants.JWT_KEY);
-        logger.info("JWT: " + jwt);
+        var key = Keys.hmacShaKeyFor(keyEnv.getBytes(StandardCharsets.UTF_8));
+
+        String jwt  = authHeader.substring(7);
 
         var claims = Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(jwt)
                 .getPayload();
-        var username = String.valueOf(claims.get("sub"));
-        var username2 = String.valueOf(claims.get("username"));
-        var authorities = String.valueOf(claims.get("authorities"));
 
-        logger.info("claims.get(\"sub\"): " + username);
-        logger.info("claims.get(\"username2\"): " + username2);
-        logger.info("claims.get(\"authorities\"): " + authorities);
+        var username = claims.getSubject();
+
+        logger.debug("Validating token for user '{}'", username);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
@@ -83,13 +74,17 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             var isTokenValid = jwtTokenService.isTokenValid(username, tokenRecord.token);
 
             if (isTokenValid) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null,
-                        AuthorityUtils.commaSeparatedStringToAuthorityList(userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","))));
-                usernamePasswordAuthenticationToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                String authorities = userDetails.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.joining(","));
 
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                var authToken = new UsernamePasswordAuthenticationToken(
+                        username,
+                        null,
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(authorities)
+                );
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
         filterChain.doFilter(request, response);
@@ -97,8 +92,8 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/api/v1/auth/authenticate") ||
-                request.getServletPath().equals("/api/v1/auth/register");
+        String path = request.getServletPath();
+        return path.equals("/api/v1/auth/authenticate")
+                || path.equals("/api/v1/auth/register");
     }
-
 }

@@ -7,11 +7,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.common.exception.UserExistsException;
+import ua.com.sinenko.things.security.filter.JWTTokenValidatorFilter;
 import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
 import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
@@ -29,18 +33,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthService {
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final JwtTokenService jwtTokenService;
-
     private final ThingsUserRepository userRepository;
-
     private final AuthorityRepository authorityRepository;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenRepository jwtTokenRepository;
 
     private void revokeAllUserTokens(ThingsUser user) {
@@ -71,6 +71,7 @@ public class AuthService {
         final String userName;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            logger.warn("auth header is null ");
             return;
         }
 

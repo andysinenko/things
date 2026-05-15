@@ -4,8 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
@@ -15,29 +15,33 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import static ua.com.sinenko.things.security.filter.Constants.JWT_ISSUER;
 
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
 public class JwtTokenService {
-    @Value("${things.jwt.secret-key}")
-    private String jwtKey;
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
-    @Value("${things.jwt.header}")
-    private String header;
+    private final long expiration;
+    private final long refreshExpiration;
+    private final String jwtKey;
 
-    @Value("${things.jwt.expiration}")
-    private long expiration;
-
-    @Value("${things.jwt.refresh-token.expiration}")
-    private long refreshExpiration;
+    public JwtTokenService(
+            @Value("${things.jwt.expiration}") long expiration,
+            @Value("${things.jwt.refresh-token.expiration}") long refreshExpiration,
+            @Value("${things.jwt.secret-key}") String jwtKey) {
+        this.expiration = expiration;
+        this.refreshExpiration = refreshExpiration;
+        this.jwtKey = jwtKey;
+    }
 
     public String generateToken(ThingsUser thingsUser) {
+        logger.info("! JWT_KEY in JwtTokenService {}", jwtKey);
+        logger.info("");
         Key secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
         return Jwts
                 .builder()
                 .claims(new HashMap<>())
-                .issuer("sinenko.homes")
+                .issuer(JWT_ISSUER)
                 .subject(thingsUser.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
@@ -46,7 +50,16 @@ public class JwtTokenService {
     }
 
     public String generateRefreshToken(ThingsUser thingsUser) {
-        return generateToken(thingsUser);
+        Key secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
+        return  Jwts
+                .builder()
+                .claims(new HashMap<>())
+                .issuer(JWT_ISSUER)
+                .subject(thingsUser.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                .signWith(secretKey)
+                .compact();
     }
 
     public boolean isTokenExpired(String token) {
@@ -75,7 +88,7 @@ public class JwtTokenService {
         return (userName.equals(subject)) && !isTokenExpired(token);
     }
 
-    public Jws<Claims> getCaims(String jwtToken) {
+    public Jws<Claims> getClaims(String jwtToken) {
         SecretKey secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.parser()

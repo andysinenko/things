@@ -27,21 +27,34 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Profile("stage")
 public class SecurityConfig {
 
+    private static final List<String> PUBLIC_ENDPOINTS = List.of(
+            "/api/v1/auth/register",
+            "/api/v1/auth/authenticate",
+            "/actuator/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    );
+
     private final JWTTokenValidatorFilter jwtTokenValidatorFilter;
     private final JWTTokenGeneratorFilter jwtTokenGeneratorFilter;
     private final UserDetailsService userDetailsService;
     private final ThingsAuthenticationEntryPoint authenticationEntryPoint;
     private final ThingsAccessDeniedHandler accessDeniedHandler;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JWTTokenValidatorFilter jwtTokenValidatorFilter, JWTTokenGeneratorFilter jwtTokenGeneratorFilter,
-                          ThingsAuthenticationEntryPoint authenticationEntryPoint, ThingsAccessDeniedHandler accessDeniedHandler) {
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.accessDeniedHandler = accessDeniedHandler;
+    public SecurityConfig(
+            UserDetailsService userDetailsService,
+            JWTTokenValidatorFilter jwtTokenValidatorFilter,
+            JWTTokenGeneratorFilter jwtTokenGeneratorFilter,
+            ThingsAuthenticationEntryPoint authenticationEntryPoint,
+            ThingsAccessDeniedHandler accessDeniedHandler
+    ) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenValidatorFilter = jwtTokenValidatorFilter;
         this.jwtTokenGeneratorFilter = jwtTokenGeneratorFilter;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -49,12 +62,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        //CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
-        //requestHandler.setCsrfRequestAttributeName("_csrf");
-
-        http //.securityContext((context) -> context.requireExplicitSave(false))
-                .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of("http://localhost:3000"));
                     config.setAllowedMethods(List.of("*"));
@@ -63,24 +73,20 @@ public class SecurityConfig {
                     config.setMaxAge(3600L);
                     config.setExposedHeaders(List.of("Authorization"));
                     return config;
-            }))
+                }))
                 .csrf(AbstractHttpConfigurer::disable)
-                //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-                .authorizeHttpRequests((requests)->requests
-                        .requestMatchers("/api/v1/auth/register","/api/v1/auth/authenticate", "/actuator/**")
-                        .permitAll()
-                        .requestMatchers("/v3/api-docs/**",
-                            "/swagger-ui/**",
-                            "/swagger-ui.html"
-                        ).permitAll()
-                        .anyRequest()
-                        .authenticated())
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(PUBLIC_ENDPOINTS.toArray(String[]::new)).permitAll()
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .addFilterAfter(jwtTokenGeneratorFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtTokenValidatorFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((exception) -> exception.authenticationEntryPoint(authenticationEntryPoint)
+                .addFilterAfter(jwtTokenGeneratorFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler)
                 );
+
         return http.build();
     }
 

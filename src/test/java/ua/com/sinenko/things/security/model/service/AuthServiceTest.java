@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
@@ -29,9 +31,7 @@ import static org.mockito.Mockito.when;
 class AuthServiceTest {
 
     private AuthService authService;
-
-    private final String secretKey = "secretkeyforjwttokenyforjwttoken";
-    private final String header = "Authorization";
+    private final String KEY = "your-very-long-random-secret-key-32bytes!";
     private final Long expiration = 86400000L;
     private final Long refreshExpiration = 604800000L;
 
@@ -48,10 +48,9 @@ class AuthServiceTest {
     @Mock
     AuthorityRepository authorityRepository;
 
-
     @BeforeEach
     void setDataBeforeTests() {
-        jwtTokenService = new JwtTokenService("secretkeyforjwttokenyforjwttoken", "Authorization", 86400000L, 604800000L);
+        jwtTokenService = new JwtTokenService( refreshExpiration, expiration, KEY);
         authService = new AuthService(jwtTokenService, userRepository, authorityRepository, null, jwtTokenRepository);
     }
 
