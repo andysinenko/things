@@ -1,6 +1,7 @@
 services:
   postgres:
     image: 'postgres:latest'
+    command: postgres -c max_connections=200
     environment:
       - 'POSTGRES_DB=things'
       - 'POSTGRES_PASSWORD=things12345'
@@ -8,6 +9,10 @@ services:
       - 'POSTGRES_SCHEMA=things'
     ports:
       - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - db
 networks:
   db:
     driver: bridge

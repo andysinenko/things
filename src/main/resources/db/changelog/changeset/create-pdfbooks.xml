@@ -1,0 +1,49 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="Andrew Sinenko" id="1-create-pdfbooks-sequence">
+        <createSequence schemaName="things"
+                        sequenceName="pdf_books_sequence"
+                        startValue="1"
+                        incrementBy="1"/>
+    </changeSet>
+
+    <changeSet author="Andrew Sinenko" id="2-create-pdfbooks-table">
+        <createTable tableName="pdf_books" schemaName="things">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="pdf_books_sequence">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_pdf_books"/>
+            </column>
+            <column name="title" type="VARCHAR(512)"/>
+            <column name="author_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="fk_pdf_books_author"
+                             references="things.pdfbooks_authors(id)"/>
+            </column>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="fk_pdf_books_category"
+                             references="things.pdfbooks_categories(id)"/>
+            </column>
+            <column name="year_of_release" type="VARCHAR(64)"/>
+            <column name="language" type="VARCHAR(64)"/>
+            <column name="file_path" type="VARCHAR(1024)"/>
+            <column name="number_of_pages" type="INTEGER"/>
+            <column name="upload_date" type="TIMESTAMP"/>
+        </createTable>
+
+    </changeSet>
+    <changeSet author="Andrew Sinenko" id="2-create-pdfauthors-sequence">
+        <createSequence schemaName="things"
+                        sequenceName="pdf_authors_sequence"
+                        startValue="1000"
+                        incrementBy="1"/>
+        <addDefaultValue schemaName="things"
+                         tableName="pdfbooks_authors"
+                         columnName="id"
+                         defaultValueSequenceNext="pdf_authors_sequence"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -2,11 +2,11 @@ package ua.com.sinenko.things.pdfbook.dto;
 
 import ua.com.sinenko.things.book.dto.AuthorResponse;
 import ua.com.sinenko.things.pdfbook.entity.PdfAuthor;
-import ua.com.sinenko.things.pdfbook.schema.Author;
 
 import java.util.List;
 
 public class PdfAuthorMapper {
+
     public static PdfAuthor toEntity(PdfAuthorDto dto) {
         return PdfAuthor.builder()
                 .id(dto.id())
@@ -21,38 +21,15 @@ public class PdfAuthorMapper {
                 .build();
     }
 
-
-    public static PdfAuthorDto toDtoFromSchema(Author schema) {
-        return PdfAuthorDto.builder()
-                .id(schema.getId())
-                .name(schema.getName())
-                .build();
-    }
-
-    public static Author toSchemaFromEntity(PdfAuthor entity) {
-        return Author.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .build();
-    }
-
-    public static Author toSchemaFromDto(AuthorResponse dto) {
-        return Author.builder()
+    // используется в save() когда автор пришёл из запроса, а не из PDF-метаданных
+    public static PdfAuthor fromAuthorResponse(AuthorResponse dto) {
+        return PdfAuthor.builder()
                 .id(dto.id())
                 .name(dto.name())
                 .build();
     }
 
-
-    public static List<PdfAuthor> toEntityList(List<PdfAuthorDto> dtoList) {
-        return dtoList.stream().map(e -> PdfAuthorMapper.toEntity(e)).toList();
-    }
-
     public static List<PdfAuthorDto> toDtoList(List<PdfAuthor> entityList) {
-        return entityList.stream().map(e -> PdfAuthorMapper.toDto(e)).toList();
-    }
-
-    public static List<PdfAuthorDto> toDtoListFromSchema(List<Author> authors) {
-        return authors.stream().map(e -> PdfAuthorMapper.toDtoFromSchema(e)).toList();
+        return entityList.stream().map(PdfAuthorMapper::toDto).toList();
     }
 }

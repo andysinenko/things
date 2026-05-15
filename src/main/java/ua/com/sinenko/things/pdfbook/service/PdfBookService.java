@@ -7,65 +7,46 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.sax.BodyContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.sinenko.things.book.dto.AuthorResponse;
 import ua.com.sinenko.things.pdfbook.dto.*;
 import ua.com.sinenko.things.pdfbook.entity.PdfAuthor;
+import ua.com.sinenko.things.pdfbook.entity.PdfBook;
 import ua.com.sinenko.things.pdfbook.repository.CategoryRepository;
 import ua.com.sinenko.things.pdfbook.repository.PdfAuthorRepository;
 import ua.com.sinenko.things.pdfbook.repository.PdfBookRepository;
-import ua.com.sinenko.things.pdfbook.schema.PdfBookSchema;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-
 
 @Service
 @RequiredArgsConstructor
 public class PdfBookService {
     private static final Logger logger = LoggerFactory.getLogger(PdfBookService.class);
 
-    private final ElasticsearchOperations operations;
+    @Value("${things.pdfbooks.storage-path}")
+    private String storagePath;
+
     private final PdfBookRepository pdfBookRepository;
     private final PdfAuthorRepository pdfAuthorRepository;
     private final CategoryRepository categoryRepository;
 
-    public PdfBookSchema getBook(String id) {
+    public PdfBook getBook(Long id) {
         return pdfBookRepository.findById(id).orElse(null);
     }
 
-    public Page<PdfBookSchema> getBooks(int pageNumber, int pageSize) {
-        String[] fields = new String[]{"id", "title", "category", "authors", "yearOfRelease", "language", "uploadDate", "numberOfPages"};
-        String[] exclude = new String[]{"content"};
-
-        NativeQuery query = NativeQuery.builder()
-                .withSourceFilter(new FetchSourceFilter(false, fields, exclude))
-                .withFields(fields)
-                .withPageable(PageRequest.of(pageNumber, pageSize))
-                .build();
-
-        SearchHits<PdfBookSchema> searchHits = operations.search(query, PdfBookSchema.class);
-
-        List<PdfBookSchema> pdfBookSchemas = searchHits.stream()
-                .map(hit -> hit.getContent())
-                .collect(Collectors.toList());
-
-        logger.info("Strored books: " + pdfBookSchemas);
-
-        long totalHits = searchHits.getTotalHits();
-        return new PageImpl<PdfBookSchema>(pdfBookSchemas, PageRequest.of(pageNumber, pageSize), totalHits);
+    public Page<PdfBook> getBooks(int pageNumber, int pageSize) {
+        return pdfBookRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
     public List<CategoryDto> getCategories() {
@@ -77,62 +58,70 @@ public class PdfBookService {
     }
 
     @Transactional
-    public PdfBookResponse save(MultipartFile file, Long categoryId, String yearOfRelease, String language, String inputedTitle, AuthorResponse authorResponse) throws Exception {
-        String id = UUID.randomUUID().toString();
+    public PdfBookResponse save(MultipartFile file, Long categoryId, String yearOfRelease,
+                                String language, String inputedTitle,
+                                AuthorResponse authorResponse) throws Exception {
+
+        byte[] bytes = file.getBytes();
 
         AutoDetectParser parser = new AutoDetectParser();
         BodyContentHandler handler = new BodyContentHandler(-1);
         Metadata metadata = new Metadata();
 
-        try (InputStream stream = file.getInputStream()) {
+        try (InputStream stream = new ByteArrayInputStream(bytes)) {
             parser.parse(stream, handler, metadata, new ParseContext());
         }
 
-        String title = metadata.get("dc:title");
-        String yearOfReleaseParsed = metadata.get("xmp:CreateDate");
+        String title         = metadata.get("dc:title");
+        String yearParsed    = metadata.get("xmp:CreateDate");
         String numberOfPages = metadata.get("xmpTPg:NPages");
-        String author = metadata.get("dc:creator");
+        String authorName    = metadata.get("dc:creator");
 
-        PdfBookSchema pdfBookSchema = new PdfBookSchema();
-        pdfBookSchema.setId(id);
-        var category = categoryRepository.findById(categoryId).orElseGet(null);
-        pdfBookSchema.setCategory(CategoryMapper.toSchema(category));
+        var category = categoryId != null
+                ? categoryRepository.findById(categoryId).orElse(null)
+                : null;
 
-        if(title != null) {
-            pdfBookSchema.setTitle(title);
-        } else {
-            pdfBookSchema.setTitle(inputedTitle);
-        }
-
-        if(author != null) {
-            PdfAuthor authorEntity = pdfAuthorRepository.findByName(author);
-            if(authorEntity != null) {
-                pdfBookSchema.setAuthor(PdfAuthorMapper.toSchemaFromEntity(authorEntity));
-            } else {
-                PdfAuthor newAuthor = new PdfAuthor();
-                newAuthor.setName(author);
-                authorEntity = pdfAuthorRepository.save(newAuthor);
-                pdfBookSchema.setAuthor(PdfAuthorMapper.toSchemaFromEntity(authorEntity));
+        PdfAuthor author;
+        if (authorName != null) {
+            author = pdfAuthorRepository.findByName(authorName);
+            if (author == null) {
+                author = pdfAuthorRepository.save(PdfAuthor.builder().name(authorName).build());
             }
         } else {
-            pdfBookSchema.setAuthor(PdfAuthorMapper.toSchemaFromDto(authorResponse));
+            author = authorResponse != null
+                    ? PdfAuthorMapper.fromAuthorResponse(authorResponse)
+                    : null;
         }
 
-        pdfBookSchema.setYearOfRelease(yearOfReleaseParsed!=null?yearOfReleaseParsed:yearOfRelease);
-        pdfBookSchema.setLanguage(language);
-        pdfBookSchema.setNumberOfPages(numberOfPages!=null? Integer.parseInt(numberOfPages):0);
+        PdfBook book = PdfBook.builder()
+                .title(title != null ? title : inputedTitle)
+                .author(author)
+                .category(category)
+                .yearOfRelease(yearParsed != null ? yearParsed : yearOfRelease)
+                .language(language)
+                .numberOfPages(numberOfPages != null ? Integer.parseInt(numberOfPages) : 0)
+                .uploadDate(LocalDateTime.now())
+                .build();
 
-        logger.info("PdfBook before storing without content: " + pdfBookSchema.toString());
-        pdfBookSchema.setContent(handler.toString());
+        PdfBook saved = pdfBookRepository.save(book);
 
+        String fileName = saved.getId() + "_" + file.getOriginalFilename();
+        Path destination = Path.of(storagePath, fileName);
+        Files.createDirectories(destination.getParent());
+        Files.write(destination, bytes);
 
-        var book = pdfBookRepository.save(pdfBookSchema);
-        var bookResponse = PdfBookMapper.entityToResponseWOContent(book);
+        saved.setFilePath(destination.toString());
 
-        return bookResponse;
+        logger.info("Saving PdfBook: {}", saved);
+
+        return PdfBookMapper.toResponse(pdfBookRepository.save(saved));
     }
 
-    public void deleteBook(String id) {
+    public void deleteBook(Long id) {
         pdfBookRepository.deleteById(id);
+    }
+
+    public List<PdfBook> findByTitle(String title) {
+        return pdfBookRepository.findByTitleContainingIgnoreCase(title);
     }
 }

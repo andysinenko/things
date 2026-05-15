@@ -21,4 +21,7 @@
     <include file="changeset/create-categories.xml" relativeToChangelogFile="true"/>
     <include file="changeset/pdfbooks-categories-indexes.xml" relativeToChangelogFile="true"/>
     <include file="changeset/create-pdfauthors.xml" relativeToChangelogFile="true"/>
+    <!-- moving pdf from elastic search-->
+    <include file="changeset/create-pdfbooks.xml" relativeToChangelogFile="true"/>
+    <include file="changeset/pdfbooks-indexes.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

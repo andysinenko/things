@@ -7,6 +7,7 @@ spring:
     active: stage
   docker:
     compose:
+      enabled: false
       profiles:
         active: stage
   application:
@@ -30,6 +31,8 @@ spring:
   main:
     banner-mode: off
 things:
+  pdfbooks:
+    storage-path: ${PDFBOOKS_STORAGE_PATH:./pdfbooks}
   jwt:
     header: Authorization
     secret-key: your-very-long-random-secret-key-32bytes!

@@ -47,7 +47,7 @@ export const Books = () => {
         dispatch(fetchGenres());
         dispatch(fetchAuthors());
         dispatch(fetchAllPlaces());
-        dispatch(fetchBooks({ pageNumber: 0, pageSize }));  // <-- объект
+        dispatch(fetchBooks({ pageNumber: 0, pageSize }));
     }, [dispatch]);
 
     const openModal = (type) => {
@@ -95,7 +95,7 @@ export const Books = () => {
             } else if (modalType === "delete") {
                 dispatch(deleteBook(selectedBook.id));
             } else if (modalType === "edit") {
-                dispatch(updateBook({ id: selectedBook.id, book: selectedBook, pageNumber, pageSize }));  // <-- объект
+                dispatch(updateBook({ id: selectedBook.id, book: selectedBook, pageNumber, pageSize }));
             }
             closeModal();
         } catch (error) {
@@ -104,7 +104,7 @@ export const Books = () => {
     };
 
     const onChagePage = (pageNumber, pageSize) => {
-        dispatch(fetchBooks({ pageNumber, pageSize }));  // <-- объект
+        dispatch(fetchBooks({ pageNumber, pageSize }));
     };
 
     if (loading) return (
