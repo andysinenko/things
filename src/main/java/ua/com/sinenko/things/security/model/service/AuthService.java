@@ -5,8 +5,6 @@ import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import ua.com.sinenko.things.common.exception.UserExistsException;
-import ua.com.sinenko.things.security.filter.JWTTokenValidatorFilter;
 import ua.com.sinenko.things.security.model.dto.AuthenticationRequest;
 import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
@@ -86,7 +83,7 @@ public class AuthService {
         if (userName != null) {
             var thingsUser = userRepository
                     .findByUsername(userName)
-                    .orElseThrow();
+                    .orElseThrow(() -> new UserExistsException("User doesn't exists"));
             if (jwtTokenService.isTokenValid(userName, refreshToken)) {
                 var accessToken = jwtTokenService.generateToken(thingsUser);
                 revokeAllUserTokens(thingsUser);

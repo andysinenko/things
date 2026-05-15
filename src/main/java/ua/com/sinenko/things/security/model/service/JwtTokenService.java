@@ -12,10 +12,11 @@ import ua.com.sinenko.things.security.model.entity.ThingsUser;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+
 import static ua.com.sinenko.things.security.filter.Constants.JWT_ISSUER;
+
 
 @Service
 public class JwtTokenService {
@@ -35,65 +36,52 @@ public class JwtTokenService {
     }
 
     public String generateToken(ThingsUser thingsUser) {
-        logger.info("! JWT_KEY in JwtTokenService {}", jwtKey);
-        logger.info("");
-        Key secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
-        return Jwts
-                .builder()
-                .claims(new HashMap<>())
-                .issuer(JWT_ISSUER)
-                .subject(thingsUser.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(secretKey)
-                .compact();
+        return buildToken(thingsUser, expiration);
     }
 
     public String generateRefreshToken(ThingsUser thingsUser) {
-        Key secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
-        return  Jwts
-                .builder()
+        return buildToken(thingsUser, refreshExpiration);
+    }
+
+    private String buildToken(ThingsUser thingsUser, long ttlMs) {
+        SecretKey secretKey = getSecretKey();
+        return Jwts.builder()
                 .claims(new HashMap<>())
                 .issuer(JWT_ISSUER)
                 .subject(thingsUser.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                .expiration(new Date(System.currentTimeMillis() + ttlMs))
                 .signWith(secretKey)
                 .compact();
     }
 
+    public boolean isTokenValid(String username, String token) {
+        String subject = getSubjectFromToken(token);
+        return username.equals(subject) && !isTokenExpired(token);
+    }
+
     public boolean isTokenExpired(String token) {
-        SecretKey secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration().before(new Date());
+        return extractExpiration(token).before(new Date());
     }
 
     public String getSubjectFromToken(String token) {
-        SecretKey secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
-
-    }
-
-    public boolean isTokenValid(String userName, String token) {
-        var subject =getSubjectFromToken(token);
-        return (userName.equals(subject)) && !isTokenExpired(token);
+        return getClaims(token).getPayload().getSubject();
     }
 
     public Jws<Claims> getClaims(String jwtToken) {
-        SecretKey secretKey = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
-
         return Jwts.parser()
-                .verifyWith(secretKey)
+                .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(jwtToken);
+    }
+
+    private Date extractExpiration(String token) {
+        return getClaims(token).getPayload().getExpiration();
+    }
+
+    private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(
+                jwtKey.getBytes(StandardCharsets.UTF_8)
+        );
     }
 }
