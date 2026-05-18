@@ -25,11 +25,12 @@ public class AuthorMapper {
     }
 
     public static Author requestToEntity(AuthorRequest authorRequest) {
-        if(authorRequest != null)
-            return Author.builder()
-                    .name(authorRequest.name())
-                    .note(authorRequest.note())
-                    .build();
+        if(authorRequest != null) {
+            Author author = new Author();
+            author.setName(authorRequest.name());
+            author.setNote(authorRequest.note());
+            return author;
+        }
         return null;
     }
 

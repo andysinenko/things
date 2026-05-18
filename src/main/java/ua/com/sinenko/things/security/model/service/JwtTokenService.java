@@ -13,7 +13,7 @@ import ua.com.sinenko.things.security.model.entity.ThingsUser;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import static ua.com.sinenko.things.security.filter.Constants.JWT_ISSUER;
 
@@ -45,8 +45,12 @@ public class JwtTokenService {
 
     private String buildToken(ThingsUser thingsUser, long ttlMs) {
         SecretKey secretKey = getSecretKey();
-        return Jwts.builder()
-                .claims(new HashMap<>())
+        String authorities = thingsUser.getAuthorities().stream()
+                .map(a -> a.getName())
+                .collect(Collectors.joining(","));
+
+    return Jwts.builder()
+                .claim("authorities", authorities)
                 .issuer(JWT_ISSUER)
                 .subject(thingsUser.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))

@@ -30,10 +30,7 @@ public class AuthorController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthorResponse.class)))
     @GetMapping
     public ResponseEntity<List<AuthorResponse>> getAllBooks() {
-        var authors = authorService.getAllAuthors();
-        var authorDtos = authors.stream().map(AuthorMapper::entityToResponse).toList();
-
-        return new ResponseEntity<>(authorDtos, HttpStatus.OK);
+        return new ResponseEntity<>(authorService.getAllAuthors(), HttpStatus.OK);
     }
 
     @Operation(summary = "New author", description = "Create a new author")

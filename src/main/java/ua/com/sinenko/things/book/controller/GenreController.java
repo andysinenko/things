@@ -41,9 +41,6 @@ public class GenreController {
     )
     @GetMapping
     public ResponseEntity<List<GenreResponse>> getAllGenres() {
-        var genreList = genreService.getAllGenres();
-        var genresDtos = genreList.stream().map(GenreMapper::entityToDto).toList();
-
-        return new ResponseEntity<>(genresDtos, HttpStatus.OK);
+        return new ResponseEntity<>(genreService.getAllGenres(), HttpStatus.OK);
     }
 }

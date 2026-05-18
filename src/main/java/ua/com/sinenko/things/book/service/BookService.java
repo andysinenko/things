@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,9 +41,18 @@ public class BookService {
     private final SeriesRepository seriesRepository;
     private final PlaceRepository placeRepository;
 
+
+    @Transactional(readOnly = true)
     public Page<Book> getAllBooks(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return bookRepository.findAll(pageable);
+        Page<Book> page = bookRepository.findAllPaged(pageable);
+        List<Long> ids = page.getContent().stream()
+                .map(Book::getId)
+                .toList();
+
+        List<Book> booksWithAuthors = bookRepository.findAllWithAuthorsByIds(ids);
+
+        return new PageImpl<>(booksWithAuthors, pageable, page.getTotalElements());
     }
 
     public Book getBookById(Long id) {
@@ -85,7 +95,7 @@ public class BookService {
 
     private List<Author> getAuthors(List<AuthorResponse> authorResponses) {
         logger.info("!!! authorDtos {}", authorResponses);
-        if(authorResponses != null) {
+        if (authorResponses != null) {
             List<String> authorIds = authorResponses.stream().map(e -> e.name()).collect(Collectors.toList());
             List<Author> authors = authorRepository.findByNameIn(authorIds);
             return authors;

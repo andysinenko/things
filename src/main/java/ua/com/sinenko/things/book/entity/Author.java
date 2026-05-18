@@ -3,6 +3,7 @@ package ua.com.sinenko.things.book.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +12,12 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "authors", schema="things")
-public class Author {
+public class Author implements Serializable {
     @Id
     @SequenceGenerator(
             name = "author_sequence",

@@ -18,10 +18,8 @@ import ua.com.sinenko.things.security.model.dto.AuthenticationResponse;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.entity.Authority;
-import ua.com.sinenko.things.security.model.entity.JwtTokenEntity;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
 import ua.com.sinenko.things.security.model.repository.AuthorityRepository;
-import ua.com.sinenko.things.security.model.repository.JwtTokenRepository;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 
 import java.io.IOException;
@@ -38,21 +36,9 @@ public class AuthService {
     private final ThingsUserRepository userRepository;
     private final AuthorityRepository authorityRepository;
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenRepository jwtTokenRepository;
+    //private final JwtTokenRepository jwtTokenRepository;
 
-    private void revokeAllUserTokens(ThingsUser user) {
-        var validUserTokens = jwtTokenRepository.findAllValidTokenByUserAndRevokedFalseAndExpiredFalse(user);
-
-        if (validUserTokens != null && !validUserTokens.isEmpty()) {
-            validUserTokens.forEach(token -> {
-                token.setExpired(true);
-                token.setRevoked(true);
-            });
-            jwtTokenRepository.saveAll(validUserTokens);
-        }
-    }
-
-    private void saveToken(ThingsUser user, String jwtToken) {
+    /*private void saveToken(ThingsUser user, String jwtToken) {
         JwtTokenEntity jwtTokenEntity = JwtTokenEntity.builder()
                 .user(user)
                 .token(jwtToken)
@@ -60,7 +46,7 @@ public class AuthService {
                 .revoked(false)
                 .build();
         jwtTokenRepository.save(jwtTokenEntity);
-    }
+    }*/
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -86,8 +72,6 @@ public class AuthService {
                     .orElseThrow(() -> new UserExistsException("User doesn't exists"));
             if (jwtTokenService.isTokenValid(userName, refreshToken)) {
                 var accessToken = jwtTokenService.generateToken(thingsUser);
-                revokeAllUserTokens(thingsUser);
-                saveToken(thingsUser, accessToken);
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
@@ -129,7 +113,6 @@ public class AuthService {
         var savedUser = userRepository.save(user);
         var jwtToken = jwtTokenService.generateToken(savedUser);
         var refreshToken = jwtTokenService.generateRefreshToken(user);
-        saveToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -149,16 +132,10 @@ public class AuthService {
                 .orElseThrow();
         var jwtToken = jwtTokenService.generateToken(thingsUser);
         var refreshToken = jwtTokenService.generateRefreshToken(thingsUser);
-        revokeAllUserTokens(thingsUser);
-        saveToken(thingsUser, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
-    }
-
-    public JwtTokenEntity findByToken(String jwt) {
-        return jwtTokenRepository.findByToken(jwt);
     }
 }
 

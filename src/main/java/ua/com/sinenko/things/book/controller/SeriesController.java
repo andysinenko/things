@@ -40,9 +40,6 @@ public class SeriesController {
     )
     @GetMapping
     public ResponseEntity<List<SeriesResponse>> getAllSeries() {
-        var seriesList = seriesService.getAllSeries();
-        var seriesDtos = seriesList.stream().map(SeriesMapper::entityToDto).toList();
-
-        return new ResponseEntity<>(seriesDtos, HttpStatus.OK);
+        return new ResponseEntity<>(seriesService.getAllSeries(), HttpStatus.OK);
     }
 }

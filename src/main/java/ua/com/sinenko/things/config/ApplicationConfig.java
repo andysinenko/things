@@ -1,6 +1,7 @@
 package ua.com.sinenko.things.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,13 +13,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
 public class ApplicationConfig {
-    @Autowired
     private ThingsUserRepository thingsUserRepository;
+
+    public ApplicationConfig(ThingsUserRepository thingsUserRepository) {
+        this.thingsUserRepository = thingsUserRepository;
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -33,5 +38,15 @@ public class ApplicationConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public CaffeineCache authorsCache() {
+        return new CaffeineCache("authors",
+                Caffeine.newBuilder()
+                        .maximumSize(500)
+                        .expireAfterWrite(Duration.ofHours(1))
+                        .refreshAfterWrite(Duration.ofMinutes(5))
+                        .build(key -> /* loader */ null));
     }
 }

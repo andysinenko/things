@@ -1,19 +1,27 @@
 package ua.com.sinenko.things.book.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import ua.com.sinenko.things.book.dto.AuthorMapper;
+import ua.com.sinenko.things.book.dto.AuthorResponse;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.repository.AuthorRepository;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class AuthorService {
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
+    @Cacheable("authors")
+    public List<AuthorResponse> getAllAuthors() {
+        return authorRepository.findAll()
+                .stream()
+                .map(AuthorMapper::entityToResponse)
+                .toList();
     }
 
     public Author getAuthorById(Long id) {
