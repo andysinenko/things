@@ -33,4 +33,20 @@ public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSort
 
     @Query("SELECT b FROM Book b LEFT JOIN FETCH b.authors WHERE b.id IN :ids")
     List<Book> findAllWithAuthorsByIds(@Param("ids") List<Long> ids);
+
+    // Single query fetching everything needed
+    @Query(value = """
+    SELECT DISTINCT b FROM Book b
+    LEFT JOIN FETCH b.authors
+    LEFT JOIN FETCH b.genre
+    LEFT JOIN FETCH b.series
+    LEFT JOIN FETCH b.place
+    WHERE b.id IN :ids
+    """)
+    List<Book> findAllWithAssociationsByIds(@Param("ids") List<Long> ids);
+
+    // Lightweight paged query — only scalar data, no associations
+    @Query(value = "SELECT b.id FROM Book b",
+            countQuery = "SELECT COUNT(b.id) FROM Book b")
+    Page<Long> findAllIds(Pageable pageable);
 }
