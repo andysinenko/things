@@ -12,10 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.com.sinenko.things.tool.dto.*;
 import ua.com.sinenko.things.tool.service.ToolService;
 import ua.com.sinenko.things.tool.service.VendorService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Tools controller", description = "Operations with tools")
 public class ToolController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ToolController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ToolController.class);
 
     private final ToolService toolService;
     private final VendorService vendorService;
@@ -33,11 +35,7 @@ public class ToolController {
     @ApiResponse(responseCode = "200", description = "Success")
     @GetMapping
     public ResponseEntity<List<ToolResponse>> getAllTools() {
-        LOGGER.info("get all tools");
-        var tools = toolService.getAllTools();
-        var toolsDto = ToolMapper.entitiesToResponses(tools);
-
-        return new ResponseEntity<>(toolsDto, HttpStatus.OK);
+        return ResponseEntity.ok(toolService.getAllTools());
     }
 
     @Operation(summary = "New book", description = "Create a new book")
@@ -47,8 +45,13 @@ public class ToolController {
     @ApiResponse(responseCode = "201", description = "Tool created successfully")
     @PostMapping
     public ResponseEntity<Void> addTool(@RequestBody ToolRequest toolRequest) {
-        toolService.saveTool(toolRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        var toolResponse = toolService.saveTool(toolRequest);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(toolResponse.id())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Change tool", description = "Change tool")
@@ -58,14 +61,20 @@ public class ToolController {
     @ApiResponse(responseCode = "201", description = "Book changed successfully")
     @PutMapping("/{id}")
     public ResponseEntity<ToolResponse> updateTool(@Parameter(description = "tool's id", example = "54", required = true) @PathVariable Long id, @RequestBody ToolRequest toolRequest) {
-        var tool = toolService.updateTool(id, toolRequest);
-        var toolResponse = ToolMapper.entityToResponse(tool);
-        return new ResponseEntity<>(toolResponse, HttpStatus.CREATED);
+        var toolResponse = toolService.updateTool(id, toolRequest);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(toolResponse.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(toolResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ToolResponse> getToolById(@PathVariable("id") String id) {
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    public ResponseEntity<Void> getToolById(@PathVariable("id") String id) {
+        //todo implement!
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

@@ -1,0 +1,7 @@
+mvn clean dependency:purge-local-repository
+
+psql -c "\du"
+psql -c "CREATE ROLE postgres WITH SUPERUSER CREATEDB LOGIN PASSWORD 'postgres';"
+psql -c "ALTER ROLE postgres WITH LOGIN PASSWORD 'postgres';"
+psql -U postgres -c "CREATE DATABASE things_test;"
+psql -U postgres -d things_test -c "CREATE SCHEMA things;"

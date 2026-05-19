@@ -3,6 +3,7 @@ package ua.com.sinenko.things.tool.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.sinenko.things.book.dto.AuthorMapper;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.common.exception.PlaceNotExistsException;
 import ua.com.sinenko.things.common.exception.SeriesNotExistsException;
@@ -24,14 +25,18 @@ public class ToolService {
     private final VendorRepository vendorRepository;
     private final PlaceRepository placeRepository;
 
-    public List<Tool> getAllTools() {
-        return toolsRepository.findAll();
+    public List<ToolResponse> getAllTools() {
+        return toolsRepository.findAll()
+                .stream()
+                .map(ToolMapper::entityToResponse)
+                .toList();
     }
 
     @Transactional
-    public void saveTool(ToolRequest toolRequest) {
+    public ToolResponse saveTool(ToolRequest toolRequest) {
         var tool = getFullfilledToolEntity(toolRequest);
-        toolsRepository.save(tool);
+        tool = toolsRepository.save(tool);
+        return  ToolMapper.entityToResponse(tool);
     }
 
     @Transactional
@@ -50,7 +55,7 @@ public class ToolService {
     }
 
     @Transactional
-    public Tool updateTool(Long id, ToolRequest toolRequest) {
+    public ToolResponse updateTool(Long id, ToolRequest toolRequest) {
         var tool = toolsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tool not found"));
 
@@ -68,7 +73,7 @@ public class ToolService {
         tool.setDateOfPurchasing(toolRequest.dateOfPurchasing());
         tool.setDescription(toolRequest.description());
 
-        return toolsRepository.save(tool);
+        return ToolMapper.entityToResponse(toolsRepository.save(tool));
     }
 
     private Tool getFullfilledToolEntity(ToolRequest toolRequest) {

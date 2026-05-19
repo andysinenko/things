@@ -36,7 +36,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle("Resource Not Found");
         errorDescription.setDetail(resourceNotFoundException.getMessage());
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 
     @ExceptionHandler(UserExistsException.class)
@@ -47,7 +47,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle(userExistsException.getMessage());
         errorDescription.setDetail(userExistsException.getMessage());
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 
     @ExceptionHandler({BadCredentialsException.class})
@@ -58,7 +58,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle("Username or password is incorrect");
         errorDescription.setDetail(badCredentialsException.getMessage());
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 
     @ExceptionHandler({SQLIntegrityConstraintViolationException.class})
@@ -69,7 +69,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle("Resource Not Found");
         errorDescription.setDetail(sqlIntegrityConstraintViolationException.getMessage());
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.internalServerError().body(errorDescription);
     }
 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status) {
@@ -79,7 +79,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle("Validation Errors");
         errorDescription.setDetail("Input validation failed");
 
-        return new ResponseEntity<>(errorDescription, headers, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status) {
@@ -89,7 +89,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle("Message Not Readable");
         errorDescription.setDetail(ex.getMessage());
 
-        return new ResponseEntity<>(errorDescription, headers, status);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 
 
@@ -107,7 +107,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle("Method not supported");
         errorDescription.setDetail(builder.toString());
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 
 
@@ -118,7 +118,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle(ex.getVariableName() + " Missing Path Variable");
         errorDescription.setDetail(ex.getMessage());
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 
 
@@ -129,7 +129,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         errorDescription.setTitle("Internal Server Error");
         errorDescription.setDetail(ex.getMessage());
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.internalServerError().body(errorDescription);
     }
 
     @ExceptionHandler({BaseException.class})
@@ -142,6 +142,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
         logger.error("Unexpected error occurred.", ex);
 
-        return new ResponseEntity<>(errorDescription, null, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorDescription);
     }
 }

@@ -5,17 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ua.com.sinenko.things.security.model.dto.AuthorityDto;
 import ua.com.sinenko.things.security.model.dto.UserDto;
 import ua.com.sinenko.things.security.model.entity.Authority;
-import ua.com.sinenko.things.security.model.entity.JwtTokenEntity;
 import ua.com.sinenko.things.security.model.entity.ThingsUser;
 import ua.com.sinenko.things.security.model.repository.AuthorityRepository;
-import ua.com.sinenko.things.security.model.repository.JwtTokenRepository;
 import ua.com.sinenko.things.security.model.repository.ThingsUserRepository;
 
 import java.util.*;
@@ -40,9 +36,6 @@ class AuthServiceTest {
     private JwtTokenService jwtTokenService;
 
     @Mock
-    private JwtTokenRepository jwtTokenRepository;
-
-    @Mock
     ThingsUserRepository userRepository;
 
     @Mock
@@ -51,7 +44,7 @@ class AuthServiceTest {
     @BeforeEach
     void setDataBeforeTests() {
         jwtTokenService = new JwtTokenService( refreshExpiration, expiration, KEY);
-        authService = new AuthService(jwtTokenService, userRepository, authorityRepository, null, jwtTokenRepository);
+        authService = new AuthService(jwtTokenService, userRepository, authorityRepository, null);
     }
 
     @Test
@@ -82,7 +75,6 @@ class AuthServiceTest {
         UserDto userDto = UserDto.builder().username("test").password("test").email("test").firstName("test").lastName("test").phoneNumber("test").authorities(List.of(AuthorityDto.builder().id(2L).name("ROLE_USER").build())).build();
 
         when(userRepository.save(any(ThingsUser.class))).thenReturn(getUser());
-        when(jwtTokenRepository.save(any(JwtTokenEntity.class))).thenReturn(JwtTokenEntity.builder().user(getUser()).expired(false).revoked(false).token("eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTaW5lbmtvLmNvbS51YSIsInN1YiI6InRlc3R1c2VyIiwiaWF0IjoxNzMxMjUyMDI1LCJleHAiOjE3MzEzMzg0MjV9.TjjE3DgIipNJ9bOljsfc8yYojdPERK_sEw74dVROILc").build());
 
         var registredUser = authService.register(userDto);
 
