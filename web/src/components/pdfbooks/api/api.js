@@ -1,6 +1,6 @@
 import axios from "axios";
 import {addPdfBookSuccess, deletePdfBookFailure, deletePdfBookSuccess, fetchPdfBooksFailure, fetchPdfBooksStart, fetchPdfBooksSuccess} from "../reducer/PdfBooksSlice";
-import {fetchCategoriesError, fetchCategoriesSuccess} from "../reducer/CategoriesSlice";
+import {fetchCategoriesError, fetchCategoriesStart, fetchCategoriesSuccess} from "../reducer/CategoriesSlice";
 import {fetchPdfAuthorsFailure, fetchPdfAuthorsStart, fetchPdfAuthorsSuccess} from "../reducer/PdfAuthorsSlice";
 import {fetchSeriesStart} from "../../books/reducer/SeriesSlice";
 import store from "../../../store/storeConfig";
@@ -19,7 +19,7 @@ export const fetchPdfBooks= (pageNumber, pageSize) => async (dispatch) => {
 };
 
 export const fetchCategories = () => async (dispatch) => {
-    dispatch(fetchSeriesStart());
+    dispatch(fetchCategoriesStart());
     try {
         const response = await axios.get("http://localhost:8080/api/v1/pdfbooks/categories");
         if (response.status === 200) {

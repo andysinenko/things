@@ -47,6 +47,8 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
+        default_batch_fetch_size: 50
+        format_sql: false
         generate_statistics: false
         connection:
           provider_disables_autocommit: true
@@ -64,6 +66,8 @@ things:
 logging:
   level:
     ua.com.sinenko.things: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 

@@ -175,7 +175,6 @@
             <column name="author_id" type="bigint">
                 <constraints nullable="true" foreignKeyName="fk_books_authors2_type" />
             </column>
-            <column name="description" type="varchar2(512)"/>
         </createTable>
     </changeSet>
 

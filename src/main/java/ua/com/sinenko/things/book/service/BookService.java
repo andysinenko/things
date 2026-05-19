@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.sinenko.things.book.dto.AuthorResponse;
 import ua.com.sinenko.things.book.dto.BookRequest;
 import ua.com.sinenko.things.book.dto.BookMapper;
+import ua.com.sinenko.things.book.dto.BookResponse;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.entity.Genre;
@@ -28,9 +29,6 @@ import ua.com.sinenko.things.place.repository.PlaceRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -52,27 +50,11 @@ public class BookService {
         return bookRepository.count();
     }
 
-    @Cacheable(value = "booksPage", key = "#pageNumber + '-' + #pageSize")
     @Transactional(readOnly = true)
-    public Page<Book> getAllBooks(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("id"));
-
-        Page<Long> idsPage = bookRepository.findAllIds(pageable);
-        if (idsPage.isEmpty()) {
-            return Page.empty(pageable);
-        }
-
-        List<Book> books = bookRepository.findAllWithAssociationsByIds(idsPage.getContent());
-
-        Map<Long, Book> bookMap = books.stream()
-                .collect(Collectors.toMap(Book::getId, Function.identity()));
-        List<Book> ordered = idsPage.getContent()
-                .stream()
-                .map(bookMap::get)
-                .filter(Objects::nonNull)
-                .toList();
-
-        return new PageImpl<>(ordered, pageable, idsPage.getTotalElements());
+    @Cacheable(value = "booksPage", key = "#pageNumber + '-' + #pageSize + '-' + #sort")
+    public Page<BookResponse> getAllBooksOld(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return bookRepository.findAll(pageable).map(BookMapper::entityToResponse);
     }
 
     public Book getBookById(Long id) {

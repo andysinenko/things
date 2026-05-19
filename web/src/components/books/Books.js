@@ -23,9 +23,9 @@ export const Books = () => {
     const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
     const dispatch = useDispatch();
 
-    const { books, loading, error } = useSelector(state => state.booksReducer.books);
-    const total      = useSelector(state => state.booksReducer.books.total);
-    const pageNumber = useSelector(state => state.booksReducer.books.pageNumber);
+    const { books, loading, error } = useSelector(state => state.booksReducer);
+    const total = useSelector(state => state.booksReducer.total);
+    const pageNumber =  useSelector(state => state.booksReducer.pageNumber);
     const pageSize = 15;
 
     const { series  } = useSelector(state => state.seriesReducer);
@@ -103,7 +103,8 @@ export const Books = () => {
         }
     };
 
-    const onChagePage = (pageNumber, pageSize) => {
+    const onChangePage = (pageNumber, pageSize) => {
+        console.log("page Number: {}, page size: {}", pageNumber, pageSize);
         dispatch(fetchBooks({ pageNumber, pageSize }));
     };
 
@@ -159,7 +160,7 @@ export const Books = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {books.length !== 0 ? books.map((book) => (
+                    {books && books.length !== 0 ? books.map((book) => (
                         <tr key={book.id}>
                             <td>{book.id}</td>
                             <td>{book.title}</td>
@@ -192,7 +193,12 @@ export const Books = () => {
                     )}
                     </tbody>
                 </table>
-                <Paginator onChagePage={onChagePage} total={total} pageSize={pageSize} />
+                <Paginator
+                    pageNumber={pageNumber}
+                    totalPages={total}
+                    pageSize={pageSize}
+                    onChangePage={onChangePage}
+                />
             </section>
 
             <BookModal

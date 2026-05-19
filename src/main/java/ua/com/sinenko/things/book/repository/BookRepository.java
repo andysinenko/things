@@ -24,7 +24,12 @@ public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSort
 
     List<Book> findByTitle(String title);
 
-    @EntityGraph(attributePaths = {"genre", "series", "place", "authors"})
+    @Query(value = """
+    SELECT DISTINCT b FROM Book b
+    LEFT JOIN FETCH b.genre
+    LEFT JOIN FETCH b.series
+    LEFT JOIN FETCH b.place
+    """)
     Page<Book> findAll(Pageable pageable);
 
     @Query(value = "SELECT b FROM Book b",

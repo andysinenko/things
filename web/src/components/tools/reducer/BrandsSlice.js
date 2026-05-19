@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { ENDPOINTS } from "@/config/api";
+import { ENDPOINTS } from "../../../config/api";
 
 export const fetchBrands = createAsyncThunk(
     "brands/fetchAll",

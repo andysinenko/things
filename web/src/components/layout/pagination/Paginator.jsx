@@ -1,22 +1,26 @@
-import { useState } from "react";
+
 import './paginator.css';
 
-export const Paginator = ({ onChagePage, total, pageSize }) => {
-    const [pageNumber, setPageNumber] = useState(0);
+export const Paginator = ({ pageNumber, totalPages, pageSize, onChangePage }) => {
+
+    /*const increment = () => {
+        if (pageNumber < totalPages - 1) {
+            const newPage = pageNumber + 1;
+            onChangePage(newPage, pageSize);
+        }
+    };*/
 
     const increment = () => {
-        if (pageNumber < total - 1) {
+        if (pageNumber < totalPages - 1) {
             const newPage = pageNumber + 1;
-            setPageNumber(newPage);
-            onChagePage(newPage, pageSize);
+            onChangePage(newPage, pageSize);
         }
     };
 
     const decrement = () => {
         if (pageNumber > 0) {
             const newPage = pageNumber - 1;
-            setPageNumber(newPage);
-            onChagePage(newPage, pageSize);
+            onChangePage(newPage, pageSize);
         }
     };
 
@@ -26,8 +30,7 @@ export const Paginator = ({ onChagePage, total, pageSize }) => {
                 <button
                     type="button"
                     className="th-main-button"
-                    onClick={decrement}
-                >
+                    onClick={decrement}>
                     {pageNumber > 0 ? "👈" : "✋"}
                 </button>
             </div>
@@ -37,8 +40,7 @@ export const Paginator = ({ onChagePage, total, pageSize }) => {
                     value={pageNumber}
                     onChange={(e) => {
                         const newPage = Number(e.target.value) || 0;
-                        setPageNumber(newPage);
-                        onChagePage(newPage, pageSize);
+                        onChangePage(newPage, pageSize);
                     }}
                 />
             </div>
@@ -48,7 +50,7 @@ export const Paginator = ({ onChagePage, total, pageSize }) => {
                     className="th-main-button"
                     onClick={increment}
                 >
-                    {pageNumber < total - 1 ? "👉" : "🤚"}
+                    {pageNumber < totalPages - 1 ? "👉" : "🤚"}
                 </button>
             </div>
         </div>

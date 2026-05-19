@@ -64,9 +64,9 @@ public class BookMapper {
         return null;
     }
 
-    public static BookPageResponse entityToResponse(Page<Book> pageEntity) {
+    public static BookPageResponse entityToPagebleResponse(Page<BookResponse> pageEntity) {
             return BookPageResponse.builder()
-                .books(pageEntity.getContent().stream().map(BookMapper::entityToResponse).toList())
+                .books(pageEntity.getContent())
                 .pageNumber(pageEntity.getNumber())
                 .pageSize(pageEntity.getSize())
                 .total(pageEntity.getTotalPages())

@@ -2,6 +2,7 @@ package ua.com.sinenko.things.book.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import ua.com.sinenko.things.place.entity.Place;
 
 import java.time.LocalDate;
@@ -44,6 +45,7 @@ public class Book {
     @ToString.Exclude
     @Builder.Default
     @EqualsAndHashCode.Exclude
+    @BatchSize(size = 50)
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "books_authors",

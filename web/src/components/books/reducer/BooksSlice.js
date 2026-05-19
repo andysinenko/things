@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { ENDPOINTS } from "@/config/api";
+import { ENDPOINTS } from "../../../config/api";
 
 export const fetchBooks = createAsyncThunk(
     "books/fetchAll",
@@ -61,16 +61,16 @@ const booksSlice = createSlice({
     },
     reducers: {
         sortBooksById(state) {
-            state.books.books.sort((a, b) => a.id - b.id);
+            state.books.sort((a, b) => a.id - b.id);
         },
         sortBooksByIdReverse(state) {
-            state.books.books.sort((a, b) => b.id - a.id);
+            state.books.sort((a, b) => b.id - a.id);
         },
         sortBooksByTitle(state) {
-            state.books.books = [...state.books.books].sort((a, b) => b.id - a.id);
+            state.books = [...state.books].sort((a, b) => a.title.localeCompare(b.title));
         },
         sortBooksByGenre(state) {
-            state.books.books.sort((a, b) => a.genre.name.localeCompare(b.genre.name));
+            state.books.sort((a, b) => a.genre.name.localeCompare(b.genre.name));
         },
     },
     extraReducers: (builder) => {
@@ -82,7 +82,9 @@ const booksSlice = createSlice({
             })
             .addCase(fetchBooks.fulfilled, (state, action) => {
                 state.loading = false;
-                state.books = action.payload;
+                state.books = action.payload.books;
+                state.total = action.payload.total;
+                state.pageNumber = action.payload.pageNumber;
             })
             .addCase(fetchBooks.rejected, (state, action) => {
                 state.loading = false;
@@ -91,7 +93,7 @@ const booksSlice = createSlice({
 
             // addNewBook
             .addCase(addNewBook.fulfilled, (state, action) => {
-                state.books.books.push(action.payload);
+                state.books.push(action.payload);
             })
             .addCase(addNewBook.rejected, (state, action) => {
                 state.error = action.payload;
@@ -108,7 +110,7 @@ const booksSlice = createSlice({
 
             // deleteBook
             .addCase(deleteBook.fulfilled, (state, action) => {
-                state.books.books = state.books.books.filter(b => b.id !== action.payload);
+                state.books = state.books.filter(b => b.id !== action.payload);
             })
             .addCase(deleteBook.rejected, (state, action) => {
                 state.error = action.payload;
