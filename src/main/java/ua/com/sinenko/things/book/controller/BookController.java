@@ -53,14 +53,7 @@ public class BookController {
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int pageNumber,
             @Parameter(description = "Pages size") @RequestParam(defaultValue = "20") int pageSize
     ) {
-        var booksPage = bookService.getAllBooksOld(pageNumber, pageSize);
-
-        logger.info("Returning {} books", booksPage);
-        logger.info("booksPage.getPageable().getPageNumber() {} books", booksPage.getPageable().getPageNumber());
-        logger.info("booksPage.getPageable().getPageNumber() {}", booksPage.getPageable().getPageNumber());
-        logger.info("booksPage.getPageable().getPageSize() {}", booksPage.getPageable().getPageSize());
-
-        return ResponseEntity.ok(BookMapper.entityToPagebleResponse(booksPage));
+        return ResponseEntity.ok(bookService.getAllBooksOld(pageNumber, pageSize));
     }
 
 
@@ -111,7 +104,7 @@ public class BookController {
             )
     })
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponse> getBookById(
+    public ResponseEntity<BookResponse> getOne(
             @Parameter(description = "Book id", example = "42", required = true) @PathVariable Long id) {
         var bookEntities = bookService.getBookById(id);
         var bookDto = BookMapper.entityToDto(bookEntities);

@@ -36,17 +36,6 @@ public class AuthService {
     private final ThingsUserRepository userRepository;
     private final AuthorityRepository authorityRepository;
     private final AuthenticationManager authenticationManager;
-    //private final JwtTokenRepository jwtTokenRepository;
-
-    /*private void saveToken(ThingsUser user, String jwtToken) {
-        JwtTokenEntity jwtTokenEntity = JwtTokenEntity.builder()
-                .user(user)
-                .token(jwtToken)
-                .expired(false)
-                .revoked(false)
-                .build();
-        jwtTokenRepository.save(jwtTokenEntity);
-    }*/
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);

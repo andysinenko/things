@@ -3,16 +3,12 @@ package ua.com.sinenko.things.book.service;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.sinenko.things.book.dto.AuthorResponse;
-import ua.com.sinenko.things.book.dto.BookRequest;
-import ua.com.sinenko.things.book.dto.BookMapper;
-import ua.com.sinenko.things.book.dto.BookResponse;
+import ua.com.sinenko.things.book.dto.*;
 import ua.com.sinenko.things.book.entity.Author;
 import ua.com.sinenko.things.book.entity.Book;
 import ua.com.sinenko.things.book.entity.Genre;
@@ -41,7 +37,6 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final SeriesRepository seriesRepository;
     private final PlaceRepository placeRepository;
-    private final CacheManager cacheManager;
 
 
     @Transactional(readOnly = true)
@@ -52,9 +47,9 @@ public class BookService {
 
     @Transactional(readOnly = true)
     @Cacheable(value = "booksPage", key = "#pageNumber + '-' + #pageSize + '-' + #sort")
-    public Page<BookResponse> getAllBooksOld(int pageNumber, int pageSize) {
+    public BookPageResponse getAllBooksOld(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return bookRepository.findAll(pageable).map(BookMapper::entityToResponse);
+        return BookMapper.entityToPagebleResponse(bookRepository.findAll(pageable).map(BookMapper::entityToResponse));
     }
 
     public Book getBookById(Long id) {
@@ -78,12 +73,13 @@ public class BookService {
     @Transactional
     public Book updateBook(Long id, BookRequest bookRequest) {
         var book = getFullfilledBookEntity(bookRequest);
-        logger.info("Book before updating: {}", book);
+        logger.debug("Book before updating: {}", book);
 
         return bookRepository.saveAndFlush(book);
     }
 
     @Cacheable(value = "booksPage", key = "#pageNumber + '-' + #pageSize")
+    @Transactional(readOnly = true)
     private Book getFullfilledBookEntity(BookRequest bookRequest) {
         List<Author> authors = authorRepository.findAllById(bookRequest.authors());
 
@@ -99,8 +95,8 @@ public class BookService {
         return BookMapper.dtoToEntity(bookRequest, authors, genre, series, place);
     }
 
+    @Transactional(readOnly = true)
     private List<Author> getAuthors(List<AuthorResponse> authorResponses) {
-        logger.info("!!! authorDtos {}", authorResponses);
         if (authorResponses != null) {
             List<String> authorIds = authorResponses.stream().map(e -> e.name()).collect(Collectors.toList());
             List<Author> authors = authorRepository.findByNameIn(authorIds);
@@ -109,22 +105,27 @@ public class BookService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getBooksByTitle(String title) {
         return bookRepository.findByTitle(title);
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getBooksByAuthorName(String name) {
         return bookRepository.findByAuthorsName(name);
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getBooksByGenre(Genre genre) {
         return bookRepository.findBooksByGenre(genre);
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getBooksByYear(LocalDate year) {
         return bookRepository.findByYear(year);
     }
 
+    @Transactional(readOnly = true)
     public Book getBooksById(Long id) {
         return bookRepository.findById(id).orElse(new Book());
     }

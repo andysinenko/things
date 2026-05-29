@@ -6,8 +6,8 @@ import lombok.Builder;
 public record PdfBookResponse(
         Long id,
         String title,
-        CategoryDto category,
-        PdfAuthorDto author,
+        CategoryResponse category,
+        PdfAuthorResponse author,
         String yearOfRelease,
         String language,
         Integer numberOfPages

@@ -1,10 +1,13 @@
 debug: false
 server:
+  shutdown: graceful
   compression:
     enabled: true
     mime-types: application/json
     min-response-size: 1024
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
   cache:
     type: caffeine
     caffeine:
@@ -34,7 +37,7 @@ spring:
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 50
+      maximum-pool-size: 300
       minimum-idle: 10
       connection-timeout: 3000
       idle-timeout: 600000
@@ -75,13 +78,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
-      discovery:
-        enabled: on
+        include: health, info
   endpoint:
     shutdown:
       access:
-        unrestricted: true
+        unrestricted: false
       enabled: on
   info:
     env:

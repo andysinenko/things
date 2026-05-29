@@ -1,26 +1,24 @@
 package ua.com.sinenko.things.pdfbook.dto;
 
 import ua.com.sinenko.things.pdfbook.entity.Category;
-
 import java.util.List;
 
 public class CategoryMapper {
 
-    public static Category toEntity(CategoryDto dto) {
+    public static Category toEntity(CategoryRequest request) {
         return Category.builder()
-                .id(dto.id())
-                .name(dto.name())
+                .name(request.name())
                 .build();
     }
 
-    public static CategoryDto toDto(Category entity) {
-        return CategoryDto.builder()
+    public static CategoryResponse toDto(Category entity) {
+        return CategoryResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .build();
     }
 
-    public static List<CategoryDto> toDtoList(List<Category> entityList) {
+    public static List<CategoryResponse> toDtoList(List<Category> entityList) {
         return entityList.stream().map(CategoryMapper::toDto).toList();
     }
 }

@@ -1,6 +1,5 @@
 package ua.com.sinenko.things.security.filter;
 
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -46,13 +45,9 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             String keyEnv = getEnvironment().getProperty(JWT_KEY);
             var key = Keys.hmacShaKeyFor(keyEnv.getBytes(StandardCharsets.UTF_8));
 
-            var claims = Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(jwt)
-                    .getPayload();
-
+            var claims = jwtTokenService.getClaims(jwt);
             String username = claims.getSubject();
+
             String authorities = (String) claims.get("authorities");
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -64,7 +59,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (Exception e) {
-            logger.debug("JWT validation failed: {}", e.getMessage());
+            logger.error("JWT validation failed: {}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);

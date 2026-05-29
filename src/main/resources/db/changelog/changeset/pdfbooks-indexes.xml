@@ -8,15 +8,14 @@
         <createIndex schemaName="things" tableName="pdf_books" indexName="idx_pdf_books_title">
             <column name="title"/>
         </createIndex>
-        <createIndex schemaName="things" tableName="pdf_books" indexName="idx_pdf_books_author">
+        <createIndex schemaName="things" tableName="pdf_books" indexName="idx_pdf_books_author_id">
             <column name="author_id"/>
         </createIndex>
-        <createIndex schemaName="things" tableName="pdf_books" indexName="idx_pdf_books_category">
+        <createIndex schemaName="things" tableName="pdf_books" indexName="idx_pdf_books_category_id">
             <column name="category_id"/>
         </createIndex>
         <createIndex schemaName="things" tableName="pdf_books" indexName="idx_pdf_books_upload_date">
             <column name="upload_date"/>
         </createIndex>
     </changeSet>
-
 </databaseChangeLog>

@@ -7,15 +7,14 @@ import java.util.List;
 
 public class PdfAuthorMapper {
 
-    public static PdfAuthor toEntity(PdfAuthorDto dto) {
+    public static PdfAuthor toEntity(PdfAuthorRequest request) {
         return PdfAuthor.builder()
-                .id(dto.id())
-                .name(dto.name())
+                .name(request.name())
                 .build();
     }
 
-    public static PdfAuthorDto toDto(PdfAuthor entity) {
-        return PdfAuthorDto.builder()
+    public static PdfAuthorResponse toDto(PdfAuthor entity) {
+        return PdfAuthorResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .build();
@@ -29,7 +28,7 @@ public class PdfAuthorMapper {
                 .build();
     }
 
-    public static List<PdfAuthorDto> toDtoList(List<PdfAuthor> entityList) {
+    public static List<PdfAuthorResponse> toDtoList(List<PdfAuthor> entityList) {
         return entityList.stream().map(PdfAuthorMapper::toDto).toList();
     }
 }

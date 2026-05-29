@@ -41,12 +41,12 @@ public class ThLoggerApect {
             }
         }
 
-        logger.info("THLOGGER Before method execution. Class: {}, Method: {}, Annotation value: {}, Parameters: [{}]",
+        logger.debug("THLOGGER Before method execution. Class: {}, Method: {}, Annotation value: {}, Parameters: [{}]",
                 className, methodName, annotation.value(), paramsLog);
 
         Object result = joinPoint.proceed();
 
-        logger.info("THLOGGER After method execution. {} of class {},  Result: {}", methodName, className, result);
+        logger.debug("THLOGGER After method execution. {} of class {},  Result: {}", methodName, className, result);
 
         return result;
     }

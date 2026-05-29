@@ -39,7 +39,6 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String keyEnv = env.getProperty(JWT_KEY);
-        logger.info("! JWT_KEY in Generation filter {}", keyEnv);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {

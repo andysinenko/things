@@ -1,298 +1,355 @@
-html, body, #root {
+/* ─── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  color: #404040;
-  font-size: 12px;
-  font-weight: 400;
-  font-family: helvetica, "Helvetica Neue", "Open Sans", arial, verdana, sans-serif;
-  box-sizing: border-box;
-  background-color: #f9f9f9;
+}
+
+html, body, #root {
   width: 100%;
   height: 100%;
-  display: block;
-  overflow-y: auto;
-  font-family: Lato, sans-serif;
-}
-
-.content-container {
-  position: fixed;
-  top: 75px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow-y: auto;
-  background-color: #f9f9f9;
-  padding: 20px;
-}
-
-.root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  gap: 10px;
-}
-
-.th-main-button {
-  border: none;
-  font-size: inherit;
-  color: #000000;
-  background: rgb(255, 255, 255);
-  cursor: pointer;
-  padding: 10px 20px;
-  display: inline-block;
-  margin: 0px 0px;
-  letter-spacing: 1px;
-  font-weight: 500;
-  outline: none;
-  position: relative;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  transition: all 0.3s;
-  box-shadow: 2px 2px 2px rgba(201, 225, 239, 0.53);
-  border-radius: 4px;
-}
-
-.main-container {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-/*  box-shadow: #332e28 0 0 5px;*/
-  max-height: 90vh;
-  overflow-y: auto;
-  height: 100vh;
-}
-
-.tableContainer {
-  display: block;
-  overflow-y: auto;
-  overflow-x: auto;
-  max-height: 90vh;
-  border: 1px solid #ddd;
-  flex: 1;
-}
-
-.th-buttons-toolbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    border-bottom: 1px solid #e5e7eb;
-    gap: 10px;
-    padding: 0px 20px 10px 10px;
-    position: sticky;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #1a2332;
+  background-color: #f4f5f7;
+  -webkit-font-smoothing: antialiased;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0;
-  table-layout: fixed;
-  border-spacing: 0;
-  background-color: #ffffff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding-bottom: 20px;
-}
-
-.table th,
-.table td {
-  border: 1px solid #e5e7eb;
-  padding: 10px 8px;
-  text-align: center;
-  transition: background-color 0.2s ease;
-}
-
-.tableContainer table thead {
-  position: sticky;
-  top: 0;
-  background: #fff;
-  z-index: 1;
-}
-
-.table thead th {
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 2;
-
-  border: 1px solid #e5e7eb;
-  padding: 12px 8px;
-  text-align: center;
-  transition: background-color 0.2s ease;
-}
-
-.table th:first-child,
-.table td:first-child {
-  width: 100px;
-  font-weight: 600;
-  text-align: left;
-  left: 0;
-  background-color: #ffffff;
-  z-index: 1;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-}
-
-.table th:last-child,
-.table td:last-child {
-  width: 150px;
-  font-weight: 600;
-  background-color: #f9fafb;
-  right: 0;
-  z-index: 1;
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
-}
-
-.table th:not(:first-child):not(:last-child),
-.table td:not(:first-child):not(:last-child) {
-  width: 100px;
-  min-width: 100px;
-}
-
-.table th {
-  background-color: #f3f4f6;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  font-weight: 600;
-  color: #1f2937;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.table th:first-child {
-  z-index: 3;
-}
-
-.table tr:last-child td {
-  font-weight: 600;
-  background-color: #f9fafb;
-}
-
-.table tr:hover td {
-  background-color: #f1f5f9;
-}
-
-.table th:hover {
-  background-color: #e5e7eb;
-  cursor: pointer;
-}
-
-.table-action-btn {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  color: #fff;
-  transition: background-color 0.2s ease;
-  margin: 0 4px;
-}
-
-th:nth-last-child(1),
-td:nth-last-child(1),
-th:nth-last-child(2),
-td:nth-last-child(2) {
-    width: 70px;
-    white-space: nowrap;
-}
-
-.edit-btn {
-  background-color: #f9f9f9;
-}
-
-.edit-btn:hover {
-  background-color: #c6c5c5;
-}
-
-.delete-btn {
-  background-color: #fff0;
-}
-
-.delete-btn:hover {
-  background-color: #c6c5c5;
-}
-
-.thbtn-add {
-  border: 1px solid rgba(115, 129, 136, 0.77);
-  font-size: inherit;
-  color: rgb(0, 0, 0);
-  background-color: #ffffff;
-  cursor: pointer;
-  padding: 10px 20px;
-  display: inline-block;
-  margin: 5px;
-  letter-spacing: 1px;
-  font-weight: 600;
-  outline: none;
-  position: relative;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  transition: all 0.3s;
-  border-radius: 0px;
-}
-
-.thbtn-add:hover {
-  background-color: rgba(216, 227, 234, 0.53);
-}
-
-.thbtn-add:active {
-  color: rgb(0, 0, 0);
-  background-color: #ffffff;
-  transform: translateY(3px);
-}
-
-.thbtn-del {
-  border: 1px solid rgba(115, 129, 136, 0.77);
-  font-size: inherit;
-  color: rgb(0, 0, 0);
-  background-color: rgba(201, 225, 239, 0.53);
-  cursor: pointer;
-  padding: 10px 20px;
-  display: inline-block;
-  margin: 5px;
-  letter-spacing: 1px;
-  font-weight: 600;
-  outline: none;
-  position: relative;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  transition: all 0.3s;
-  border-radius: 0px;
-}
-
-.thbtn-del:hover {
-  background-color: rgba(157, 173, 182, 0.53);
-}
-
-.thbtn-del:active {
-  color: rgb(255, 255, 255);
-  background-color: rgba(201, 225, 239, 0.53);
-  transform: translateY(3px);
+  font-family: "SF Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 a {
   text-decoration: none;
-  color: white;
-  padding: 5px;
-  margin: 5px;
-  display: inline-block;
-  font-size: 14px;
+  color: inherit;
 }
 
+/* ─── Layout ────────────────────────────────────────────── */
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-container {
+  position: fixed;
+  top: 52px; /* высота навбара */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background-color: #f4f5f7;
+  padding: 16px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0;
+}
+
+/* ─── Toolbar ───────────────────────────────────────────── */
+.th-buttons-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e8eaed;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: #e8eaed;
+  margin: 0 2px;
+}
+
+/* ─── Buttons ───────────────────────────────────────────── */
+
+/* Базовая кнопка — используй для любых кнопок тулбара */
+.th-main-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a2332;
+  background: #ffffff;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  outline: none;
+  white-space: nowrap;
+}
+
+.th-main-button:hover {
+  background: #f4f5f7;
+  border-color: #b0b8c4;
+}
+
+.th-main-button:active {
+  background: #eaecef;
+}
+
+/* Primary — "Add book" */
+.thbtn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  background: #1a2332;
+  border: 1px solid #1a2332;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  outline: none;
+  white-space: nowrap;
+}
+
+.thbtn-add:hover {
+  background: #253346;
+  border-color: #253346;
+}
+
+.thbtn-add:active {
+  background: #111824;
+}
+
+/* Danger — "Delete book" */
+.thbtn-del {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: #b91c1c;
+  background: #ffffff;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  outline: none;
+  white-space: nowrap;
+}
+
+.thbtn-del:hover {
+  background: #fef2f2;
+  border-color: #f87171;
+}
+
+.thbtn-del:active {
+  background: #fee2e2;
+}
+
+/* ─── Input ─────────────────────────────────────────────── */
 .th-main-input {
-    width: auto;
-    padding: 10px 20px;
-    font-weight: 600;
-    border: solid #c6c5c5 1px ;
-    border-radius: 0px;
+  padding: 7px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #1a2332;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.th-main-input:focus {
+  border-color: #1a2332;
+  box-shadow: 0 0 0 3px rgba(26, 35, 50, 0.1);
+}
+
+/* ─── Table container ───────────────────────────────────── */
+.tableContainer {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 52px - 52px - 32px); /* навбар + тулбар + отступы */
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+/* ─── Table ─────────────────────────────────────────────── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background-color: #ffffff;
+  font-size: 13px;
+}
+
+.table th,
+.table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #f0f1f3;
+  transition: background-color 0.1s ease;
+}
+
+/* Хедер */
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #e8eaed;
+  white-space: nowrap;
+}
+
+.table thead th:first-child {
+  z-index: 3;
+}
+
+.table thead th:hover {
+  background: #f0f1f3;
+  cursor: pointer;
+}
+
+/* Первая колонка (ID / row label) */
+.table th:first-child,
+.table td:first-child {
+  width: 56px;
+  font-weight: 500;
+  color: #9ca3af;
+  position: sticky;
+  left: 0;
+  background: #ffffff;
+  z-index: 1;
+}
+
+.table thead th:first-child {
+  background: #f8f9fa;
+}
+
+/* Колонка actions */
+.table th:last-child,
+.table td:last-child {
+  width: 80px;
+  text-align: center;
+}
+
+/* Строки */
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background-color: #f8f9fa;
+}
+
+/* ─── Action buttons в таблице ──────────────────────────── */
+.table-action-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e8eaed;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #6b7280;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  margin: 0 2px;
+}
+
+.edit-btn:hover {
+  background: #f0f1f3;
+  color: #1a2332;
+  border-color: #d0d5dd;
+}
+
+.delete-btn {
+  background: transparent;
+  border-color: #e8eaed;
+}
+
+.delete-btn:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+/* ─── Genre badges ──────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-roman    { background: #eff6ff; color: #1d4ed8; }
+.badge-fantasy  { background: #fefce8; color: #92400e; }
+.badge-sci      { background: #f0fdf4; color: #166534; }
+
+/* ─── Pagination ────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 16px;
+  border-top: 1px solid #f0f1f3;
+  background: #ffffff;
+}
+
+.pg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #e8eaed;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4b5563;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.pg-btn:hover {
+  background: #f4f5f7;
+  border-color: #d0d5dd;
+}
+
+.pg-btn.active,
+.pg-btn-current {
+  background: #1a2332;
+  color: #ffffff;
+  border-color: #1a2332;
+  font-weight: 500;
+}
+
+.pg-ellipsis {
+  color: #9ca3af;
+  font-size: 13px;
+  padding: 0 4px;
+  user-select: none;
 }

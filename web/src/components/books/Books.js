@@ -19,14 +19,24 @@ const sortMenu = [
 
 const INITIAL_SORT_MENU_TYPE = 'id';
 
+const GenreBadge = ({ name }) => {
+    if (!name) return null;
+    const lower = name.toLowerCase();
+    let cls = "badge";
+    if (lower === "роман")         cls += " badge-roman";
+    else if (lower === "фэнтези")  cls += " badge-fantasy";
+    else if (lower === "фантастика") cls += " badge-sci";
+    return <span className={cls}>{name}</span>;
+};
+
 export const Books = () => {
     const [sortType, setType] = useState(INITIAL_SORT_MENU_TYPE);
     const dispatch = useDispatch();
 
     const { books, loading, error } = useSelector(state => state.booksReducer);
-    const total = useSelector(state => state.booksReducer.total);
-    const pageNumber =  useSelector(state => state.booksReducer.pageNumber);
-    const pageSize = 15;
+    const total      = useSelector(state => state.booksReducer.total);
+    const pageNumber = useSelector(state => state.booksReducer.pageNumber);
+    const pageSize   = 15;
 
     const { series  } = useSelector(state => state.seriesReducer);
     const { genres  } = useSelector(state => state.genresReducer);
@@ -34,7 +44,7 @@ export const Books = () => {
     const { places  } = useSelector(state => state.placeReducer);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalType, setModalType] = useState(null);
+    const [modalType,   setModalType]   = useState(null);
 
     const emptyBook = {
         id: "", title: "", volume: "", genre: {},
@@ -50,85 +60,56 @@ export const Books = () => {
         dispatch(fetchBooks({ pageNumber: 0, pageSize }));
     }, [dispatch]);
 
-    const openModal = (type) => {
-        setModalType(type);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setModalType(null);
-        setSelectedBook(emptyBook);
-    };
+    const openModal  = (type) => { setModalType(type); setIsModalOpen(true); };
+    const closeModal = () => { setIsModalOpen(false); setModalType(null); setSelectedBook(emptyBook); };
 
     const onSortSelect = (event) => {
         setType(event.target.value);
         switch (event.target.value.toLowerCase()) {
-            case "id":      dispatch(sortBooksById());      break;
-            case "title":   dispatch(sortBooksByTitle());   break;
+            case "id":      dispatch(sortBooksById());        break;
+            case "title":   dispatch(sortBooksByTitle());     break;
             case "reverse": dispatch(sortBooksByIdReverse()); break;
-            case "genre":   dispatch(sortBooksByGenre());   break;
+            case "genre":   dispatch(sortBooksByGenre());     break;
             default: break;
         }
     };
 
-    const handleAddBook = () => {
-        setSelectedBook(emptyBook);
-        openModal("add");
-    };
-
-    const handleDelBook = (book) => {
-        setSelectedBook(book);
-        openModal("delete");
-    };
-
-    const handleEditBook = (book) => {
-        setSelectedBook({ ...book });
-        openModal("edit");
-    };
+    const handleAddBook  = ()     => { setSelectedBook(emptyBook); openModal("add"); };
+    const handleDelBook  = (book) => { setSelectedBook(book);      openModal("delete"); };
+    const handleEditBook = (book) => { setSelectedBook({ ...book }); openModal("edit"); };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (modalType === "add") {
-                dispatch(addNewBook(selectedBook));
-            } else if (modalType === "delete") {
-                dispatch(deleteBook(selectedBook.id));
-            } else if (modalType === "edit") {
-                dispatch(updateBook({ id: selectedBook.id, book: selectedBook, pageNumber, pageSize }));
-            }
+            if      (modalType === "add")    dispatch(addNewBook(selectedBook));
+            else if (modalType === "delete") dispatch(deleteBook(selectedBook.id));
+            else if (modalType === "edit")   dispatch(updateBook({ id: selectedBook.id, book: selectedBook, pageNumber, pageSize }));
             closeModal();
-        } catch (error) {
-            console.error("Error:", error);
+        } catch (err) {
+            console.error("Error:", err);
         }
     };
 
     const onChangePage = (pageNumber, pageSize) => {
-        console.log("page Number: {}, page size: {}", pageNumber, pageSize);
         dispatch(fetchBooks({ pageNumber, pageSize }));
     };
 
     if (loading) return (
-        <div className='root'>
-            <div className="main-container">
-                <h3>Books component</h3>
-                <p>Loading...</p>
-            </div>
+        <div className="main-container" style={{ padding: 32, color: "#6b7280" }}>
+            Loading…
         </div>
     );
 
     if (error) return (
-        <div className='root'>
-            <div className="main-container">
-                <h3>Books component</h3>
-                <p>Error: {error}</p>
-            </div>
+        <div className="main-container" style={{ padding: 32, color: "#b91c1c" }}>
+            Error: {error}
         </div>
     );
 
     return (
         <main className="main-container">
-            <nav className="th-buttons-toolbar" aria-label="Books">
+            {/* ── Toolbar ── */}
+            <nav className="th-buttons-toolbar" aria-label="Books toolbar">
                 <ThSelect
                     onChange={onSortSelect}
                     defaultChecked={sortType}
@@ -138,61 +119,83 @@ export const Books = () => {
                     input_size={1}
                     required={false}
                 />
-                <button className="th-main-button" onClick={handleAddBook}>Add book</button>
-                <button className="th-main-button" onClick={handleDelBook}>Delete book</button>
+                <div className="toolbar-divider" aria-hidden="true" />
+                <button className="thbtn-add" onClick={handleAddBook}>
+                    + Add book
+                </button>
+                <button className="thbtn-del" onClick={() => handleDelBook(selectedBook)}>
+                    Delete book
+                </button>
             </nav>
 
+            {/* ── Table ── */}
             <section className="tableContainer">
                 <table className="table">
                     <thead>
                     <tr>
-                        <th onClick={() => dispatch(sortBooksById())}>ID &#x25be;&#x25b4;</th>
-                        <th onClick={() => dispatch(sortBooksByTitle())}>Title &#x25be;&#x25b4;</th>
-                        <th>Volume</th>
+                        <th onClick={() => dispatch(sortBooksById())}    style={{ cursor: "pointer" }}>ID</th>
+                        <th onClick={() => dispatch(sortBooksByTitle())}  style={{ cursor: "pointer" }}>Title</th>
+                        <th style={{ color: "#9ca3af", width: "120px" }}>Volume</th>
                         <th>Author</th>
-                        <th onClick={() => dispatch(sortBooksByGenre())}>Genre &#x25be;&#x25b4;</th>
+                        <th onClick={() => dispatch(sortBooksByGenre())}  style={{ cursor: "pointer" }}>Genre</th>
                         <th>Series</th>
                         <th>Year</th>
                         <th>Place</th>
                         <th>Description</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th style={{ textAlign: "center" }}>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {books && books.length !== 0 ? books.map((book) => (
+                    {books && books.length > 0 ? books.map((book) => (
                         <tr key={book.id}>
-                            <td>{book.id}</td>
-                            <td>{book.title}</td>
-                            <td>{book.volume}</td>
+                            <td style={{ color: "#9ca3af" }}>{book.id}</td>
+                            <td style={{ fontWeight: 500 }}>{book.title}</td>
+                            <td style={{ color: "#9ca3af", width: "120px" }}>{book.volume}</td>
                             <td>
                                 {book.authors
                                     ? [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(a => a.name).join(", ")
-                                    : ''}
+                                    : ""}
                             </td>
-                            <td>{book.genre?.name}</td>
-                            <td>{book.series?.name}</td>
-                            <td>{book.year.substring(0, 4)}</td>
-                            <td>{book.place.parent?.name + ":" + book.place.name}</td>
-                            <td>{book.description}</td>
-                            <td>
-                                <button className="table-action-btn edit-btn" title="Редактировать"
-                                        onClick={() => handleEditBook(book)}>✏️</button>
+                            <td><GenreBadge name={book.genre?.name} /></td>
+                            <td style={{ color: "#6b7280" }}>{book.series?.name}</td>
+                            <td style={{ color: "#6b7280" }}>{book.year?.substring(0, 4)}</td>
+                            <td style={{ color: "#6b7280" }}>
+                                {book.place?.parent?.name
+                                    ? `${book.place.parent.name} · ${book.place.name}`
+                                    : book.place?.name}
                             </td>
+                            <td style={{ color: "#6b7280" }}>{book.description}</td>
                             <td>
-                                <button className="table-action-btn delete-btn" title="Удалить"
-                                        onClick={() => handleDelBook(book)}>🗑️</button>
+                                <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
+                                    <button
+                                        className="table-action-btn edit-btn"
+                                        title="Edit"
+                                        onClick={() => handleEditBook(book)}
+                                        aria-label="Edit book"
+                                    >
+                                        ✎
+                                    </button>
+                                    <button
+                                        className="table-action-btn delete-btn"
+                                        title="Delete"
+                                        onClick={() => handleDelBook(book)}
+                                        aria-label="Delete book"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     )) : (
                         <tr>
-                            <td colSpan="10" style={{ textAlign: "center" }}>
-                                <h5>Book list is empty</h5>
+                            <td colSpan="10" style={{ textAlign: "center", padding: "32px 0", color: "#9ca3af" }}>
+                                No books found
                             </td>
                         </tr>
                     )}
                     </tbody>
                 </table>
+
                 <Paginator
                     pageNumber={pageNumber}
                     totalPages={total}

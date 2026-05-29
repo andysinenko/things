@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -45,15 +45,21 @@ public class PdfBookService {
         return pdfBookRepository.findById(id).orElse(null);
     }
 
-    public Page<PdfBook> getBooks(int pageNumber, int pageSize) {
-        return pdfBookRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    @Transactional(readOnly = true)
+    public PdfBookPageResponse getBooks(int pageNumber, int pageSize) {
+        Page<PdfBook> page = pdfBookRepository.findAllWithAssociations(
+                PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "uploadDate"))
+        );
+        return PdfBookMapper.entityToResponse(page);
     }
 
-    public List<CategoryDto> getCategories() {
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getCategories() {
         return CategoryMapper.toDtoList(categoryRepository.findAll());
     }
 
-    public List<PdfAuthorDto> getPdfAuthors() {
+    @Transactional(readOnly = true)
+    public List<PdfAuthorResponse> getPdfAuthors() {
         return PdfAuthorMapper.toDtoList(pdfAuthorRepository.findAll());
     }
 
@@ -109,18 +115,18 @@ public class PdfBookService {
         Path destination = Path.of(storagePath, fileName);
         Files.createDirectories(destination.getParent());
         Files.write(destination, bytes);
-
         saved.setFilePath(destination.toString());
-
-        logger.info("Saving PdfBook: {}", saved);
+        logger.debug("Saving PdfBook: {}", saved);
 
         return PdfBookMapper.toResponse(pdfBookRepository.save(saved));
     }
 
+    @Transactional
     public void deleteBook(Long id) {
         pdfBookRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<PdfBook> findByTitle(String title) {
         return pdfBookRepository.findByTitleContainingIgnoreCase(title);
     }

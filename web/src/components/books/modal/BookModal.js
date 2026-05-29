@@ -31,14 +31,14 @@ const BookModal = ({
     };
 
     const getFullPlacePath = (place) => {
-        if (!place) return '';
+        if (!place) return "";
         const names = [];
         let current = place;
         while (current) {
             names.unshift(current.name);
             current = current.parent;
         }
-        return names.join(' -> ');
+        return names.join(" → ");
     };
 
     if (!isOpen) return null;
@@ -46,108 +46,148 @@ const BookModal = ({
     const renderEditAdd = () => (
         <>
             <div className="th-modal-header">
-                <h5>{modalType === "add" ? "Add book" : "Edit book"}</h5>
+                <span className="th-modal-title">
+                    {modalType === "add" ? "Add book" : "Edit book"}
+                </span>
+                <button className="th-modal-close-btn" onClick={onClose} aria-label="Close">
+                    ✕
+                </button>
             </div>
 
             <div className="modal-body">
-                <input
-                    placeholder="id"
-                    className="th-main-input"
-                    name="id"
-                    value={selectedBook.id}
-                    readOnly
-                    disabled
-                />
-                <input
-                    className="th-main-input"
-                    type="text"
-                    name="title"
-                    value={selectedBook.title}
-                    onChange={handleChange}
-                    placeholder="Enter title of book"
-                    maxLength="512"
-                />
-                <input
-                    className="th-main-input"
-                    type="text"
-                    name="volume"
-                    value={selectedBook.volume}
-                    onChange={handleChange}
-                    placeholder="Enter volume of book"
-                    maxLength="512"
-                />
+                {/* Title + Volume */}
+                <div className="modal-field-row">
+                    <div className="modal-field">
+                        <label>Title</label>
+                        <input
+                            className="modal-input"
+                            type="text"
+                            name="title"
+                            value={selectedBook.title}
+                            onChange={handleChange}
+                            placeholder="Book title"
+                            maxLength="512"
+                        />
+                    </div>
+                    <div className="modal-field">
+                        <label>Volume</label>
+                        <input
+                            className="modal-input"
+                            type="text"
+                            name="volume"
+                            value={selectedBook.volume}
+                            onChange={handleChange}
+                            placeholder="1"
+                            maxLength="512"
+                        />
+                    </div>
+                </div>
 
-                <select
-                    aria-label="Genre name"
-                    value={selectedBook.genre?.id || ""}
-                    onChange={(e) => {
-                        const selectedGenre = genres.find(g => g.id === Number(e.target.value));
-                        setSelectedBook((prev) => ({ ...prev, genre: selectedGenre }));
-                    }}
-                >
-                    <option value="" disabled hidden>Genre name</option>
-                    {genres.map((genre) => (
-                        <option key={genre.id} value={genre.id}>{genre.name}</option>
-                    ))}
-                </select>
+                {/* Author + Genre */}
+                <div className="modal-field-row">
+                    <div className="modal-field">
+                        <label>Author</label>
+                        <select
+                            multiple
+                            aria-label="Authors"
+                            value={selectedBook.authors?.map((a) => a.id) || []}
+                            onChange={(e) => {
+                                const selectedIds = Array.from(e.target.selectedOptions, (o) => Number(o.value));
+                                const selectedAuthors = authors.filter((a) => selectedIds.includes(a.id));
+                                setSelectedBook((prev) => ({ ...prev, authors: selectedAuthors }));
+                            }}
+                        >
+                            {authors.map((author) => (
+                                <option key={author.id} value={author.id}>{author.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="modal-field">
+                        <label>Genre</label>
+                        <select
+                            aria-label="Genre name"
+                            value={selectedBook.genre?.id || ""}
+                            onChange={(e) => {
+                                const selectedGenre = genres.find((g) => g.id === Number(e.target.value));
+                                setSelectedBook((prev) => ({ ...prev, genre: selectedGenre }));
+                            }}
+                        >
+                            <option value="" disabled hidden>Select genre</option>
+                            {genres.map((genre) => (
+                                <option key={genre.id} value={genre.id}>{genre.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
 
-                <select
-                    multiple
-                    aria-label="Authors"
-                    value={selectedBook.authors?.map(a => a.id) || []}
-                    onChange={(e) => {
-                        const selectedIds = Array.from(e.target.selectedOptions, o => Number(o.value));
-                        const selectedAuthors = authors.filter(a => selectedIds.includes(a.id));
-                        setSelectedBook((prev) => ({ ...prev, authors: selectedAuthors }));
-                    }}
-                >
-                    {authors.map((author) => (
-                        <option key={author.id} value={author.id}>{author.name}</option>
-                    ))}
-                </select>
+                {/* Series + Year */}
+                <div className="modal-field-row">
+                    <div className="modal-field">
+                        <label>Series</label>
+                        <select
+                            aria-label="Series"
+                            value={selectedBook.series?.id || ""}
+                            onChange={(e) => {
+                                const selectedSeries = series.find((s) => s.id === Number(e.target.value));
+                                setSelectedBook((prev) => ({ ...prev, series: selectedSeries }));
+                            }}
+                        >
+                            <option value="" disabled hidden>Select series</option>
+                            {series.map((s) => (
+                                <option key={s.id} value={s.id}>{s.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="modal-field">
+                        <label>Year</label>
+                        <input
+                            className="modal-input"
+                            type="text"
+                            name="year"
+                            value={selectedBook.year?.substring(0, 4) || ""}
+                            onChange={handleChange}
+                            placeholder="2024"
+                        />
+                    </div>
+                </div>
 
-                <select
-                    aria-label="Series"
-                    value={selectedBook.series?.id || ""}
-                    onChange={(e) => {
-                        const selectedSeries = series.find(s => s.id === Number(e.target.value));
-                        setSelectedBook((prev) => ({ ...prev, series: selectedSeries }));
-                    }}
-                >
-                    <option value="" disabled hidden>Series</option>
-                    {series.map((s) => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
-                    ))}
-                </select>
+                {/* Place */}
+                <div className="modal-field">
+                    <label>Place</label>
+                    <button
+                        type="button"
+                        className="modal-place-btn"
+                        onClick={onPlacesOpenDialogBox}
+                    >
+                        <span>
+                            {selectedBook.place
+                                ? getFullPlacePath(selectedBook.place)
+                                : "Select place"}
+                        </span>
+                        <span style={{ fontSize: 13, opacity: 0.5 }}>
+                            {selectedBook.place ? "✓" : "›"}
+                        </span>
+                    </button>
+                </div>
 
-                <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>
-                    {selectedBook.place
-                        ? `Place: ${getFullPlacePath(selectedBook.place)} ✅`
-                        : "Select place ❓"}
-                </button>
-
-                <input
-                    className="th-main-input"
-                    type="text"
-                    name="year"
-                    value={selectedBook.year?.substring(0, 4) || ""}
-                    onChange={handleChange}
-                    placeholder="Enter year of release"
-                />
-                <input
-                    className="th-main-input"
-                    type="text"
-                    name="description"
-                    value={selectedBook.description}
-                    onChange={handleChange}
-                    placeholder="Description"
-                    maxLength="512"
-                />
+                {/* Description */}
+                <div className="modal-field">
+                    <label>Description</label>
+                    <input
+                        className="modal-input"
+                        type="text"
+                        name="description"
+                        value={selectedBook.description}
+                        onChange={handleChange}
+                        placeholder="Optional notes"
+                        maxLength="512"
+                    />
+                </div>
             </div>
 
             <div className="modal-footer">
-                <button className="th-main-button" onClick={onClose}>Close</button>
-                <button className="th-main-button" onClick={onSubmit}>Save</button>
+                <button className="modal-button" onClick={onClose}>Cancel</button>
+                <button className="modal-button modal-btn-primary" onClick={onSubmit}>Save</button>
             </div>
         </>
     );
@@ -155,14 +195,31 @@ const BookModal = ({
     const renderDelete = () => (
         <>
             <div className="th-modal-header">
-                <h5>Delete book</h5>
+                <span className="th-modal-title">Delete book</span>
+                <button className="th-modal-close-btn" onClick={onClose} aria-label="Close">
+                    ✕
+                </button>
             </div>
             <div className="modal-body">
-                <span>Are you sure you want to delete "{selectedBook?.title || "this book"}"?</span>
+                <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.5 }}>
+                    Are you sure you want to delete{" "}
+                    <strong style={{ color: "#1a2332" }}>"{selectedBook?.title || "this book"}"</strong>?
+                    This action cannot be undone.
+                </p>
             </div>
             <div className="modal-footer">
-                <button className="th-main-button" onClick={onClose}>Close</button>
-                <button className="th-main-button" onClick={onSubmit}>Delete</button>
+                <button className="modal-button" onClick={onClose}>Cancel</button>
+                <button
+                    className="modal-button"
+                    onClick={onSubmit}
+                    style={{
+                        background: "#b91c1c",
+                        color: "#fff",
+                        border: "1px solid #b91c1c",
+                    }}
+                >
+                    Delete
+                </button>
             </div>
         </>
     );

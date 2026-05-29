@@ -83,9 +83,9 @@ class JwtTokenServiceTest {
         thingsUser.setUsername("test");
 
         String token = jwtTokenService.generateToken(thingsUser);
-        Jws<Claims> claims = jwtTokenService.getClaims(token);
-        claims.getPayload().entrySet().forEach(e -> System.out.println(e.getKey() + " : " + e.getValue()));
-        assertEquals("test", claims.getPayload().getSubject());
-        assertEquals(SUBJECT, claims.getPayload().getIssuer());
+        Claims claims = jwtTokenService.getClaims(token);
+        claims.entrySet().forEach(e -> System.out.println(e.getKey() + " : " + e.getValue()));
+        assertEquals("test", claims.getSubject());
+        assertEquals(SUBJECT, claims.getIssuer());
     }
 }
