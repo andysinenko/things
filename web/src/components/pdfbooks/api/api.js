@@ -39,7 +39,7 @@ export const fetchCategories = () => async (dispatch) => {
 export const fetchPdfAuthors = () => async (dispatch) => {
     dispatch(fetchPdfAuthorsStart());
     try {
-        const response = await axios.get("http://localhost:8080/api/v1/pdfbooks/pdfautors");
+        const response = await axios.get("http://localhost:8080/api/v1/pdfbooks/pdfauthors");
         if (response.status === 200) {
             console.log("Success on fetching genres: ", response.status);
             dispatch(fetchPdfAuthorsSuccess(response.data));
