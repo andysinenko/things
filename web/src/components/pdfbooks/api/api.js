@@ -1,10 +1,15 @@
 import axios from "axios";
-import {addPdfBookSuccess, deletePdfBookFailure, deletePdfBookSuccess, fetchPdfBooksFailure, fetchPdfBooksStart, fetchPdfBooksSuccess} from "../reducer/PdfBooksSlice";
+import {
+    addPdfBookSuccess,
+    deletePdfBookFailure,
+    deletePdfBookSuccess,
+    fetchPdfBooksFailure,
+    fetchPdfBooksStart,
+    fetchPdfBooksSuccess,
+    updatePdfBookSuccess
+} from "../reducer/PdfBooksSlice";
 import {fetchCategoriesError, fetchCategoriesStart, fetchCategoriesSuccess} from "../reducer/CategoriesSlice";
 import {fetchPdfAuthorsFailure, fetchPdfAuthorsStart, fetchPdfAuthorsSuccess} from "../reducer/PdfAuthorsSlice";
-import {fetchSeriesStart} from "../../books/reducer/SeriesSlice";
-import store from "../../../store/storeConfig";
-import { fetchBooksFailure, fetchBooksSuccess} from "../../books/reducer/BooksSlice";
 
 
 export const fetchPdfBooks= (pageNumber, pageSize) => async (dispatch) => {
@@ -84,6 +89,22 @@ export const deletePdfBook = (id) => async (dispatch) => {
     } catch (err) {
         console.error("Delete error:", err.message);
         dispatch(deletePdfBookFailure(err.message));
+    }
+};
+
+export const updatePdfBook = (id, book) => async (dispatch) => {
+    try {
+        const response = await axios.put(`http://localhost:8080/api/v1/pdfbooks/${id}`, book);
+        if (response.status === 200) {
+            console.log("Success on updating pdfbook: ", response.status);
+            dispatch(updatePdfBookSuccess(response.data));
+        } else {
+            console.log("Error on updating pdfbook: ", response.status);
+            dispatch(fetchPdfBooksFailure(`Error: ${response.status}`));
+        }
+    } catch (error) {
+        console.log("Error on updating pdfbook, catch section: ", error.message);
+        dispatch(fetchPdfBooksFailure(error.message));
     }
 };
 

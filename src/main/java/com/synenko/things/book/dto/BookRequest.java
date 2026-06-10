@@ -15,11 +15,11 @@ public record BookRequest(
     @Schema(name = "authors", description = "List of authors of the book")
     List<Long> authors,
     @Schema(name = "genre", description = "Genre of the book")
-    long genre,
+    Long genre,
     @Schema(name = "series", description = "Series of the book")
-    long series,
+    Long series,
     @Schema(name = "place", description = "Place of storing")
-    long place,
+    Long place,
     @Schema(name = "year", description = "Date of issue")
     LocalDate year,
     @Schema(name = "volume", description = "Volume")

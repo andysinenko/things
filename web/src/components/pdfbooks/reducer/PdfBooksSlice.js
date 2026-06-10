@@ -45,6 +45,14 @@ const pdfBooksSlice = createSlice({
             state.loading = false;
             state.pdfbooks.pdfbooks.push(action.payload);
         },
+
+        updatePdfBookSuccess: (state, action) => {
+            const updated = action.payload;
+            const idx = state.pdfbooks.content.findIndex(b => b.id === updated.id);
+            if (idx !== -1) {
+                state.pdfbooks.content[idx] = updated;
+            }
+        },
     },
 });
 
@@ -54,7 +62,8 @@ export const {
     fetchPdfBooksFailure,
     deletePdfBookSuccess,
     deletePdfBookFailure,
-    addPdfBookSuccess} =
+    addPdfBookSuccess,
+    updatePdfBookSuccess} =
     pdfBooksSlice.actions;
 
 export default pdfBooksSlice.reducer;

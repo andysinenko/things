@@ -1,5 +1,6 @@
 package com.synenko.things.pdfbook.controller;
 
+import com.synenko.things.book.dto.BookRequest;
 import com.synenko.things.pdfbook.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -187,5 +188,41 @@ public class PdfBookController {
                         .map(PdfBookMapper::toResponse)
                         .toList()
         );
+    }
+
+    @Operation(summary = "Update pdf book by id", description = "Updates a pdf book")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pdf book updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = PdfBookResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pdf book not found",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "PdfBook update request",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PdfBookRequest.class)
+            )
+    )
+    @PutMapping("/{id}")
+    public ResponseEntity<PdfBookResponse> update(@Parameter(description = "pdf book ID")
+                                                      @PathVariable (value = "id", required = true) Long id,
+                                                  @RequestBody PdfBookRequest request) throws Exception {
+        return ResponseEntity.ok(pdfBookService.update(id, request));
     }
 }

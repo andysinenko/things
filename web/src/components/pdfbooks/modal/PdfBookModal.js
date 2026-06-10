@@ -1,12 +1,13 @@
 import React from "react";
 
-const PdfBookModal = ({selectedPdfBook, setSelectedPdfBook, isOpen, onOpen, onClose, categories, authors}) => {
+const PdfBookModal = ({selectedPdfBook, setSelectedPdfBook, isOpen, onOpen, onClose, categories, authors, onSubmit}) => {
     const handleChange = e => {
+        console.log("handleChange", e.target);
         const {name, value} = e.target;
-        selectedPdfBook[name] = value;
+        setSelectedPdfBook(prev => ({ ...prev, [name]: value }));
     }
 
-    //if (!isOpen) return null;
+    if (!isOpen) return null;
 
     return (
         <>
@@ -33,7 +34,7 @@ const PdfBookModal = ({selectedPdfBook, setSelectedPdfBook, isOpen, onOpen, onCl
                                 <select
                                     name="category"
                                     aria-label="Category"
-                                    value={setSelectedPdfBook.category?.id || setSelectedPdfBook.category || ''}
+                                    value={selectedPdfBook.category?.id || selectedPdfBook.category || ''}
                                     onChange={(e) => setSelectedPdfBook(prev => ({
                                         ...prev,
                                         category: Number(e.target.value)
@@ -50,7 +51,7 @@ const PdfBookModal = ({selectedPdfBook, setSelectedPdfBook, isOpen, onOpen, onCl
                                 <select
                                     name="author"
                                     aria-label="Author"
-                                    value={setSelectedPdfBook.author?.id || setSelectedPdfBook.author || ''}
+                                    value={selectedPdfBook.author?.id || selectedPdfBook.author || ''}
                                     onChange={(e) => setSelectedPdfBook(prev => ({
                                         ...prev,
                                         author: Number(e.target.value)
@@ -89,6 +90,15 @@ const PdfBookModal = ({selectedPdfBook, setSelectedPdfBook, isOpen, onOpen, onCl
                                     placeholder="Year of issue"
                                 />
                             </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="modal-button" onClick={onClose}>Cancel</button>
+                            <button
+                                className="modal-button modal-btn-primary"
+                                onClick={onSubmit}
+                            >
+                                Save
+                            </button>
                         </div>
                     </div>
                 </div>

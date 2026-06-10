@@ -92,9 +92,8 @@ const BookModal = ({
                             aria-label="Authors"
                             value={selectedBook.authors?.map((a) => a.id) || []}
                             onChange={(e) => {
-                                const selectedIds = Array.from(e.target.selectedOptions, (o) => Number(o.value));
-                                const selectedAuthors = authors.filter((a) => selectedIds.includes(a.id));
-                                setSelectedBook((prev) => ({ ...prev, authors: selectedAuthors }));
+                                const selectedIds = Array.from(e.target.selectedOptions, (o) => Number(o.id));
+                                setSelectedBook((prev) => ({ ...prev, authors: selectedIds }));
                             }}
                         >
                             {authors.map((author) => (
@@ -108,8 +107,7 @@ const BookModal = ({
                             aria-label="Genre name"
                             value={selectedBook.genre?.id || ""}
                             onChange={(e) => {
-                                const selectedGenre = genres.find((g) => g.id === Number(e.target.value));
-                                setSelectedBook((prev) => ({ ...prev, genre: selectedGenre }));
+                                setSelectedBook((prev) => ({ ...prev, genre: e.target.value }));
                             }}
                         >
                             <option value="" disabled hidden>Select genre</option>
@@ -128,8 +126,7 @@ const BookModal = ({
                             aria-label="Series"
                             value={selectedBook.series?.id || ""}
                             onChange={(e) => {
-                                const selectedSeries = series.find((s) => s.id === Number(e.target.value));
-                                setSelectedBook((prev) => ({ ...prev, series: selectedSeries }));
+                                setSelectedBook((prev) => ({ ...prev, series: e.target.value }));
                             }}
                         >
                             <option value="" disabled hidden>Select series</option>

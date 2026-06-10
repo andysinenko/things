@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { deletePdfBook, fetchCategories, fetchPdfAuthors, fetchPdfBooks, uploadPdfBook } from "./api/api";
+import {deletePdfBook, fetchCategories, fetchPdfAuthors, fetchPdfBooks, updatePdfBook, uploadPdfBook} from "./api/api";
 import PdfBookModal from "./modal/PdfBookModal";
 
 const INITIAL_BOOK = {
@@ -61,6 +61,7 @@ export const PdfBooks = () => {
     };
 
     const handleSubmit = async (e) => {
+        console.log("Uploading pdfbook...");
         e.preventDefault();
         const formData = new FormData();
         formData.append("file",          storingBook.file);
@@ -72,7 +73,7 @@ export const PdfBooks = () => {
         dispatch(uploadPdfBook(formData));
         setStoringBook(INITIAL_BOOK);
         setFileName('');
-        dispatch(fetchPdfBooks());
+        dispatch(fetchPdfBooks(0, pageSize));
     };
 
     if (loading) return (
@@ -85,6 +86,7 @@ export const PdfBooks = () => {
 
     const openModal  = (pdfBook) => {
         console.log(pdfBook);
+        setSelectedPdfBook(pdfBook);
         setIsOpen(true);
     };
 
@@ -93,6 +95,14 @@ export const PdfBooks = () => {
         setIsOpen(false);
         setSelectedPdfBook(emptyPdfBook);
     }
+
+    const handleUpdateSubmit = async (e) => {
+        console.log("Updating pdfbook...", selectedPdfBook);
+        dispatch(updatePdfBook(selectedPdfBook.id, selectedPdfBook));
+        setIsOpen(false);
+        setSelectedPdfBook(emptyPdfBook);
+        dispatch(fetchPdfBooks(0, pageSize));
+    };
 
     return (
         <main className="main-container">
@@ -221,12 +231,8 @@ export const PdfBooks = () => {
                             <td style={{ color: "#9ca3af" }}>{book.id}</td>
                             <td style={{ fontWeight: 500 }}>{book.title}</td>
                             <td style={{ color: "#6b7280" }}>{book.category?.name}</td>
-                            <td>
-                                {book.author
-                                    ? [...book.author].filter(a => a.name).map(a => a.name).join(", ")
-                                    : ""}
-                            </td>
-                            <td style={{ color: "#6b7280" }}>{book.yearOfRelease}</td>
+                            <td>{book.author?.name}</td>
+                            <td style={{ color: "#6b7280" }}>{book.yearOfRelease?.substring(0, 4)}</td>
                             <td>
                                 {book.language && (
                                     <span className="badge" style={{
@@ -274,6 +280,7 @@ export const PdfBooks = () => {
                 setSelectedPdfBook={setSelectedPdfBook}
                 categories={categories}
                 authors={pdfauthors}
+                onSubmit={handleUpdateSubmit}
             />
         </main>
     );

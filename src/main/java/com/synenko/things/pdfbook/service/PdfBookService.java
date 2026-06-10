@@ -1,6 +1,12 @@
 package com.synenko.things.pdfbook.service;
 
+import com.synenko.things.common.exception.PdfBookNotExistsException;
 import com.synenko.things.pdfbook.dto.*;
+import com.synenko.things.pdfbook.entity.PdfAuthor;
+import com.synenko.things.pdfbook.entity.PdfBook;
+import com.synenko.things.pdfbook.repository.CategoryRepository;
+import com.synenko.things.pdfbook.repository.PdfAuthorRepository;
+import com.synenko.things.pdfbook.repository.PdfBookRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -15,12 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import com.synenko.things.pdfbook.dto.*;
-import com.synenko.things.pdfbook.entity.PdfAuthor;
-import com.synenko.things.pdfbook.entity.PdfBook;
-import com.synenko.things.pdfbook.repository.CategoryRepository;
-import com.synenko.things.pdfbook.repository.PdfAuthorRepository;
-import com.synenko.things.pdfbook.repository.PdfBookRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -66,7 +66,7 @@ public class PdfBookService {
     @Transactional
     public PdfBookResponse save(MultipartFile file, Long categoryId, String yearOfRelease,
                                 String language, String inputedTitle,
-                                Long authorId) throws Exception {  // ← было AuthorResponse authorResponse
+                                Long authorId) throws Exception {
 
         byte[] bytes = file.getBytes();
 
@@ -118,7 +118,7 @@ public class PdfBookService {
         Files.createDirectories(destination.getParent());
         Files.write(destination, bytes);
         saved.setFilePath(destination.toString());
-        logger.debug("Saving PdfBook: {}", saved);
+        logger.debug("Saving pdf book: {}", saved);
 
         return PdfBookMapper.toResponse(pdfBookRepository.save(saved));
     }
@@ -131,5 +131,27 @@ public class PdfBookService {
     @Transactional(readOnly = true)
     public List<PdfBook> findByTitle(String title) {
         return pdfBookRepository.findByTitleContainingIgnoreCase(title);
+    }
+
+    @Transactional
+    public PdfBookResponse update(Long id, PdfBookRequest request) throws Exception {
+        logger.info("id = {}, request = ", id, request);
+        var pdfBook = pdfBookRepository.findById(id).orElseThrow(() -> new PdfBookNotExistsException(id));
+        var category = request.category() != null
+                ? categoryRepository.findById(request.category()).orElse(pdfBook.getCategory())
+                : pdfBook.getCategory();
+        PdfAuthor author = pdfAuthorRepository.findById(request.author()).orElse(pdfBook.getAuthor());
+
+        pdfBook.setTitle(request.title() != null ? request.title() : pdfBook.getTitle());
+        pdfBook.setAuthor(author);
+        pdfBook.setCategory(category);
+        pdfBook.setYearOfRelease(request.yearOfRelease() != null ? request.yearOfRelease() : pdfBook.getYearOfRelease());
+        pdfBook.setLanguage(request.language() != null ? request.language() : pdfBook.getLanguage());
+        pdfBook.setNumberOfPages(request.numberOfPages() != null ? request.numberOfPages() : pdfBook.getNumberOfPages());
+        PdfBook saved = pdfBookRepository.save(pdfBook);
+
+        logger.debug("Updating pdf book: {}", saved);
+
+        return PdfBookMapper.toResponse(pdfBookRepository.save(saved));
     }
 }

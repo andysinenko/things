@@ -178,6 +178,7 @@ public class BookController {
             @PathVariable Long id,
             @RequestBody BookRequest bookRequest
     ) {
+        logger.info("Updating book with id: " + id);
         Book book = bookService.updateBook(id, bookRequest);
         var response = BookMapper.entityToResponse(book);
         return new ResponseEntity<>(response, HttpStatus.OK);
