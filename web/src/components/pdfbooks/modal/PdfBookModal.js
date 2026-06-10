@@ -2,7 +2,6 @@ import React from "react";
 
 const PdfBookModal = ({selectedPdfBook, setSelectedPdfBook, isOpen, onOpen, onClose, categories, authors, onSubmit}) => {
     const handleChange = e => {
-        console.log("handleChange", e.target);
         const {name, value} = e.target;
         setSelectedPdfBook(prev => ({ ...prev, [name]: value }));
     }

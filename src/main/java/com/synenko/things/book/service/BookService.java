@@ -4,6 +4,7 @@ import com.synenko.things.book.dto.AuthorResponse;
 import com.synenko.things.book.dto.BookMapper;
 import com.synenko.things.book.dto.BookPageResponse;
 import com.synenko.things.book.dto.BookRequest;
+import com.synenko.things.common.exception.BookNotExistsException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,10 +74,32 @@ public class BookService {
         return bookRepository.saveAndFlush(book);
     }
 
-    @CacheEvict(value = "bookCount", allEntries = true)
+    @CacheEvict(value = {"bookCount", "booksPage"}, allEntries = true)
     @Transactional
     public Book updateBook(Long id, BookRequest bookRequest) {
-        var book = getFullfilledBookEntity(bookRequest);
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotExistsException(id));
+
+        List<Author> authors = authorRepository.findAllById(bookRequest.authors());
+
+        Genre genre = genreRepository.findById(bookRequest.genre())
+                .orElseThrow(() -> new GenreNotExistsException(bookRequest.genre()));
+
+        Place place = placeRepository.findById(bookRequest.place())
+                .orElseThrow(() -> new PlaceNotExistsException(bookRequest.place()));
+
+        Series series = seriesRepository.findById(bookRequest.series())
+                .orElseThrow(() -> new SeriesNotExistsException(bookRequest.series()));
+
+        book.setTitle(bookRequest.title());
+        book.setDescription(bookRequest.description());
+        book.setYear(bookRequest.year());
+        book.setVolumeNumber(bookRequest.volume());
+        book.setAuthors(authors);
+        book.setGenre(genre);
+        book.setPlace(place);
+        book.setSeries(series);
+
         logger.debug("Book before updating: {}", book);
 
         return bookRepository.saveAndFlush(book);

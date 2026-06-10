@@ -47,8 +47,15 @@ export const Books = () => {
     const [modalType,   setModalType]   = useState(null);
 
     const emptyBook = {
-        id: "", title: "", volume: "", genre: {},
-        authors: [], series: {}, year: "", place: null, description: ""
+        id: null,
+        title: "",
+        volume: "",
+        genre: null,
+        authors: [],
+        series: null,
+        year: "",
+        place: null,
+        description: ""
     };
     const [selectedBook, setSelectedBook] = useState(emptyBook);
 
@@ -81,7 +88,20 @@ export const Books = () => {
 
     const handleAddBook  = ()     => { setSelectedBook(emptyBook); openModal("add"); };
     const handleDelBook  = (book) => { setSelectedBook(book);      openModal("delete"); };
-    const handleEditBook = (book) => { setSelectedBook({ ...book }); openModal("edit"); };
+    const handleEditBook = (book) => {
+        setSelectedBook({
+            id: book.id,
+            title: book.title,
+            volume: book.volume,
+            genre: book.genre?.id ?? null,
+            authors: book.authors?.map(a => a.id) ?? [],
+            series: book.series?.id ?? null,
+            year: book.year ?? "",
+            place: book.place?.id ?? null,
+            description: book.description ?? ""
+        });
+        openModal("edit");
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();

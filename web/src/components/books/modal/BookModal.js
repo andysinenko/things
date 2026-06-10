@@ -21,7 +21,10 @@ const BookModal = ({
     };
 
     const onNodeSelect = (nodePlace) => {
-        setSelectedBook((prev) => ({ ...prev, place: nodePlace }));
+        setSelectedBook(prev => ({
+            ...prev,
+            place: nodePlace.id
+        }));
         setIsTreeModalOpen(false);
     };
 
@@ -87,29 +90,36 @@ const BookModal = ({
                 <div className="modal-field-row">
                     <div className="modal-field">
                         <label>Author</label>
-                        <select
-                            multiple
-                            aria-label="Authors"
-                            value={selectedBook.authors?.map((a) => a.id) || []}
+                        <select multiple
+                            value={selectedBook.authors}
                             onChange={(e) => {
-                                const selectedIds = Array.from(e.target.selectedOptions, (o) => Number(o.id));
-                                setSelectedBook((prev) => ({ ...prev, authors: selectedIds }));
+                                const selectedIds = Array.from(
+                                    e.target.selectedOptions,
+                                    o => Number(o.value)
+                                );
+                                setSelectedBook(prev => ({
+                                    ...prev,
+                                    authors: selectedIds
+                                }));
                             }}
                         >
-                            {authors.map((author) => (
-                                <option key={author.id} value={author.id}>{author.name}</option>
+                            {authors.map(author => (
+                                <option key={author.id} value={author.id}>
+                                    {author.name}
+                                </option>
                             ))}
                         </select>
                     </div>
                     <div className="modal-field">
                         <label>Genre</label>
                         <select
-                            aria-label="Genre name"
-                            value={selectedBook.genre?.id || ""}
-                            onChange={(e) => {
-                                setSelectedBook((prev) => ({ ...prev, genre: e.target.value }));
-                            }}
-                        >
+                            value={selectedBook.genre || ""}
+                            onChange={(e) =>
+                                setSelectedBook(prev => ({
+                                    ...prev,
+                                    genre: Number(e.target.value)
+                                }))
+                            }>
                             <option value="" disabled hidden>Select genre</option>
                             {genres.map((genre) => (
                                 <option key={genre.id} value={genre.id}>{genre.name}</option>
@@ -122,13 +132,13 @@ const BookModal = ({
                 <div className="modal-field-row">
                     <div className="modal-field">
                         <label>Series</label>
-                        <select
-                            aria-label="Series"
-                            value={selectedBook.series?.id || ""}
-                            onChange={(e) => {
-                                setSelectedBook((prev) => ({ ...prev, series: e.target.value }));
-                            }}
-                        >
+                        <select value={selectedBook.series || ""}
+                            onChange={(e) =>
+                                setSelectedBook(prev => ({
+                                    ...prev,
+                                    series: Number(e.target.value)
+                                }))
+                            }>
                             <option value="" disabled hidden>Select series</option>
                             {series.map((s) => (
                                 <option key={s.id} value={s.id}>{s.name}</option>
