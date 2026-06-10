@@ -50,7 +50,7 @@ const BookModal = ({
                     {modalType === "add" ? "Add book" : "Edit book"}
                 </span>
                 <button className="th-modal-close-btn" onClick={onClose} aria-label="Close">
-                    ✕
+                    ✖️
                 </button>
             </div>
 

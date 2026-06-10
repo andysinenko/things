@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { deletePdfBook, fetchCategories, fetchPdfAuthors, fetchPdfBooks, uploadPdfBook } from "./api/api";
+import PdfBookModal from "./modal/PdfBookModal";
 
 const INITIAL_BOOK = {
     file: null,
@@ -17,6 +18,18 @@ export const PdfBooks = () => {
     const dispatch   = useDispatch();
     const pageSize   = 15;
     const pageNumber = useSelector(state => state.pdfBooksReducer.pdfbooks.pageNumber);
+
+    //modal window
+    const [isOpen, setIsOpen] = useState(false);
+    const emptyPdfBook = {
+        id: '',
+        title: '',
+        category: '',
+        author: '',
+        yearOfRelease: '',
+        language: ''
+    };
+    const [selectedPdfBook, setSelectedPdfBook] = useState(emptyPdfBook);
 
     const { pdfauthors }          = useSelector(state => state.pdfAuthorsReducer);
     const { categories }          = useSelector(state => state.categoriesReducer);
@@ -68,6 +81,18 @@ export const PdfBooks = () => {
     if (error) return (
         <div className="main-container" style={{ padding: 32, color: "#b91c1c" }}>Error: {error}</div>
     );
+
+
+    const openModal  = (pdfBook) => {
+        console.log(pdfBook);
+        setIsOpen(true);
+    };
+
+    const onClose = (e) => {
+        console.log("onClose ", e);
+        setIsOpen(false);
+        setSelectedPdfBook(emptyPdfBook);
+    }
 
     return (
         <main className="main-container">
@@ -217,7 +242,7 @@ export const PdfBooks = () => {
                                         className="table-action-btn edit-btn"
                                         title="Edit"
                                         aria-label="Edit book"
-                                        onClick={() => console.log("Edit:", book)}
+                                        onClick={() => openModal(book)}
                                     >
                                         ✎
                                     </button>
@@ -242,6 +267,14 @@ export const PdfBooks = () => {
                     </tbody>
                 </table>
             </section>
+            <PdfBookModal
+                isOpen={isOpen}
+                onClose={onClose}
+                selectedPdfBook={selectedPdfBook}
+                setSelectedPdfBook={setSelectedPdfBook}
+                categories={categories}
+                authors={pdfauthors}
+            />
         </main>
     );
 };

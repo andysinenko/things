@@ -61,7 +61,12 @@ export const Books = () => {
     }, [dispatch]);
 
     const openModal  = (type) => { setModalType(type); setIsModalOpen(true); };
-    const closeModal = () => { setIsModalOpen(false); setModalType(null); setSelectedBook(emptyBook); };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalType(null);
+        setSelectedBook(emptyBook);
+    };
 
     const onSortSelect = (event) => {
         setType(event.target.value);
