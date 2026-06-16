@@ -1,6 +1,5 @@
 package com.synenko.things.book.service;
 
-import com.synenko.things.book.dto.AuthorResponse;
 import com.synenko.things.book.dto.BookMapper;
 import com.synenko.things.book.dto.BookPageResponse;
 import com.synenko.things.book.dto.BookRequest;
@@ -30,7 +29,6 @@ import com.synenko.things.place.repository.PlaceRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -106,7 +104,6 @@ public class BookService {
     }
 
     @Cacheable(value = "booksPage", key = "#pageNumber + '-' + #pageSize")
-    @Transactional(readOnly = true)
     private Book getFullfilledBookEntity(BookRequest bookRequest) {
         List<Author> authors = authorRepository.findAllById(bookRequest.authors());
 
@@ -120,16 +117,6 @@ public class BookService {
                 .orElseThrow(() -> new SeriesNotExistsException(bookRequest.series()));
 
         return BookMapper.dtoToEntity(bookRequest, authors, genre, series, place);
-    }
-
-    @Transactional(readOnly = true)
-    private List<Author> getAuthors(List<AuthorResponse> authorResponses) {
-        if (authorResponses != null) {
-            List<String> authorIds = authorResponses.stream().map(e -> e.name()).collect(Collectors.toList());
-            List<Author> authors = authorRepository.findByNameIn(authorIds);
-            return authors;
-        }
-        return null;
     }
 
     @Transactional(readOnly = true)
