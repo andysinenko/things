@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.*;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -224,5 +225,27 @@ public class PdfBookController {
                                                       @PathVariable (value = "id", required = true) Long id,
                                                   @RequestBody PdfBookRequest request) throws Exception {
         return ResponseEntity.ok(pdfBookService.update(id, request));
+    }
+
+    @Operation(summary = "Get pdf book count", description = "Returns a number of the pdf books")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved pdf book",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Long.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    @GetMapping("/count")
+    public ResponseEntity<Long> getPdfBooksCount() {
+        logger.debug("Retrieving books count");
+        return new ResponseEntity<>(pdfBookService.getBookCount(), HttpStatus.OK);
     }
 }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import {deletePdfBook, fetchCategories, fetchPdfAuthors, fetchPdfBooks, updatePdfBook, uploadPdfBook} from "./api/api";
+import {deletePdfBook, fetchCategories, fetchPdfAuthors, fetchPdfBooks, updatePdfBook, uploadPdfBook} from "./reducer/PdfBooksSlice";
 import PdfBookModal from "./modal/PdfBookModal";
+
 
 const INITIAL_BOOK = {
     file: null,
@@ -17,7 +18,6 @@ const YEARS = Array.from({ length: 26 }, (_, i) => 2000 + i);
 export const PdfBooks = () => {
     const dispatch   = useDispatch();
     const pageSize   = 15;
-    const pageNumber = useSelector(state => state.pdfBooksReducer.pdfbooks.pageNumber);
 
     //modal window
     const [isOpen, setIsOpen] = useState(false);
@@ -31,15 +31,17 @@ export const PdfBooks = () => {
     };
     const [selectedPdfBook, setSelectedPdfBook] = useState(emptyPdfBook);
 
-    const { pdfauthors }          = useSelector(state => state.pdfAuthorsReducer);
-    const { categories }          = useSelector(state => state.categoriesReducer);
-    const { pdfbooks, loading, error } = useSelector(state => state.pdfBooksReducer.pdfbooks);
+    const { pdfbooks, pageNumber } = useSelector(state => state.pdfBooksReducer.pdfbooks);
+    const categories = useSelector(state => state.pdfBooksReducer.categories);
+    const pdfauthors = useSelector(state => state.pdfBooksReducer.pdfAuthors);
+    const loading    = useSelector(state => state.pdfBooksReducer.loading);
+    const error      = useSelector(state => state.pdfBooksReducer.error);
 
     const [storingBook, setStoringBook] = useState(INITIAL_BOOK);
     const [fileName, setFileName]       = useState('');
 
     useEffect(() => {
-        dispatch(fetchPdfBooks(0, pageSize));
+        dispatch(fetchPdfBooks({ pageNumber: 0, pageSize }));
         dispatch(fetchCategories());
         dispatch(fetchPdfAuthors());
     }, [dispatch]);
@@ -70,19 +72,12 @@ export const PdfBooks = () => {
         formData.append("author",        storingBook.author?.id ?? '');
         formData.append("yearOfRelease", storingBook.yearOfRelease);
         formData.append("language",      storingBook.language);
-        dispatch(uploadPdfBook(formData));
+
+        await dispatch(uploadPdfBook(formData));
         setStoringBook(INITIAL_BOOK);
         setFileName('');
-        dispatch(fetchPdfBooks(0, pageSize));
+        dispatch(fetchPdfBooks({ pageNumber: 0, pageSize }));
     };
-
-    if (loading) return (
-        <div className="main-container" style={{ padding: 32, color: "#6b7280" }}>Loading…</div>
-    );
-    if (error) return (
-        <div className="main-container" style={{ padding: 32, color: "#b91c1c" }}>Error: {error}</div>
-    );
-
 
     const openModal  = (pdfBook) => {
         console.log(pdfBook);
@@ -98,11 +93,18 @@ export const PdfBooks = () => {
 
     const handleUpdateSubmit = async (e) => {
         console.log("Updating pdfbook...", selectedPdfBook);
-        dispatch(updatePdfBook(selectedPdfBook.id, selectedPdfBook));
+        await dispatch(updatePdfBook({ id: selectedPdfBook.id, book: selectedPdfBook }));
         setIsOpen(false);
         setSelectedPdfBook(emptyPdfBook);
-        dispatch(fetchPdfBooks(0, pageSize));
+        dispatch(fetchPdfBooks({ pageNumber: 0, pageSize }));
     };
+
+    if (loading) return (
+        <div className="main-container" style={{ padding: 32, color: "#6b7280" }}>Loading…</div>
+    );
+    if (error) return (
+        <div className="main-container" style={{ padding: 32, color: "#b91c1c" }}>Error: {error}</div>
+    );
 
     return (
         <main className="main-container">
@@ -238,7 +240,7 @@ export const PdfBooks = () => {
                                     <span className="badge" style={{
                                         background: book.language === "EN" ? "#eff6ff" : "#f0fdf4",
                                         color:      book.language === "EN" ? "#1d4ed8" : "#166534",
-                                        }}>{book.language}
+                                    }}>{book.language}
                                     </span>
                                 )}
                             </td>

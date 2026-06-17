@@ -14,6 +14,19 @@ export const fetchBooks = createAsyncThunk(
     }
 );
 
+export const getBooksCount = createAsyncThunk(
+    "books/getBooksCount",
+    async () => {
+        try {
+            const response = await axios.get(`${ENDPOINTS.books}/count`);
+            return response.data;
+        } catch (err) {
+            console.log(err.message);
+            return 0;
+        }
+    }
+);
+
 export const addNewBook = createAsyncThunk(
     "books/add",
     async (book, { rejectWithValue }) => {
@@ -58,6 +71,7 @@ const booksSlice = createSlice({
         pageNumber: 0,
         loading: false,
         error: null,
+        count: 0,
     },
     reducers: {
         sortBooksById(state) {
@@ -76,6 +90,15 @@ const booksSlice = createSlice({
     extraReducers: (builder) => {
         builder
             // fetchBooks
+            /*.addCase(getBooksCount.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })*/
+            .addCase(getBooksCount.fulfilled, (state, action) => {
+                state.loading = false;
+                state.count = action.payload;
+                state.error = null;
+            })
             .addCase(fetchBooks.pending, (state) => {
                 state.loading = true;
                 state.error = null;

@@ -9,13 +9,12 @@ import Tools from "./components/tools";
 //import Admin from "./components/admin";
 import {Provider} from "react-redux";
 import store from "./store/storeConfig";
-import Dashboard from "./components/dashboard";
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import SignIn from "./components/signin/SignIn";
 import {AuthProvider} from "./components/auth/AuthProvider";
 import {PdfBooks} from "./components/pdfbooks/PdfBooks";
-
+import {Dashboard} from "./components/dashboard/Dashboard";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

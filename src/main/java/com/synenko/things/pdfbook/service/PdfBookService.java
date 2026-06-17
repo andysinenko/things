@@ -15,6 +15,7 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -153,5 +154,11 @@ public class PdfBookService {
         logger.debug("Updating pdf book: {}", saved);
 
         return PdfBookMapper.toResponse(pdfBookRepository.save(saved));
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = "pdfBookCount")
+    public long getBookCount() {
+        return pdfBookRepository.count();
     }
 }

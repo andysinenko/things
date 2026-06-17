@@ -183,4 +183,26 @@ public class BookController {
         var response = BookMapper.entityToResponse(book);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @Operation(summary = "Get book count", description = "Returns a number of the books")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved book",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Long.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    @GetMapping("/count")
+    public ResponseEntity<Long> getBooksCount() {
+        logger.debug("Retrieving books count");
+        return new ResponseEntity<>(bookService.getBookCount(), HttpStatus.OK);
+    }
 }
