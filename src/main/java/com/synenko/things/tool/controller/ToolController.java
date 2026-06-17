@@ -155,5 +155,25 @@ public class ToolController {
         return new ResponseEntity<>(vendors, HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Get pdf book count", description = "Returns a number of the pdf books")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved pdf book",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Long.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    @GetMapping("/count")
+    public ResponseEntity<Long> getToolsCount() {
+        logger.debug("Retrieving tools count");
+        return new ResponseEntity<>(toolService.getToolsCount(), HttpStatus.OK);
+    }
 }

@@ -51,12 +51,26 @@ export const deleteTool = createAsyncThunk(
     }
 );
 
+export const getToolCount = createAsyncThunk(
+    "tools/count",
+    async () => {
+        try {
+            const result = await axios.get(`${ENDPOINTS.tools}/count`);
+            return result.data;
+        } catch (error) {
+            console.error(error);
+            return 0;
+        }
+    }
+);
+
 const toolsSlice = createSlice({
     name: "tools",
     initialState: {
         tools: [],
         loading: false,
         error: null,
+        count: 0,
     },
     reducers: {
         sortById(state) {
@@ -79,6 +93,11 @@ const toolsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             // fetchTools
+            .addCase(getToolCount.fulfilled, (state, action) => {
+                state.loading = false;
+                state.count = action.payload;
+                state.error = null;
+            })
             .addCase(fetchTools.pending, (state) => {
                 state.loading = true;
                 state.error = null;

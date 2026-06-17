@@ -11,7 +11,7 @@ const AppHeader = () => {
     const {user, loading} = useSelector(state => state.userReducer);
 
     const handleLogout = () => {
-        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("thingsToken");
         setToken("");
         navigate("/signin");
     };

@@ -27,7 +27,7 @@ const SignIn = () => {
             });
             const token = response.data.accessToken || response.headers['authorization'] || response.headers['Authorization'];
             if (token) {
-                localStorage.setItem("jwtToken", token);
+                localStorage.setItem("thingsToken", token);
                 setToken(token);
                 navigate("/dashboard");
                 fetchUser(dispatch);

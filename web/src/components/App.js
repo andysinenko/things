@@ -10,7 +10,7 @@ function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const token = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem("thingsToken");
         if (token) {
             dispatch(fetchUser());
         }

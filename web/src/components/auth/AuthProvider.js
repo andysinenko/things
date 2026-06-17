@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 axios.interceptors.request.use(
     (config) => {
-        const jwt = localStorage.getItem("jwtToken");
+        const jwt = localStorage.getItem("thingsToken");
         if (jwt) {
             config.headers["Authorization"] = `Bearer ${jwt}`;
         }
@@ -15,7 +15,7 @@ axios.interceptors.request.use(
 );
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(localStorage.getItem("jwtToken") || "");
+    const [token, setToken] = useState(localStorage.getItem("thingsToken") || "");
 
     return (
         <AuthContext.Provider value={{ token, setToken }}>

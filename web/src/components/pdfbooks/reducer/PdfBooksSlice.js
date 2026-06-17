@@ -6,6 +6,7 @@ const initialState = {
     pdfbooks: {
         pdfbooks: [],
         pageNumber: 0,
+        total: 0,
     },
     categories: [],
     pdfAuthors: [],
@@ -46,7 +47,7 @@ export const fetchCategories = createAsyncThunk(
     "pdfbooks/fetchCategories",
     async (_, {rejectWithValue}) => {
         try {
-            const response = await axios.get("http://localhost:8080/api/v1/pdfbooks/categories");
+            const response = await axios.get(`${ENDPOINTS.pdfbooks}/categories`);
             if (response.status === 200) {
                 return response.data;
             }
@@ -65,9 +66,8 @@ export const fetchPdfAuthors = createAsyncThunk(
     "pdfbooks/fetchPdfAuthors",
     async (_, {rejectWithValue}) => {
         try {
-            const response = await axios.get("http://localhost:8080/api/v1/pdfbooks/pdfauthors");
+            const response = await axios.get(`${ENDPOINTS.pdfbooks}/pdfauthors`);
             if (response.status === 200) {
-                console.log("Success on fetching genres: ", response.status);
                 return response.data;
             }
             console.log("Error on fetching pdf authors: ", response.status);

@@ -1,6 +1,7 @@
 package com.synenko.things.tool.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.synenko.things.common.exception.PlaceNotExistsException;
@@ -109,5 +110,11 @@ public class ToolService {
     public List<ToolResponse> getToolsByType(String type) {
         var tools = toolsRepository.findByType(ToolType.valueOf(type));
         return ToolMapper.entitiesToResponses(tools);
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = "toolsCount")
+    public Long getToolsCount() {
+        return toolsRepository.count();
     }
 }

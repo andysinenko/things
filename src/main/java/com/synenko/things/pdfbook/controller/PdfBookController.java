@@ -1,6 +1,5 @@
 package com.synenko.things.pdfbook.controller;
 
-import com.synenko.things.book.dto.BookRequest;
 import com.synenko.things.pdfbook.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -245,7 +244,7 @@ public class PdfBookController {
     })
     @GetMapping("/count")
     public ResponseEntity<Long> getPdfBooksCount() {
-        logger.debug("Retrieving books count");
+        logger.debug("Retrieving pdf books count");
         return new ResponseEntity<>(pdfBookService.getBookCount(), HttpStatus.OK);
     }
 }

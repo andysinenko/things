@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {deletePdfBook, fetchCategories, fetchPdfAuthors, fetchPdfBooks, updatePdfBook, uploadPdfBook} from "./reducer/PdfBooksSlice";
 import PdfBookModal from "./modal/PdfBookModal";
+import {Paginator} from "../layout/pagination/Paginator";
+import {fetchBooks} from "../books/reducer/BooksSlice";
 
 
 const INITIAL_BOOK = {
@@ -17,7 +19,6 @@ const YEARS = Array.from({ length: 26 }, (_, i) => 2000 + i);
 
 export const PdfBooks = () => {
     const dispatch   = useDispatch();
-    const pageSize   = 15;
 
     //modal window
     const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,8 @@ export const PdfBooks = () => {
     };
     const [selectedPdfBook, setSelectedPdfBook] = useState(emptyPdfBook);
 
-    const { pdfbooks, pageNumber } = useSelector(state => state.pdfBooksReducer.pdfbooks);
+    const { pdfbooks, pageNumber, total } = useSelector(state => state.pdfBooksReducer.pdfbooks);
+    const pageSize   = 15;
     const categories = useSelector(state => state.pdfBooksReducer.categories);
     const pdfauthors = useSelector(state => state.pdfBooksReducer.pdfAuthors);
     const loading    = useSelector(state => state.pdfBooksReducer.loading);
@@ -102,9 +104,14 @@ export const PdfBooks = () => {
     if (loading) return (
         <div className="main-container" style={{ padding: 32, color: "#6b7280" }}>Loading…</div>
     );
+
     if (error) return (
         <div className="main-container" style={{ padding: 32, color: "#b91c1c" }}>Error: {error}</div>
     );
+
+    const onChangePage = (pageNumber, pageSize) => {
+        dispatch(fetchBooks({ pageNumber, pageSize }));
+    };
 
     return (
         <main className="main-container">
@@ -274,6 +281,12 @@ export const PdfBooks = () => {
                     )}
                     </tbody>
                 </table>
+                <Paginator
+                    pageNumber={pageNumber}
+                    totalPages={total}
+                    pageSize={pageSize}
+                    onChangePage={onChangePage}
+                />
             </section>
             <PdfBookModal
                 isOpen={isOpen}
