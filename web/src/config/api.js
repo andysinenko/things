@@ -6,7 +6,7 @@ export const ENDPOINTS = {
     series: `${API_URL}/series`,
     genres: `${API_URL}/genres`,
     tools:    `${API_URL}/tools`,
-    brands: `${API_URL}/brands`,
+    //brands: `${API_URL}/brands`,
     users:    `${API_URL}/users`,
     places: `${API_URL}/places`,
     pdfbooks: `${API_URL}/pdfbooks`,

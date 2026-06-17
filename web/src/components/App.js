@@ -14,7 +14,7 @@ function App() {
         if (token) {
             dispatch(fetchUser());
         }
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="root">

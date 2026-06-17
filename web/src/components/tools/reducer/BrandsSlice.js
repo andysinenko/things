@@ -6,7 +6,7 @@ export const fetchBrands = createAsyncThunk(
     "brands/fetchAll",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get(ENDPOINTS.brands);
+            const response = await axios.get(`${ENDPOINTS.tools}/brands`);
             return response.data;
         } catch (error) {
         }

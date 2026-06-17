@@ -150,16 +150,15 @@ public class ToolController {
     })
     @GetMapping(value = "/brands", produces = "application/json")
     public ResponseEntity<List<VendorResponse>> getToolBrands() {
-        logger.info("Getting brands");
-        var vendors = vendorService.getAllVendors();
-        return new ResponseEntity<>(vendors, HttpStatus.OK);
+        logger.debug("Getting brands");
+        return new ResponseEntity<>(vendorService.getAllVendors(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get pdf book count", description = "Returns a number of the pdf books")
+    @Operation(summary = "Get tools count", description = "Returns a number of the tools")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Successfully retrieved pdf book",
+                    description = "Successfully retrieved tools count",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = Long.class)

@@ -7,7 +7,7 @@ export const fetchTools = createAsyncThunk(
     "tools/fetchAll",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get(ENDPOINTS.tools);
+            const response = await axios.get(`${ENDPOINTS.tools}`);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -19,7 +19,7 @@ export const addNewTool = createAsyncThunk(
     "tools/add",
     async (tool, { dispatch, rejectWithValue }) => {
         try {
-            await axios.post(ENDPOINTS.tools, tool);
+            await axios.post(`${ENDPOINTS.tools}`, tool);
             dispatch(fetchTools());
         } catch (error) {
             return rejectWithValue(error.message);
