@@ -1,7 +1,10 @@
 package com.synenko.things.tool.service;
 
+import com.synenko.things.tool.dto.ToolPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.synenko.things.common.exception.PlaceNotExistsException;
@@ -25,11 +28,10 @@ public class ToolService {
     private final PlaceRepository placeRepository;
 
     @Transactional(readOnly = true)
-    public List<ToolResponse> getAllTools() {
-        return toolsRepository.findAll()
-                .stream()
-                .map(ToolMapper::entityToResponse)
-                .toList();
+    public ToolPageResponse getAllTools(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        var tools = toolsRepository.findAll(pageable);
+        return ToolMapper.entityToPagebleResponse(tools);
     }
 
     @Transactional

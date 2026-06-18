@@ -1,4 +1,3 @@
-import './Tools.css'
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { fetchTools, addNewTool, updateTool, deleteTool, sortById, sortByName, sortByBrand, sortByType } from "./reducer/ToolsSlice";
@@ -12,6 +11,10 @@ export const Tools = () => {
     const dispatch = useDispatch();
 
     const {tools, loading, error} = useSelector(state => state.toolsReducer);
+    const total      = useSelector(state => state.toolsReducer.total);
+    const pageNumber = useSelector(state => state.toolsReducer.pageNumber);
+    const pageSize   = 15;
+
     const {places, ploading, perror} = useSelector(state => state.placeReducer);
     const {brands, loading: brandsLoading, error: brandsError} = useSelector(state => state.brandsReducer);
 
@@ -32,7 +35,7 @@ export const Tools = () => {
     const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchTools());
+        dispatch(fetchTools({ pageNumber: 0, pageSize }));
         dispatch(fetchBrands());
         dispatch(fetchAllPlaces());
     }, [dispatch]);
@@ -44,6 +47,7 @@ export const Tools = () => {
                 <p>Loading...</p>
             </div>
         </div>);
+
     if (error) return (
         <div className='root'>
             <div className="main-container">
@@ -104,13 +108,20 @@ export const Tools = () => {
         openModal("delete", tool);
     }
 
+    const onChangePage = (pageNumber, pageSize) => {
+        dispatch(fetchTools({ pageNumber: 0, pageSize }));
+    };
+
     return (
         <main className="main-container">
+            {/* ── Toolbar / Operations with tools ── */}
             <nav className="th-buttons-toolbar" aria-label="Tools">
-                <button className="th-main-button" variant="light" size="sm" onClick={handleAddTool}>
-                    Add tool
+                <button type="button" className="thbtn-add" onClick={handleAddTool}>
+                    + Add tool
                 </button>
             </nav>
+
+            {/* ── Table ── */}
             <section className="tableContainer">
                 <table className="table">
                     <thead>
@@ -123,8 +134,7 @@ export const Tools = () => {
                         <th scope="col">Purchasing date</th>
                         <th scope="col">Place</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th style={{ textAlign: "center" }}>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -132,19 +142,33 @@ export const Tools = () => {
                     .filter(tool => typeof tool === 'object' && tool !== null && 'id' in tool)
                     .map((tool) =>
                         <tr key={tool.id}>
-                            <td>{tool.id}</td>
-                            <td>{tool.name}</td>
-                            <td>{tool.vendor?.name}</td>
+                            <td style={{ color: "#9ca3af" }}>{tool.id}</td>
+                            <td style={{ fontWeight: 500 }}>{tool.name}</td>
+                            <td style={{ color: "#6b7280" }}>{tool.vendor?.name}</td>
                             <td>{tool.toolType}</td>
                             <td>{tool.serialNumber}</td>
                             <td>{tool.dateOfPurchasing?.substring(0, 4)}</td>
                             <td>{tool.place?.description}</td>
                             <td>{tool.description}</td>
                             <td>
-                                <button className="table-action-btn edit-btn" title="Редактировать" onClick={() => handleEditTool(tool)}>✏️</button>
-                            </td>
-                            <td>
-                                <button className="table-action-btn delete-btn" title="Удалить" onClick={() => handleDelTool(tool)}>🗑️</button>
+                                <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
+                                    <button
+                                        className="table-action-btn edit-btn"
+                                        title="Edit"
+                                        onClick={() => handleEditTool(tool)}
+                                        aria-label="Edit tool"
+                                    >
+                                        ✎
+                                    </button>
+                                    <button
+                                        className="table-action-btn delete-btn"
+                                        title="Delete"
+                                        onClick={() => handleDelTool(tool)}
+                                        aria-label="Delete tool"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         ): (
@@ -156,7 +180,12 @@ export const Tools = () => {
                     )}
                     </tbody>
                 </table>
-                <Paginator />
+                <Paginator
+                    pageNumber={pageNumber}
+                    totalPages={total}
+                    pageSize={pageSize}
+                    onChangePage={onChangePage}
+                />
             </section>
 
             <ToolModal

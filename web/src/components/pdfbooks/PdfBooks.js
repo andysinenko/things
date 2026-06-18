@@ -240,9 +240,9 @@ export const PdfBooks = () => {
                             <td style={{ color: "#9ca3af" }}>{book.id}</td>
                             <td style={{ fontWeight: 500 }}>{book.title}</td>
                             <td style={{ color: "#6b7280" }}>{book.category?.name}</td>
-                            <td>{book.author?.name}</td>
+                            <td style={{ color: "#6b7280" }}>{book.author?.name}</td>
                             <td style={{ color: "#6b7280" }}>{book.yearOfRelease?.substring(0, 4)}</td>
-                            <td>
+                            <td style={{ color: "#6b7280" }}>
                                 {book.language && (
                                     <span className="badge" style={{
                                         background: book.language === "EN" ? "#eff6ff" : "#f0fdf4",

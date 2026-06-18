@@ -5,9 +5,10 @@ import { ENDPOINTS } from "../../../config/api";
 
 export const fetchTools = createAsyncThunk(
     "tools/fetchAll",
-    async (_, { rejectWithValue }) => {
+    async ({ pageNumber, pageSize }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${ENDPOINTS.tools}`);
+            const response = await axios.get(`${ENDPOINTS.tools}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+            console.dir(response.data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -70,6 +71,8 @@ const toolsSlice = createSlice({
         tools: [],
         loading: false,
         error: null,
+        pageNumber: 0,
+        total: 0,
         count: 0,
     },
     reducers: {
@@ -104,7 +107,10 @@ const toolsSlice = createSlice({
             })
             .addCase(fetchTools.fulfilled, (state, action) => {
                 state.loading = false;
-                state.tools = action.payload.sort((a, b) => a.id - b.id);
+                state.tools = action.payload.tools.sort((a, b) => a.id - b.id);
+                state.total = action.payload.total;
+                state.pageNumber = action.payload.pageNumber;
+                state.pageSize = action.payload.pageSize;
             })
             .addCase(fetchTools.rejected, (state, action) => {
                 state.loading = false;

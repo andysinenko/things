@@ -39,8 +39,11 @@ public class ToolController {
     @Operation(summary = "List of tools", description = "Return list of tools")
     @ApiResponse(responseCode = "200", description = "Success")
     @GetMapping
-    public ResponseEntity<List<ToolResponse>> getAllTools() {
-        return ResponseEntity.ok(toolService.getAllTools());
+    public ResponseEntity<ToolPageResponse> getAllTools(
+            @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int pageNumber,
+            @Parameter(description = "Pages size") @RequestParam(defaultValue = "15") int pageSize
+    ) {
+        return ResponseEntity.ok(toolService.getAllTools(pageNumber, pageSize));
     }
 
     @Operation(summary = "New book", description = "Create a new book")
