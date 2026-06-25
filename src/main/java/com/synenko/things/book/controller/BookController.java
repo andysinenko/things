@@ -57,7 +57,8 @@ public class BookController {
             @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int pageNumber,
             @Parameter(description = "Pages size") @RequestParam(defaultValue = "15") int pageSize
     ) {
-        return ResponseEntity.ok(bookService.getAllBooksOld(pageNumber, pageSize));
+        //return ResponseEntity.ok(bookService.getAllBooksOld(pageNumber, pageSize));
+        return ResponseEntity.ok(bookService.getAllBooks(pageNumber, pageSize));
     }
 
 

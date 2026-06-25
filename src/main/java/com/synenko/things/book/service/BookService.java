@@ -28,7 +28,12 @@ import com.synenko.things.place.entity.Place;
 import com.synenko.things.place.repository.PlaceRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,6 +51,30 @@ public class BookService {
     @Cacheable(value = "bookCount")
     public long getBookCount() {
         return bookRepository.count();
+    }
+
+    @Cacheable(value = "booksPage", key = "#pageNumber + '-' + #pageSize")
+    @Transactional(readOnly = true)
+    public BookPageResponse getAllBooks(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("id"));
+
+        Page<Long> idsPage = bookRepository.findAllIds(pageable);
+        if (idsPage.isEmpty()) {
+            return new BookPageResponse(List.of(), 0, 0, 0);
+        }
+
+        List<Book> books = bookRepository.findAllWithAssociationsByIds(idsPage.getContent());
+
+        Map<Long, Book> bookMap = books.stream()
+                .collect(Collectors.toMap(Book::getId, Function.identity()));
+        List<Book> ordered = idsPage.getContent()
+                .stream()
+                .map(bookMap::get)
+                .filter(Objects::nonNull)
+                .toList();
+
+        var pagableResponse = new PageImpl<>(ordered, pageable, idsPage.getTotalElements());
+        return BookMapper.entityToPagebleResponse(pagableResponse.map(BookMapper::entityToResponse));
     }
 
     @Transactional(readOnly = true)
