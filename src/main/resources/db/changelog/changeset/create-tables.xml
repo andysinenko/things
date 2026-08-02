@@ -94,7 +94,7 @@
         </createTable>
     </changeSet>
     <changeSet author="Andrew Sinenko" id="015">
-        <createTable tableName="genre" catalogName="things"
+        <createTable tableName="genres" catalogName="things"
                      schemaName="things">
             <column name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_genre"/>

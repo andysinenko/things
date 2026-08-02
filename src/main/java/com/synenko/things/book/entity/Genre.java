@@ -2,7 +2,10 @@ package com.synenko.things.book.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +17,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Builder
 @Entity
-@Table(name = "genre", schema="things")
+@Table(name = "genres", schema="things")
 public class Genre {
     @Id
     @SequenceGenerator(
@@ -35,4 +38,15 @@ public class Genre {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }

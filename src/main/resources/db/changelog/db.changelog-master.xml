@@ -24,4 +24,5 @@
     <!-- moving pdf from elastic search-->
     <include file="changeset/create-pdfbooks.xml" relativeToChangelogFile="true"/>
     <include file="changeset/pdfbooks-indexes.xml" relativeToChangelogFile="true"/>
+    <include file="changeset/add-auditing.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

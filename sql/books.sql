@@ -50,6 +50,9 @@ INSERT INTO things.genre (id, name) VALUES (47, 'Юмористическая ф
 INSERT INTO things.genre (id, name) VALUES (48, 'Психологическая проза');
 INSERT INTO things.genre (id, name) VALUES (49, 'Критика и литературоведение');
 INSERT INTO things.genre (id, name) VALUES (50, 'Пьеса');
+INSERT INTO things.genre (id, name) VALUES (50, 'IT: алгоритмы');
+INSERT INTO things.genre (id, name) VALUES (50, 'IT: языки программирования');
+INSERT INTO things.genre (id, name) VALUES (50, 'IT: сети');
 
 INSERT INTO things.series (id, name) values (1, 'series 1');
 INSERT INTO things.series (id, name) values (2, 'series 2');

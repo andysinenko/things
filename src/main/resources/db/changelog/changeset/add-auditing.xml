@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="idx-401" author="Andrew Sinenko">
+        <addColumn tableName="genres">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="genres" columnName="is_deleted"/>
+            <dropColumn tableName="genres" columnName="created_at"/>
+            <dropColumn tableName="genres" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="402" author="Andrew Sinenko">
+        <addColumn tableName="authors">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="authors" columnName="is_deleted"/>
+            <dropColumn tableName="authors" columnName="created_at"/>
+            <dropColumn tableName="authors" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="403" author="Andrew Sinenko">
+        <addColumn tableName="series">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="series" columnName="is_deleted"/>
+            <dropColumn tableName="series" columnName="created_at"/>
+            <dropColumn tableName="series" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="404" author="Andrew Sinenko">
+        <addColumn tableName="tools">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="tools" columnName="is_deleted"/>
+            <dropColumn tableName="tools" columnName="created_at"/>
+            <dropColumn tableName="tools" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="405" author="Andrew Sinenko">
+        <addColumn tableName="vendors">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="vendors" columnName="is_deleted"/>
+            <dropColumn tableName="vendors" columnName="created_at"/>
+            <dropColumn tableName="vendors" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="406" author="Andrew Sinenko">
+        <addColumn tableName="pdf_books">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="pdf_books" columnName="is_deleted"/>
+            <dropColumn tableName="pdf_books" columnName="created_at"/>
+            <dropColumn tableName="pdf_books" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="407" author="Andrew Sinenko">
+        <addColumn tableName="pdfbooks_authors">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="pdfbooks_authors" columnName="is_deleted"/>
+            <dropColumn tableName="pdfbooks_authors" columnName="created_at"/>
+            <dropColumn tableName="pdfbooks_authors" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="408" author="Andrew Sinenko">
+        <addColumn tableName="pdfbooks_categories">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="pdfbooks_categories" columnName="is_deleted"/>
+            <dropColumn tableName="pdfbooks_categories" columnName="created_at"/>
+            <dropColumn tableName="pdfbooks_categories" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="409" author="Andrew Sinenko">
+        <addColumn tableName="books">
+            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="books" columnName="is_deleted"/>
+            <dropColumn tableName="books" columnName="created_at"/>
+            <dropColumn tableName="books" columnName="updated_at"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

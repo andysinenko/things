@@ -1,5 +1,6 @@
 TRUNCATE TABLE things.pdfbooks_categories RESTART IDENTITY;
 INSERT INTO things.pdfbooks_categories (id, name) VALUES
+    (0, 'Algorythms'),
     (1, 'Advanced Level'),
     (2, 'Beginner Level'),
     (3, 'C'),

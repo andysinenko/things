@@ -3,7 +3,10 @@ package com.synenko.things.tool.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import com.synenko.things.place.entity.Place;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -54,5 +57,16 @@ public class Tool {
 
     @Column(name = "description")
     private String description;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }
 
