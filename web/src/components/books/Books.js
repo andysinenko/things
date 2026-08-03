@@ -157,7 +157,7 @@ export const Books = () => {
                     <tr>
                         <th onClick={() => dispatch(sortBooksById())}    style={{ cursor: "pointer" }}>ID</th>
                         <th onClick={() => dispatch(sortBooksByTitle())}  style={{ cursor: "pointer" }}>Title</th>
-                        <th style={{ color: "#9ca3af", width: "120px" }}>Volume</th>
+                        <th style={{ display: "none", color: "#9ca3af", width: "120px" }}>Volume</th>
                         <th>Author</th>
                         <th onClick={() => dispatch(sortBooksByGenre())}  style={{ cursor: "pointer" }}>Genre</th>
                         <th>Series</th>
@@ -172,14 +172,14 @@ export const Books = () => {
                         <tr key={book.id}>
                             <td style={{ color: "#9ca3af" }}>{book.id}</td>
                             <td style={{ fontWeight: 500 }}>{book.title}</td>
-                            <td style={{ color: "#9ca3af", width: "120px" }}>{book.volume}</td>
+                            <td style={{ display: "none", color: "#9ca3af", width: "120px" }}>{book.volume}</td>
                             <td>
                                 {book.authors
                                     ? [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(a => a.name).join(", ")
                                     : ""}
                             </td>
                             <td><GenreBadge name={book.genre?.name} /></td>
-                            <td style={{ color: "#6b7280" }}>{book.series?.name}</td>
+                            <td d="true" style={{color: "#6b7280" }}>{book.series?.name}</td>
                             <td style={{ color: "#6b7280" }}>{book.year}</td>
                             <td style={{ color: "#6b7280" }}>
                                 {book.place?.parent?.name
