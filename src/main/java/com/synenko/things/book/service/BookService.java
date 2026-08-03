@@ -108,19 +108,23 @@ public class BookService {
                 .orElseThrow(() -> new BookNotExistsException(id));
 
         List<Author> authors = authorRepository.findAllById(bookRequest.authors());
+        Genre genre = null;
+        Place place = null;
+        Series series = null;
 
-        Genre genre = genreRepository.findById(bookRequest.genre())
-                .orElseThrow(() -> new GenreNotExistsException(bookRequest.genre()));
-
-        Place place = placeRepository.findById(bookRequest.place())
-                .orElseThrow(() -> new PlaceNotExistsException(bookRequest.place()));
-
-        Series series = seriesRepository.findById(bookRequest.series())
-                .orElseThrow(() -> new SeriesNotExistsException(bookRequest.series()));
+        if(bookRequest.genre() != null) {
+            genre = genreRepository.findById(bookRequest.genre()).orElse(null);
+        }
+        if(bookRequest.place() != null) {
+            place = placeRepository.findById(bookRequest.place()).orElse(null);
+        }
+        if(bookRequest.series() != null) {
+            series = seriesRepository.findById(bookRequest.series()).orElse(null);
+        }
 
         book.setTitle(bookRequest.title());
         book.setDescription(bookRequest.description());
-        book.setYear(bookRequest.year());
+        book.setYear(bookRequest.year().atDay(1));
         book.setVolumeNumber(bookRequest.volume());
         book.setAuthors(authors);
         book.setGenre(genre);
@@ -135,15 +139,19 @@ public class BookService {
     @Cacheable(value = "booksPage", key = "#pageNumber + '-' + #pageSize")
     private Book getFullfilledBookEntity(BookRequest bookRequest) {
         List<Author> authors = authorRepository.findAllById(bookRequest.authors());
+        Genre genre = null;
+        Place place = null;
+        Series series = null;
 
-        Genre genre = genreRepository.findById(bookRequest.genre())
-                .orElseThrow(() -> new GenreNotExistsException(bookRequest.genre()));
-
-        Place place = placeRepository.findById(bookRequest.place())
-                .orElseThrow(() -> new PlaceNotExistsException(bookRequest.place()));
-
-        Series series = seriesRepository.findById(bookRequest.series())
-                .orElseThrow(() -> new SeriesNotExistsException(bookRequest.series()));
+        if(bookRequest.genre() != null) {
+           genre = genreRepository.findById(bookRequest.genre()).orElse(null);
+        }
+        if(bookRequest.place() != null) {
+            place = placeRepository.findById(bookRequest.place()).orElse(null);
+        }
+        if(bookRequest.series() != null) {
+            series = seriesRepository.findById(bookRequest.series()).orElse(null);
+        }
 
         return BookMapper.dtoToEntity(bookRequest, authors, genre, series, place);
     }

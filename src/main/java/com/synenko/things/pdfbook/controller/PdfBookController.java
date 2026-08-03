@@ -79,7 +79,7 @@ public class PdfBookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved book",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BookResponse.class))),
+                            schema = @Schema(implementation = PdfBook.class))),
             @ApiResponse(responseCode = "404", description = "Book not found", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })

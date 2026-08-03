@@ -1,5 +1,6 @@
 package com.synenko.things.book.controller;
 
+import com.synenko.things.book.dto.AuthorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.synenko.things.book.dto.GenreRequest;
@@ -40,5 +42,22 @@ public class GenreController {
     @GetMapping
     public ResponseEntity<List<GenreResponse>> getAllGenres() {
         return new ResponseEntity<>(genreService.getAllGenres(), HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Get all Authors by Genre ID",
+            description = "Return all authors related to genre"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Success",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = GenreRequest.class)
+            )
+    )
+    @GetMapping("/{id}/authors")
+    public ResponseEntity<List<AuthorResponse>> getAllAuthorsByGenre(@PathVariable Long id) {
+        return new ResponseEntity<>(genreService.getAllAuthorsByGenre(id), HttpStatus.OK);
     }
 }

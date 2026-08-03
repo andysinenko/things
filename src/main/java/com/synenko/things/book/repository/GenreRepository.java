@@ -7,4 +7,5 @@ import com.synenko.things.book.entity.Genre;
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     Genre findGenreByName(String name);
+    Genre findGenreById(Long id);
 }

@@ -1,4 +1,7 @@
 TRUNCATE TABLE things.authors RESTART IDENTITY;
+-- id | name | note | is_deleted | created_at | updated_at | genre_id
+INSERT INTO things.authors (id, name, note, genre_id) VALUES
+    (1, 'Брюс Шнайдер', '', 52 );
 
 INSERT INTO things.authors (id, name, note) VALUES
     (1, 'Уильям Шекспир', 'английский драматург'),

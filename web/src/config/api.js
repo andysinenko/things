@@ -1,4 +1,4 @@
-export const API_URL = process.env.REACT_APP_API_URL;
+export const API_URL = 'http://localhost:8080/api/v1'; //process.env.REACT_APP_API_URL;
 
 export const ENDPOINTS = {
     books: `${API_URL}/books`,
@@ -10,4 +10,5 @@ export const ENDPOINTS = {
     users:    `${API_URL}/users`,
     places: `${API_URL}/places`,
     pdfbooks: `${API_URL}/pdfbooks`,
+    authorsByGenre: (id) => `${API_URL}/genres/${id}/authors`,
 };

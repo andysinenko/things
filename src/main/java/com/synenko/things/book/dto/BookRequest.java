@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 
 
@@ -21,7 +22,7 @@ public record BookRequest(
     @Schema(name = "place", description = "Place of storing")
     Long place,
     @Schema(name = "year", description = "Date of issue")
-    LocalDate year,
+    Year year,
     @Schema(name = "volume", description = "Volume")
     String volume,
     @Schema(name = "description", description = "Additional information")

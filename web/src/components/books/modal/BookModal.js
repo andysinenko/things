@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import PlaceModal from "../../places/modal/PlaceModal";
+
+import {useDispatch, useSelector} from "react-redux";
+import {fetchAuthorsByGenre, clearGenreAuthors} from "../reducer/AuthorsSlice";
 
 const BookModal = ({
                        isOpen,
@@ -10,10 +13,13 @@ const BookModal = ({
                        setSelectedBook,
                        genres,
                        series,
-                       authors = [],
+                       //authors = [],
                        places,
                    }) => {
+    const dispatch = useDispatch();
     const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
+    const { authors, loading: authorsLoading } = useSelector((state) => state.authorsReducer);
+    const { genreAuthors, loading: authorsGenresLoading } = useSelector((state) => state.authorsReducer);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,6 +49,14 @@ const BookModal = ({
         }
         return names.join(" → ");
     };
+
+    useEffect(() => {
+        if (isOpen && selectedBook.genre) {
+            dispatch(fetchAuthorsByGenre(selectedBook.genre));
+        } else {
+            dispatch(clearGenreAuthors());
+        }
+    }, [isOpen, selectedBook.genre, dispatch]);
 
     if (!isOpen) return null;
 
@@ -89,6 +103,22 @@ const BookModal = ({
                 {/* Author + Genre */}
                 <div className="modal-field-row">
                     <div className="modal-field">
+                        <label>Genre</label>
+                        <select
+                            value={selectedBook.genre || ""}
+                            onChange={(e) =>
+                                setSelectedBook(prev => ({
+                                    ...prev,
+                                    genre: Number(e.target.value)
+                                }))
+                            }>
+                            <option value="" disabled hidden>Select genre</option>
+                            {genres.map((genre) => (
+                                <option key={genre.id} value={genre.id}>{genre.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="modal-field">
                         <label>Author</label>
                         <select multiple
                             value={selectedBook.authors}
@@ -103,26 +133,10 @@ const BookModal = ({
                                 }));
                             }}
                         >
-                            {authors.map(author => (
+                            {genreAuthors.map(author => (
                                 <option key={author.id} value={author.id}>
                                     {author.name}
                                 </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="modal-field">
-                        <label>Genre</label>
-                        <select
-                            value={selectedBook.genre || ""}
-                            onChange={(e) =>
-                                setSelectedBook(prev => ({
-                                    ...prev,
-                                    genre: Number(e.target.value)
-                                }))
-                            }>
-                            <option value="" disabled hidden>Select genre</option>
-                            {genres.map((genre) => (
-                                <option key={genre.id} value={genre.id}>{genre.name}</option>
                             ))}
                         </select>
                     </div>
@@ -151,7 +165,7 @@ const BookModal = ({
                             className="modal-input"
                             type="text"
                             name="year"
-                            value={selectedBook.year?.substring(0, 4) || ""}
+                            value={selectedBook.year}
                             onChange={handleChange}
                             placeholder="2024"
                         />

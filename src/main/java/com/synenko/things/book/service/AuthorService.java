@@ -23,23 +23,7 @@ public class AuthorService {
                 .toList();
     }
 
-    public Author getAuthorById(Long id) {
-        return authorRepository.findById(id).orElse(null);
-    }
-
-    public Author getAuthorByName(String name) {
-        return authorRepository.findByName(name);
-    }
-
     public Author saveAuthor(Author author) {
         return authorRepository.save(author);
-    }
-
-    public void deleteAuthor(Long id) {
-        authorRepository.deleteById(id);
-    }
-
-    public void updateAuthor(Author author) {
-        authorRepository.save(author);
     }
 }

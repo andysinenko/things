@@ -25,4 +25,5 @@
     <include file="changeset/create-pdfbooks.xml" relativeToChangelogFile="true"/>
     <include file="changeset/pdfbooks-indexes.xml" relativeToChangelogFile="true"/>
     <include file="changeset/add-auditing.xml" relativeToChangelogFile="true"/>
+    <include file="changeset/add-genre-author.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

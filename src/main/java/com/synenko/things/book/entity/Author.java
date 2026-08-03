@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -19,6 +20,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Setter
 @Builder
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "authors", schema="things")
 public class Author implements Serializable {
     @Id
@@ -54,4 +56,10 @@ public class Author implements Serializable {
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
 }

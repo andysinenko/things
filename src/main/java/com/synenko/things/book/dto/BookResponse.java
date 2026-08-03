@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import com.synenko.things.place.dto.PlaceResponse;
 
+import java.time.Year;
 import java.util.List;
 
 @Builder
@@ -20,7 +21,7 @@ public record BookResponse(
         @Schema(name = "series", description = "Series of the book")
         SeriesResponse series,
         @Schema(name = "year", description = "Date of issue")
-        String year,
+        Year year,
         @Schema(name = "place", description = "Place of storing")
         PlaceResponse place,
         @Schema(name = "volume", description = "Volume")

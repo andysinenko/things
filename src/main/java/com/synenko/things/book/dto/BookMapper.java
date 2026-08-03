@@ -8,6 +8,7 @@ import com.synenko.things.book.entity.Series;
 import com.synenko.things.place.dto.PlaceMapper;
 import com.synenko.things.place.entity.Place;
 
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,7 @@ public class BookMapper {
                     .genre(genre)
                     .series(series)
                     .place(place)
-                    .year(request.year())
+                    .year(request.year().atDay(1))
                     .description(request.description())
                     .volumeNumber(request.volume())
                     .build();
@@ -39,7 +40,7 @@ public class BookMapper {
                     .genre(GenreMapper.entityToDto(entity.getGenre()))
                     .authors(AuthorMapper.entitiesToResponses(entity.getAuthors()))
                     .place(PlaceMapper.entityToResponse(entity.getPlace()))
-                    .year(entity.getYear().toString())
+                    .year(Year.from(entity.getYear()))
                     .description(entity.getDescription())
                     .volume(entity.getVolumeNumber())
                 .build();
@@ -53,7 +54,7 @@ public class BookMapper {
                 .builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
-                .year(entity.getYear().toString())
+                .year(Year.from(entity.getYear()))
                 .description(entity.getDescription())
                 .volume(entity.getVolumeNumber())
                 .genre(GenreMapper.entityToDto(entity.getGenre()))

@@ -10,6 +10,7 @@ import com.synenko.things.place.entity.Place;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ class BookMapperTest {
                 .series(1L)
                 .genre(1L)
                 .place(1L)
-                .year(LocalDate.parse("2021-01-01"))
+                .year(Year.parse("2021"))
                 .description("Description")
                 .volume("1")
                 .authors(List.of(1L))
@@ -83,7 +84,7 @@ class BookMapperTest {
                 .genre(1L)
                 .series(1L)
                 .authors(List.of(1L))
-                .year(LocalDate.parse("2021-01-01"))
+                .year(Year.parse("2021"))
                 .description("Description")
                 .volume("1")
                 .build();
@@ -117,7 +118,7 @@ class BookMapperTest {
                 .series(null)
                 .authors(null)
                 .place(null)
-                .year(LocalDate.parse("2021-01-01"))
+                .year(LocalDate.parse("2021"))
                 .description("Description")
                 .volumeNumber("1")
                 .build();

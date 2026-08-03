@@ -148,9 +148,6 @@ export const Books = () => {
                 <button className="thbtn-add" onClick={handleAddBook}>
                     + Add book
                 </button>
-                <button className="thbtn-del" onClick={() => handleDelBook(selectedBook)}>
-                    Delete book
-                </button>
             </nav>
 
             {/* ── Table ── */}
@@ -183,7 +180,7 @@ export const Books = () => {
                             </td>
                             <td><GenreBadge name={book.genre?.name} /></td>
                             <td style={{ color: "#6b7280" }}>{book.series?.name}</td>
-                            <td style={{ color: "#6b7280" }}>{book.year?.substring(0, 4)}</td>
+                            <td style={{ color: "#6b7280" }}>{book.year}</td>
                             <td style={{ color: "#6b7280" }}>
                                 {book.place?.parent?.name
                                     ? `${book.place.parent.name} · ${book.place.name}`
@@ -238,7 +235,7 @@ export const Books = () => {
                 setSelectedBook={setSelectedBook}
                 genres={genres}
                 series={series}
-                authors={authors}
+                //authors={authors}
                 places={places}
             />
         </main>
