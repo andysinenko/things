@@ -12,6 +12,8 @@ public class AuthorMapper {
             return AuthorResponse.builder()
                     .id(entity.getId())
                     .name(entity.getName())
+                    .note(entity.getNote())
+                    .genre(GenreMapper.entityToDto(entity.getGenre()))
                     .build();
         return null;
     }

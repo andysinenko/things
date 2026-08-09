@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet author="Andrew Sinenko" id="09-08-2026-1">
+        <addUniqueConstraint
+                tableName="authors"
+                catalogName="things"
+                schemaName="things"
+                columnNames="name"
+                constraintName="uq_authors_name"/>
+    </changeSet>
+    <changeSet author="Andrew Sinenko" id="09-08-2026-2">
+        <addNotNullConstraint
+                tableName="authors"
+                catalogName="things"
+                schemaName="things"
+                columnName="name"
+                columnDataType="varchar2(512)"/>
+    </changeSet>
+
+    <changeSet author="Andrew Sinenko" id="09-08-2026-3">
+        <addUniqueConstraint
+                tableName="genres"
+                catalogName="things"
+                schemaName="things"
+                columnNames="name"
+                constraintName="uq_genres_name"/>
+    </changeSet>
+    <changeSet author="Andrew Sinenko" id="09-08-2026-4">
+        <addNotNullConstraint
+                tableName="genres"
+                catalogName="things"
+                schemaName="things"
+                columnName="name"
+                columnDataType="varchar2(512)"/>
+    </changeSet>
+
+    <changeSet author="Andrew Sinenko" id="09-08-2026-5">
+        <addUniqueConstraint
+                tableName="series"
+                catalogName="things"
+                schemaName="things"
+                columnNames="name"
+                constraintName="uq_series_name"/>
+    </changeSet>
+    <changeSet author="Andrew Sinenko" id="09-08-2026-6">
+        <addNotNullConstraint
+                tableName="series"
+                catalogName="things"
+                schemaName="things"
+                columnName="name"
+                columnDataType="varchar2(512)"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -26,4 +26,5 @@
     <include file="changeset/pdfbooks-indexes.xml" relativeToChangelogFile="true"/>
     <include file="changeset/add-auditing.xml" relativeToChangelogFile="true"/>
     <include file="changeset/add-genre-author.xml" relativeToChangelogFile="true"/>
+    <include file="changeset/add-unique-prop.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

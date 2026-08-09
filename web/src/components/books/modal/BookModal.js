@@ -13,17 +13,28 @@ const BookModal = ({
                        setSelectedBook,
                        genres,
                        series,
-                       //authors = [],
                        places,
                    }) => {
     const dispatch = useDispatch();
     const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
-    const { authors, loading: authorsLoading } = useSelector((state) => state.authorsReducer);
-    const { genreAuthors, loading: authorsGenresLoading } = useSelector((state) => state.authorsReducer);
+    //const {authors, loading: authorsLoading} = useSelector((state) => state.authorsReducer);
+    const {genreAuthors, loading: authorsGenresLoading} = useSelector((state) => state.authorsReducer);
+    const [selectedPlace, setSelectedPlace] = useState(null);
+
+    const findPlaceById = (nodes, id) => {
+        for (const node of nodes) {
+            if (node.id === id) return node;
+            if (node.children?.length) {
+                const found = findPlaceById(node.children, id);
+                if (found) return found;
+            }
+        }
+        return null;
+    };
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setSelectedBook((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setSelectedBook((prev) => ({...prev, [name]: value}));
     };
 
     const onNodeSelect = (nodePlace) => {
@@ -57,6 +68,15 @@ const BookModal = ({
             dispatch(clearGenreAuthors());
         }
     }, [isOpen, selectedBook.genre, dispatch]);
+
+    useEffect(() => {
+        if (isOpen && selectedBook.place && places?.length) {
+            const found = findPlaceById(places, selectedBook.place);
+            setSelectedPlace(found);
+        } else if (isOpen && !selectedBook.place) {
+            setSelectedPlace(null);
+        }
+    }, [isOpen, selectedBook.place, places]);
 
     if (!isOpen) return null;
 
@@ -121,17 +141,17 @@ const BookModal = ({
                     <div className="modal-field">
                         <label>Author</label>
                         <select multiple
-                            value={selectedBook.authors}
-                            onChange={(e) => {
-                                const selectedIds = Array.from(
-                                    e.target.selectedOptions,
-                                    o => Number(o.value)
-                                );
-                                setSelectedBook(prev => ({
-                                    ...prev,
-                                    authors: selectedIds
-                                }));
-                            }}
+                                value={selectedBook.authors}
+                                onChange={(e) => {
+                                    const selectedIds = Array.from(
+                                        e.target.selectedOptions,
+                                        o => Number(o.value)
+                                    );
+                                    setSelectedBook(prev => ({
+                                        ...prev,
+                                        authors: selectedIds
+                                    }));
+                                }}
                         >
                             {genreAuthors.map(author => (
                                 <option key={author.id} value={author.id}>
@@ -147,12 +167,12 @@ const BookModal = ({
                     <div className="modal-field">
                         <label>Series</label>
                         <select value={selectedBook.series || ""}
-                            onChange={(e) =>
-                                setSelectedBook(prev => ({
-                                    ...prev,
-                                    series: Number(e.target.value)
-                                }))
-                            }>
+                                onChange={(e) =>
+                                    setSelectedBook(prev => ({
+                                        ...prev,
+                                        series: Number(e.target.value)
+                                    }))
+                                }>
                             <option value="" disabled hidden>Select series</option>
                             {series.map((s) => (
                                 <option key={s.id} value={s.id}>{s.name}</option>
@@ -178,15 +198,14 @@ const BookModal = ({
                     <button
                         type="button"
                         className="modal-place-btn"
-                        onClick={onPlacesOpenDialogBox}
-                    >
+                        onClick={onPlacesOpenDialogBox}>
                         <span>
-                            {selectedBook.place
-                                ? getFullPlacePath(selectedBook.place)
+                            {selectedPlace
+                                ? getFullPlacePath(selectedPlace)
                                 : "Select place"}
                         </span>
-                        <span style={{ fontSize: 13, opacity: 0.5 }}>
-                            {selectedBook.place ? "✓" : "›"}
+                        <span style={{fontSize: 13, opacity: 0.5}}>
+                            {selectedPlace ? "✓" : "›"}
                         </span>
                     </button>
                 </div>
@@ -222,9 +241,9 @@ const BookModal = ({
                 </button>
             </div>
             <div className="modal-body">
-                <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.5 }}>
+                <p style={{color: "#4b5563", fontSize: 14, lineHeight: 1.5}}>
                     Are you sure you want to delete{" "}
-                    <strong style={{ color: "#1a2332" }}>"{selectedBook?.title || "this book"}"</strong>?
+                    <strong style={{color: "#1a2332"}}>"{selectedBook?.title || "this book"}"</strong>?
                     This action cannot be undone.
                 </p>
             </div>

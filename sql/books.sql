@@ -54,7 +54,7 @@ INSERT INTO things.genres (id, name) VALUES (51, 'IT: алгоритмы');
 INSERT INTO things.genres (id, name) VALUES (52, 'IT: криптография');
 INSERT INTO things.genres (id, name) VALUES (53, 'IT: языки программирования');
 INSERT INTO things.genres (id, name) VALUES (54, 'IT: сети');
-
+INSERT INTO things.genres (id, name) VALUES (54, 'IT: Databases');
 INSERT INTO things.genres (id, name) VALUES (55, 'IT: Operating systems');
 
 SELECT setval('things.author_sequence', COALESCE((SELECT MAX(id) FROM things.authors), 1));
@@ -77,12 +77,25 @@ INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Герб Сатте�
 INSERT INTO things.authors (name, note, genre_id) VALUES ( 'В.Н.Пильщиков', '', 53 );
 INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Александр Степанов', 'A.Stepanov', 53 );
 INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Себастьян Дашнер', 'Sebastian Dashner', 53 );
-
 INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Дэвид Гери', '', 53 );
 INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Кей Хорстман', '', 53 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'К.Г.Финогенов', '', 53 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Microsoft', '', 53 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Джеймс Перри', '', 56 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Джеральд Пост', '', 56 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Марлен Терьо', '', 56 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Гари Корнелл', '', 53 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Уильям Ричард Стивенс', '', 53 );
+INSERT INTO things.authors (name, note, genre_id) VALUES ( 'Скот Майерс', '', 53 );
+
+
 
 INSERT INTO things.series (name, note) VALUES ( 'В действии', 'In action');
 INSERT INTO things.series (name, note) VALUES ( 'Для профессионалов', 'Professional');
 INSERT INTO things.series (name, note) VALUES ( 'В подлиннике', '');
 INSERT INTO things.series (name, note) VALUES ( 'C++ In-Depth', '');
 INSERT INTO things.series (name, note) VALUES ( 'Библиотека профессионала', '');
+INSERT INTO things.series (name, note) VALUES ( 'Мастер класс', '');
+INSERT INTO things.series (name, note) VALUES ( 'Head First', '');
+INSERT INTO things.series (name, note) VALUES ( 'Библиотека разработчика', '');
+INSERT INTO things.series (name, note) VALUES ( 'Грокаем', '');

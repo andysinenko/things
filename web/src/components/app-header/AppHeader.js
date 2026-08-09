@@ -26,21 +26,27 @@ const AppHeader = () => {
         <header className="header">
             <div className="left-header">
                 {token ? (
-                    <Link to="/dashboard"><img src={logo} alt="Logo" style={logoStyle}/></Link>
+                    <Link to="/dashboard">
+                        <div className="header-title">
+                            <img src={logo} alt="Logo" style={logoStyle}/>
+                            {/*<span>Things</span>*/}
+                        </div>
+                    </Link>
                 ) : (
                     <Link to="/signin"><img src={logo} alt="Logo" style={logoStyle}/></Link>
                 )}
                 {
                     token !== null || token !== undefined ?
                         (<ul className="header-menue">
-                            <li className="li-header-my"><NavLink to="/dashboard" className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>#</NavLink></li>
+                            {/*<li className="li-header-my"><NavLink to="/dashboard" className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>#</NavLink></li>*/}
                             <li className="li-header-my"><NavLink to="/books"     className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Books</NavLink></li>
+                            <li className="li-header-my"><NavLink to="/pdfbook"    className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Pdf books</NavLink></li>
                             <li className="li-header-my"><NavLink to="/tools"     className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Tools</NavLink></li>
                             <li className="li-header-my"><NavLink to="/places"    className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Places</NavLink></li>
-                            <li className="li-header-my"><NavLink to="/pdfbook"    className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Pdf books</NavLink></li>
+                            <li className="li-header-my"><NavLink to="/catalog"    className={({ isActive, isPending }) =>  isPending ? "pending" : isActive ? "active_link" : ""}>Catalog</NavLink></li>
                         </ul>) : ''}
             </div>
-            <div className="header-title"><span>Things</span></div>
+
             <div className="right-header">
                 <ul className="header-menue">
                     <li>{loading ? "Loading..." : user.username || "Guest"}</li>

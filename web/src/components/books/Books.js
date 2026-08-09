@@ -161,7 +161,7 @@ export const Books = () => {
                         <th>Author</th>
                         <th onClick={() => dispatch(sortBooksByGenre())}  style={{ cursor: "pointer" }}>Genre</th>
                         <th>Series</th>
-                        <th>Year</th>
+                        <th style={{ cursor: "pointer", width: "60px" }}>Year</th>
                         <th>Place</th>
                         <th>Description</th>
                         <th style={{ textAlign: "center" }}>Actions</th>
@@ -180,10 +180,10 @@ export const Books = () => {
                             </td>
                             <td><GenreBadge name={book.genre?.name} /></td>
                             <td d="true" style={{color: "#6b7280" }}>{book.series?.name}</td>
-                            <td style={{ color: "#6b7280" }}>{book.year}</td>
+                            <td style={{ color: "#6b7280", width: "60px", whiteSpace: "nowrap" }}>{book.year}</td>
                             <td style={{ color: "#6b7280" }}>
                                 {book.place?.parent?.name
-                                    ? `${book.place.parent.name} · ${book.place.name}`
+                                    ? `${book.place.parent.parent.name} ·${book.place.parent.name} · ${book.place.name}`
                                     : book.place?.name}
                             </td>
                             <td style={{ color: "#6b7280" }}>{book.description}</td>
@@ -235,7 +235,6 @@ export const Books = () => {
                 setSelectedBook={setSelectedBook}
                 genres={genres}
                 series={series}
-                //authors={authors}
                 places={places}
             />
         </main>
