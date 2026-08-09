@@ -49,7 +49,7 @@ public class ApplicationConfig {
                 Caffeine.newBuilder()
                         .maximumSize(500)
                         .expireAfterWrite(Duration.ofHours(1))
-                        .refreshAfterWrite(Duration.ofMinutes(5))
+                        .refreshAfterWrite(Duration.ofMinutes(1))
                         .build(key -> /* loader */ null));
     }
 

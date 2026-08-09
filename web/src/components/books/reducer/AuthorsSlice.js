@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ENDPOINTS } from "../../../config/api";
+import {fetchBooks} from "./BooksSlice";
 
 export const fetchAuthors = createAsyncThunk(
     "authors/fetchAll",
@@ -20,6 +21,42 @@ export const fetchAuthorsByGenre = createAsyncThunk(
         try {
             const response = await axios.get(ENDPOINTS.authorsByGenre(genreId));
             return response.data;
+        } catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+);
+
+export const addAuthor = createAsyncThunk(
+    "authors/add",
+    async (author, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(ENDPOINTS.authors, author);
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+);
+
+export const updateAuthor = createAsyncThunk(
+    "author/update",
+    async ({ id, author }, { dispatch, rejectWithValue }) => {
+        try {
+            await axios.put(`${ENDPOINTS.authors}/${id}`, author);
+            dispatch(fetchAuthors());
+        } catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+);
+
+export const deleteAuthor = createAsyncThunk(
+    "author/delete",
+    async (id, { rejectWithValue }) => {
+        try {
+            await axios.delete(`${ENDPOINTS.authors}/${id}`);
+            return id;
         } catch (err) {
             return rejectWithValue(err.message);
         }
@@ -62,6 +99,25 @@ const authorsSlice = createSlice({
             })
             .addCase(fetchAuthorsByGenre.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(addAuthor.fulfilled, (state, action) => {
+                state.authors.push(action.payload);
+            })
+            .addCase(addAuthor.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+            .addCase(updateAuthor.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateAuthor.rejected, (state, action) => {
+                state.loading = false;
+                state.authors.push(action.payload);
+            })
+            .addCase(deleteAuthor.fulfilled, (state, action) => {
+                state.authors = state.authors.filter(a => a.id !== action.payload);
+            })
+            .addCase(deleteAuthor.rejected, (state, action) => {
                 state.error = action.payload;
             });
     },

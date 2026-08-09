@@ -6,7 +6,9 @@ import lombok.Builder;
 @Builder
 @Schema(name="Genre Request", description = "Dto object for book's genre")
 public record GenreRequest(
-        @Schema(name="name", description = "Schema name")
-        String name) {
+        @Schema(name="name", description = "name") String name,
+        @Schema(name="note", description = "note") String note
+
+) {
 }
 

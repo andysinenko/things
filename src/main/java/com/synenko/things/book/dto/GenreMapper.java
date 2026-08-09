@@ -13,6 +13,7 @@ public class GenreMapper {
                     .builder()
                     .id(entity.getId())
                     .name(entity.getName())
+                    .note(entity.getNote())
                     .build();
         return null;
     }
@@ -22,6 +23,7 @@ public class GenreMapper {
             return Genre
                 .builder()
                 .name(dto.name())
+                    .note(dto.note())
                 .build();
         return null;
     }
