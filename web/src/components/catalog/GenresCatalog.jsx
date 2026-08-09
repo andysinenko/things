@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {addGenre, deleteGenre, fetchGenres, updateGenre} from "../books/reducer/GenresSlice";
 import "./Catalog.css"
-import {addAuthor, deleteAuthor} from "../books/reducer/AuthorsSlice";
+
 
 const GenresCatalog = () => {
     const { genres, loading, error } = useSelector(state => state.genresReducer);
