@@ -13,6 +13,7 @@ public class SeriesMapper {
                 .builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                    .note(entity.getNote())
                 .build();
         return null;
     }
@@ -22,6 +23,7 @@ public class SeriesMapper {
             return Series
                 .builder()
                 .name(request.name())
+                    .note(request.note())
                 .build();
         return null;
     }

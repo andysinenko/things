@@ -9,5 +9,9 @@ public record SeriesResponse(
         @Schema(name="id", description = "Id of the book's series")
         Long id,
         @Schema(name="name", description = "Name of the book's series")
-        String name) {
+        String name,
+        @Schema(name="note", description = "note")
+        String note
+
+) {
 }

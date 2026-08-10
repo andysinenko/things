@@ -14,6 +14,42 @@ export const fetchSeries = createAsyncThunk(
     }
 );
 
+export const addSeries = createAsyncThunk(
+    "series/add",
+    async (series, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(ENDPOINTS.series, series);
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+);
+
+export const updateSeries = createAsyncThunk(
+    "series/update",
+    async ({ id, series }, { dispatch, rejectWithValue }) => {
+        try {
+            await axios.put(`${ENDPOINTS.series}/${id}`, series);
+            dispatch(fetchSeries());
+        } catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+);
+
+export const deleteSeries = createAsyncThunk(
+    "series/delete",
+    async (id, { rejectWithValue }) => {
+        try {
+            await axios.delete(`${ENDPOINTS.series}/${id}`);
+            return id;
+        } catch (err) {
+            return rejectWithValue(err.message);
+        }
+    }
+);
+
 const seriesSlice = createSlice({
     name: "series",
     initialState: {
@@ -34,6 +70,25 @@ const seriesSlice = createSlice({
             })
             .addCase(fetchSeries.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(addSeries.fulfilled, (state, action) => {
+                state.series.push(action.payload);
+            })
+            .addCase(addSeries.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+            .addCase(updateSeries.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateSeries.rejected, (state, action) => {
+                state.loading = false;
+                state.series.push(action.payload);
+            })
+            .addCase(deleteSeries.fulfilled, (state, action) => {
+                state.series = state.series.filter(g => g.id !== action.payload);
+            })
+            .addCase(deleteSeries.rejected, (state, action) => {
                 state.error = action.payload;
             });
     },

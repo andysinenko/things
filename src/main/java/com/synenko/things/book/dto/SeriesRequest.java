@@ -7,5 +7,8 @@ import lombok.Builder;
 @Schema(name="SeriesDto", description = "Series dto object")
 public record SeriesRequest(
         @Schema(name="name", description = "Name of the book's series")
-        String name) {
+        String name,
+        @Schema(name="note", description = "note for series")
+        String note
+) {
 }

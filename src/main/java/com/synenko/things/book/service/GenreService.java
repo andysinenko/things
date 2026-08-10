@@ -2,7 +2,7 @@ package com.synenko.things.book.service;
 
 import com.synenko.things.book.dto.*;
 import com.synenko.things.book.repository.AuthorRepository;
-import com.synenko.things.common.exception.AuthorNotExistsException;
+import com.synenko.things.common.exception.GenreNotExistsException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class GenreService {
     @Transactional
     @CacheEvict(value = "genres", allEntries = true)
     public GenreResponse updateGenre(GenreRequest genreRequest, Long genreId) {
-        var genre = genreRepository.findById(genreId).orElseThrow(() -> new AuthorNotExistsException(genreId));
+        var genre = genreRepository.findById(genreId).orElseThrow(() -> new GenreNotExistsException(genreId));
         genre.setName(genreRequest.name());
         genre.setNote(genreRequest.note());
 
@@ -46,6 +46,7 @@ public class GenreService {
     }
 
     @Transactional
+    @CacheEvict(value = "genres", allEntries = true)
     public void deleteGenre(Long genreId) {
         genreRepository.deleteById(genreId);
     }
@@ -55,7 +56,7 @@ public class GenreService {
     public GenreResponse saveGenre(GenreRequest genreRequest) {
         var newGenre = GenreMapper.dtoToEntity(genreRequest);
         var saved = genreRepository.save(newGenre);
-        logger.info("save genre {}", saved);
+        logger.debug("save genre {}", saved);
         return GenreMapper.entityToDto(saved);
     }
 }

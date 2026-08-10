@@ -36,6 +36,8 @@ public class Series {
     @Column(name = "name")
     private String name;
 
+    private String note;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL)
