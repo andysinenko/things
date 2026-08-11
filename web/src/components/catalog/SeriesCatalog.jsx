@@ -92,7 +92,7 @@ const SeriesCatalog = () => {
                         maxLength="100"
                     />
                 </div>
-                <button className="thbtn-add" onClick={handleAddSeries}>
+                <button className="thbtn-add" onClick={handleAddSeries} disabled={!name.trim()}>
                     + Add series
                 </button>
             </nav>
@@ -118,7 +118,7 @@ const SeriesCatalog = () => {
                                 <td style={{width:"35%"}}>
                                     {isEditing ? (
                                         <input
-                                            className="modal-input"
+                                            className={`modal-input ${!editName ? "input-error" : ""}`}
                                             value={editName}
                                             onChange={(e) => setEditName(e.target.value)}
                                             autoFocus

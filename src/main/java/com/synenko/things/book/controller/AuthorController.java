@@ -47,6 +47,7 @@ public class AuthorController {
         return new ResponseEntity<>(author, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Update author", description = "Update info about author")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateAuthor(@RequestBody AuthorRequest authorRequest, @PathVariable Long id) {
         logger.info("Updating author with id {}", id);
@@ -56,6 +57,7 @@ public class AuthorController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete author", description = "Delete the author")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
         logger.info("Delete author with id {}", id);

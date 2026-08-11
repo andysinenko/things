@@ -120,6 +120,11 @@ a {
   white-space: nowrap;
 }
 
+.thbtn-add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .thbtn-add:hover {
   background: #253346;
   border-color: #253346;

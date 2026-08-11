@@ -110,7 +110,7 @@ const AuthorsCatalog = () => {
                         ))}
                     </select>
                 </div>
-                <button className="thbtn-add" onClick={handleAddAuthor}>
+                <button className="thbtn-add" onClick={handleAddAuthor} disabled={!name.trim()}>
                     + Add author
                 </button>
             </nav>
@@ -136,7 +136,7 @@ const AuthorsCatalog = () => {
                                 <td style={{width:"35%"}}>
                                     {isEditing ? (
                                         <input
-                                            className="modal-input"
+                                            className={`modal-input ${!editName ? "input-error" : ""}`}
                                             value={editName}
                                             onChange={(e) => setEditName(e.target.value)}
                                             autoFocus

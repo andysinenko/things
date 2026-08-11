@@ -92,7 +92,7 @@ const GenresCatalog = () => {
                         maxLength="100"
                     />
                 </div>
-                <button className="thbtn-add" onClick={handleAddGenre}>
+                <button className="thbtn-add" onClick={handleAddGenre} disabled={!name.trim()}>
                     + Add genre
                 </button>
             </nav>
@@ -118,7 +118,7 @@ const GenresCatalog = () => {
                                 <td style={{width:"35%"}}>
                                     {isEditing ? (
                                         <input
-                                            className="modal-input"
+                                            className={`modal-input ${!editName ? "input-error" : ""}`}
                                             value={editName}
                                             onChange={(e) => setEditName(e.target.value)}
                                             autoFocus
