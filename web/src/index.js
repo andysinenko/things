@@ -26,24 +26,25 @@ root.render(
     <React.StrictMode>
         <Provider store={store}>
             <AuthProvider>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<App/>}>
-                        <Route path="/dashboard" element={<Dashboard/>}/>
-                        <Route path="/places" element={<Places/>}/>
-                        <Route path="/books" element={<Books/>}/>
-                        <Route path="/tools" element={<Tools/>}/>
-                        <Route path="/pdfbook" element={<PdfBooks/>}/>
-                        <Route path="/catalog" element={<CatalogPage/>} >
-                            <Route index element={<Navigate to="authors" replace />} />
-                            <Route path="authors" element={<AuthorsCatalog/>}/>
-                            <Route path="series" element={<SeriesCatalog/>}/>
-                            <Route path="genres" element={<GenresCatalog/>}/>
+                <Router>
+                    <Routes>
+                        <Route path="/" element={<App/>} >
+                            <Route index element={<Navigate to="/signin" replace />} />
+                            <Route path="/dashboard" element={<Dashboard/>}/>
+                            <Route path="/places" element={<Places/>}/>
+                            <Route path="/books" element={<Books/>}/>
+                            <Route path="/tools" element={<Tools/>}/>
+                            <Route path="/pdfbook" element={<PdfBooks/>}/>
+                            <Route path="/catalog" element={<CatalogPage/>} >
+                                <Route index element={<Navigate to="authors" replace />} />
+                                <Route path="authors" element={<AuthorsCatalog/>}/>
+                                <Route path="series" element={<SeriesCatalog/>}/>
+                                <Route path="genres" element={<GenresCatalog/>}/>
+                            </Route>
                         </Route>
-                    </Route>
-                    <Route path="/signin" element={<SignIn />} />
-                </Routes>
-            </Router>
+                        <Route path="/signin" element={<SignIn />} />
+                    </Routes>
+                </Router>
             </AuthProvider>
         </Provider>
     </React.StrictMode>

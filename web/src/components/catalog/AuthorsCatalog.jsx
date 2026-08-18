@@ -46,7 +46,7 @@ const AuthorsCatalog = () => {
         setEditingId(null);
     };
 
-    const updateAuthor = (authorId) => {
+    const handleUpdateAuthor = (authorId) => {
         if (!editName) {
             console.error("name is required");
             return;
@@ -181,7 +181,7 @@ const AuthorsCatalog = () => {
                                                 <button
                                                     className="table-action-btn save-btn"
                                                     title="Save"
-                                                    onClick={() => updateAuthor(author.id)}
+                                                    onClick={() => handleUpdateAuthor(author.id)}
                                                 >
                                                     ✓
                                                 </button>

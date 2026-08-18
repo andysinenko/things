@@ -1,16 +1,18 @@
 import PlaceModal from "../../places/modal/PlaceModal";
 import React from "react";
 
-const ToolModal = ({isOpen,
-    onClose,
-    onSubmit,
-    modalType,
-    selectedTool,
-    setSelectedTool,
-    isTreeModalOpen,
-    setIsTreeModalOpen,
-    places,
-    brands}) => {
+const ToolModal = ({
+                       isOpen,
+                       onClose,
+                       onSubmit,
+                       modalType,
+                       selectedTool,
+                       setSelectedTool,
+                       isTreeModalOpen,
+                       setIsTreeModalOpen,
+                       places,
+                       brands
+                   }) => {
 
     const ToolTypes = [
         "DRILL",
@@ -28,7 +30,7 @@ const ToolModal = ({isOpen,
     };
 
     const onNodeSelect = (nodePlace) => {
-        setSelectedTool({ ...selectedTool, place: nodePlace });
+        setSelectedTool({...selectedTool, place: nodePlace});
         setIsTreeModalOpen(false);
     };
 
@@ -40,7 +42,6 @@ const ToolModal = ({isOpen,
             onClose();
         }
     };
-
 
 
     const getFullPlacePath = (place) => {
@@ -76,15 +77,22 @@ const ToolModal = ({isOpen,
         switch (modalType) {
             case "add":
                 return (
-                    <div className="th-modal-overlay">
-                        <div className="th-modal-content">
-                            <div className="th-modal-header">
-                                <h5>Add tool</h5>
-                            </div>
-                            <div className="modal-body">
-                                <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true} maxLength="512"/>
-                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name ?? ""} onChange={handleChange} maxLength="512"/>
+                    <>
+                        <div className="th-modal-header">
+                            <span className="th-modal-title">Add tool</span>
+                            <button className="th-modal-close-btn" onClick={onClose} aria-label="Close">
+                                ✖️
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="modal-field-row">
+                                <div className="modal-field">
+                                    <label>Name</label>
+                                    <input placeholder="name of tool" className="modal-input" name="name"
+                                           value={selectedTool.name ?? ""} onChange={handleChange} maxLength="512"/>
+                                </div>
+                                <div className="modal-field">
+                                    <label>Brand</label>
                                     <select aria-label="Brands" value={selectedTool.vendor} onChange={
                                         (e) => {
                                             const brandId = Number(e.target.value);
@@ -105,58 +113,86 @@ const ToolModal = ({isOpen,
                                             </option>
                                         ))}
                                     </select>
-
-                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber ?? ""} onChange={handleChange} maxLength="512"/>
-                                    <input placeholder="Year of purchase" type="date" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing ?? ""} onChange={handleChange} maxLength="512"/>
-
-                                    {selectedTool.place !== null && selectedTool.place !== undefined ? (
-                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedTool.place)} ✅</button>
-                                    ) : (
-                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>What a place ❓</button>
-                                    )}
-
-                                    <select id="toolType" value={selectedTool.toolType} onChange={e =>
-                                        setSelectedTool({...selectedTool, toolType: e.target.value})}>
-                                        <option value="" defaultValue>Tool type</option>
-                                        {ToolTypes.map((tool) => (
-                                            <option key={tool} value={tool}>
-                                                {tool}
-                                            </option>
-                                        ))}
-                                    </select>
-
-                                    <input placeholder="Description" className="th-main-input" name="description" value={selectedTool.description ?? ""} onChange={handleChange} maxLength="512"/>
-                                </form>
+                                </div>
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="th-main-button" onClick={onClose}>Close</button>
-                                <button type="submit" className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                            <div className="modal-field-row">
+                                <div className="modal-field">
+                                    <label>Serial no</label>
+                                    <input placeholder="Serial number" type="text" className="modal-input"
+                                           name="serialNumber" value={selectedTool.serialNumber ?? ""}
+                                           onChange={handleChange} maxLength="512"/>
+                                </div>
+                                <div className="modal-field">
+                                    <label>Year</label>
+                                    <input placeholder="Year of purchase" type="date" className="modal-input"
+                                           name="dateOfPurchasing" value={selectedTool.dateOfPurchasing ?? ""}
+                                           onChange={handleChange} maxLength="512"/>
+                                </div>
+                            </div>
+
+                            <div className="modal-field">
+                                <label>Place</label>
+                                {selectedTool.place !== null && selectedTool.place !== undefined ? (
+                                    <button type="button" className="th-main-button"
+                                            onClick={onPlacesOpenDialogBox}>Place
+                                        selected: {getFullPlacePath(selectedTool.place)} ✅</button>
+                                ) : (
+                                    <button type="button" className="th-main-button"
+                                            onClick={onPlacesOpenDialogBox}>What a place ❓</button>
+                                )}
+                            </div>
+                            <div className="modal-field">
+                                <label>Type</label>
+                                <select id="toolType" value={selectedTool.toolType} onChange={e =>
+                                    setSelectedTool({...selectedTool, toolType: e.target.value})}>
+                                    <option value="" defaultValue>Tool type</option>
+                                    {ToolTypes.map((tool) => (
+                                        <option key={tool} value={tool}>
+                                            {tool}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="modal-field">
+                                <label>Description</label>
+                                <input placeholder="Description" className="th-main-input" name="description"
+                                       value={selectedTool.description ?? ""} onChange={handleChange}
+                                       maxLength="512"/>
                             </div>
                         </div>
-                    </div>
+                        <div className="modal-footer">
+                            <button type="button" className="th-main-button" onClick={onClose}>Close</button>
+                            <button type="submit" className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                        </div>
+                    </>
                 );
             case "edit":
                 return (
-                    <div className="th-modal-overlay">
-                        <div className="th-modal-content">
-                            <div className="th-modal-header">
-                                <h5>Edit tool</h5>
-                            </div>
-                            <div className="modal-body">
-                                <form onSubmit={onSubmit}>
-                                    <input placeholder="id" className="th-main-input" name="id" value={selectedTool.id} onChange={handleChange}  disabled={true} maxLength="512"/>
-                                    <input placeholder="name of tool" className="th-main-input" name="name" value={selectedTool.name ?? ""} onChange={handleChange} maxLength="512"/>
+                    <>
+                        <div className="th-modal-header">
+                            <span className="th-modal-title">
+                                Edit tool
+                            </span>
+                            <button className="th-modal-close-btn" onClick={onClose} aria-label="Close">
+                                ✖️
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="modal-field-row">
+                                <div className="modal-field">
+                                    <label>Name</label>
+                                    <input placeholder="name of tool" className="modal-input" name="name"
+                                           value={selectedTool.name ?? ""} onChange={handleChange} maxLength="512"/>
+                                </div>
+                                <div className="modal-field">
+                                    <label>Brands</label>
                                     <select
                                         aria-label="Brands"
                                         value={selectedTool.vendor?.id || ""}
                                         onChange={(e) => {
                                             const brandId = Number(e.target.value);
                                             const selectedBrand = brands.find(brand => brand.id === brandId);
-                                            console.log(">>> brandId: ", brandId);
-                                            console.log(">>> selectedBrand: ", selectedBrand);
-                                            console.log(">>> brands: ", brands);
-                                            console.log(">>> selectedTool: ", selectedTool);
-                                            const newSelectedTool = { ...selectedTool, vendor: selectedBrand || null };
+                                            const newSelectedTool = {...selectedTool, vendor: selectedBrand || null};
                                             setSelectedTool(newSelectedTool);
                                         }}>
                                         <option value="" defaultValue>Brand name</option>
@@ -166,35 +202,58 @@ const ToolModal = ({isOpen,
                                             </option>
                                         ))}
                                     </select>
-
-                                    <input placeholder="Serial number" type="text" className="th-main-input" name="serialNumber" value={selectedTool.serialNumber ?? ""} onChange={handleChange} maxLength="512"/>
-                                    <input placeholder="Year of purchase" type="date" className="th-main-input" name="dateOfPurchasing" value={selectedTool.dateOfPurchasing ?? ""} onChange={handleChange} maxLength="512"/>
-
-                                    {selectedTool.place !== null && selectedTool.place !== undefined ? (
-                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>Place selected: {getFullPlacePath(selectedTool.place)} ✅</button>
-                                    ) : (
-                                        <button type="button" className="th-main-button" onClick={onPlacesOpenDialogBox}>What a place ❓</button>
-                                    )}
-
-                                    <select id="toolType" value={selectedTool.toolType} onChange={e =>
-                                        setSelectedTool({...selectedTool, toolType: e.target.value})}>
-                                        <option value="" defaultValue>Tool type</option>
-                                        {ToolTypes.map((tool) => (
-                                            <option key={tool} value={tool}>
-                                                {tool}
-                                            </option>
-                                        ))}
-                                    </select>
-
-                                    <input placeholder="Description" className="th-main-input" name="description" value={selectedTool.description ?? ""} onChange={handleChange} maxLength="512"/>
-                                </form>
+                                </div>
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="th-main-button" onClick={onClose}>Close</button>
-                                <button type="submit" className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                            <div className="modal-field-row">
+                                <div className="modal-field">
+                                    <label>Serial No.</label>
+                                    <input placeholder="Serial number" type="text" className="modal-input"
+                                           name="serialNumber" value={selectedTool.serialNumber ?? ""}
+                                           onChange={handleChange} maxLength="512"/>
+                                </div>
+                                <div className="modal-field">
+                                    <label>Year</label>
+                                    <input placeholder="Year of purchase" type="date" className="modal-input"
+                                           name="dateOfPurchasing" value={selectedTool.dateOfPurchasing ?? ""}
+                                           onChange={handleChange} maxLength="512"/>
+                                </div>
+                            </div>
+                            <div className="modal-field">
+                                <label>Place</label>
+                                {selectedTool.place !== null && selectedTool.place !== undefined ? (
+                                    <button type="button" className="th-main-button"
+                                            onClick={onPlacesOpenDialogBox}>Place
+                                        selected: {getFullPlacePath(selectedTool.place)} ✅</button>
+                                ) : (
+                                    <button type="button" className="th-main-button"
+                                            onClick={onPlacesOpenDialogBox}>What a place ❓</button>
+                                )}
+                            </div>
+                            <div className="modal-field">
+                                <label>Type</label>
+                                <select id="toolType" value={selectedTool.toolType} onChange={e =>
+                                    setSelectedTool({...selectedTool, toolType: e.target.value})}>
+                                    <option value="" defaultValue>Tool type</option>
+                                    {ToolTypes.map((tool) => (
+                                        <option key={tool} value={tool}>
+                                            {tool}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="modal-field">
+                                <label>Description</label>
+                                <input placeholder="Description" className="modal-input" name="description"
+                                       value={selectedTool.description ?? ""} onChange={handleChange}
+                                       maxLength="512"/>
                             </div>
                         </div>
-                    </div>
+                        <div className="modal-footer">
+                            <button type="button" className="th-main-button" onClick={onClose}>Close</button>
+                            <button type="submit" className="th-main-button" onClick={onSubmit}>Save</button>
+                        </div>
+                    </>
                 );
             case "delete" :
                 return (
@@ -210,12 +269,13 @@ const ToolModal = ({isOpen,
                             </div>
                             <div className="modal-footer">
                                 <button className="th-main-button" onClick={onClose}>Close</button>
-                                <button className="th-main-button" onClick={onSubmit}>Save Changes</button>
+                                <button className="th-main-button" onClick={onSubmit}>Save</button>
                             </div>
                         </div>
                     </div>
                 );
-            default: return (<p>Unknown action</p>);
+            default:
+                return (<p>Unknown action</p>);
         }
     };
 
