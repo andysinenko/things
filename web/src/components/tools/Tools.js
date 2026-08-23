@@ -15,8 +15,8 @@ export const Tools = () => {
     const pageNumber = useSelector(state => state.toolsReducer.pageNumber);
     const pageSize   = 15;
 
-    const {places, ploading, perror} = useSelector(state => state.placeReducer);
-    const {brands, loading: brandsLoading, error: brandsError} = useSelector(state => state.brandsReducer);
+    const {places} = useSelector(state => state.placeReducer);
+    const {brands} = useSelector(state => state.brandsReducer);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);

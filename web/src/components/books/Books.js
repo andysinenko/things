@@ -40,7 +40,6 @@ export const Books = () => {
 
     const { series  } = useSelector(state => state.seriesReducer);
     const { genres  } = useSelector(state => state.genresReducer);
-    const { authors } = useSelector(state => state.authorsReducer);
     const { places  } = useSelector(state => state.placeReducer);
 
     const [isModalOpen, setIsModalOpen] = useState(false);

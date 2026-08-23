@@ -4,6 +4,17 @@ import PlaceModal from "../../places/modal/PlaceModal";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchAuthorsByGenre, clearGenreAuthors} from "../reducer/AuthorsSlice";
 
+const findPlaceById = (nodes, id) => {
+    for (const node of nodes) {
+        if (node.id === id) return node;
+        if (node.children?.length) {
+            const found = findPlaceById(node.children, id);
+            if (found) return found;
+        }
+    }
+    return null;
+};
+
 const BookModal = ({
                        isOpen,
                        onClose,
@@ -18,19 +29,8 @@ const BookModal = ({
     const dispatch = useDispatch();
     const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
     //const {authors, loading: authorsLoading} = useSelector((state) => state.authorsReducer);
-    const {genreAuthors, loading: authorsGenresLoading} = useSelector((state) => state.authorsReducer);
+    const {genreAuthors} = useSelector((state) => state.authorsReducer);
     const [selectedPlace, setSelectedPlace] = useState(null);
-
-    const findPlaceById = (nodes, id) => {
-        for (const node of nodes) {
-            if (node.id === id) return node;
-            if (node.children?.length) {
-                const found = findPlaceById(node.children, id);
-                if (found) return found;
-            }
-        }
-        return null;
-    };
 
     const handleChange = (e) => {
         const {name, value} = e.target;

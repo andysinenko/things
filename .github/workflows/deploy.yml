@@ -39,12 +39,12 @@ jobs:
 
       - name: Install deps
         working-directory: web
-        env:
-          CI: false
         run: npm install
 
       - name: Build frontend
         working-directory: web
+        env:
+          CI: false
         run: npm run build
 
       - name: Upload frontend artifact

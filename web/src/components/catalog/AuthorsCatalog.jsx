@@ -5,7 +5,7 @@ import {addAuthor, fetchAuthors, updateAuthor, deleteAuthor} from "../books/redu
 import "./Catalog.css"
 
 const AuthorsCatalog = () => {
-    const { authors, loading, error } = useSelector(state => state.authorsReducer);
+    const { authors} = useSelector(state => state.authorsReducer);
     const { genres } = useSelector(state => state.genresReducer);
     const dispatch = useDispatch();
 
