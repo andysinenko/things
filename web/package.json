@@ -45,8 +45,5 @@
       "last 1 chrome version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "redux-devtools-extension": "^2.13.9"
   }
 }
