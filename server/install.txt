@@ -1,0 +1,105 @@
+cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+sudo nmtui
+wget https://download.oracle.com/java/26/latest/jdk-26_linux-x64_bin.tar.gz
+sudo mkdir -p /usr/lib/jvm
+sudo tar -xvf jdk-26_linux-x64_bin.tar.gz -C /usr/lib/jvm/
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-26*/bin/java 1000
+sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-26*/bin/javac 1000
+
+# Postgresql
+sudo apt install -y curl ca-certificates lsb-release
+sudo install -d /etc/apt/keyrings
+curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/keyrings/postgresql.gpg
+echo "deb [signed-by=/etc/apt/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+sudo apt update
+sudo apt install -y postgresql postgresql-contrib
+sudo systemctl enable --now postgresql
+sudo systemctl status postgresql
+#postgres=# CREATE USER things_service WITH PASSWORD 'things123456';
+#postgres=# CREATE DATABASE things OWNER things_service;
+#postgres=# CREATE SCHEMA IF NOT EXISTS things;
+#postgres=# ALTER SCHEMA things OWNER TO things_service;
+#postgres=# GRANT ALL PRIVILEGES ON SCHEMA things TO things_service;
+#postgres=# ALTER DEFAULT PRIVILEGES IN SCHEMA things GRANT ALL ON TABLES TO things_service;
+#postgres=# ALTER DEFAULT PRIVILEGES IN SCHEMA things GRANT ALL ON SEQUENCES TO things_service;
+
+# firewall
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow from 192.168.0.0/24 to any port 5432 proto tcp
+sudo ufw enable
+sudo apt install nginx
+sudo systemctl enable --now nginx
+
+#install NGINX server
+sudo touch /etc/nginx/sites-available/things
+echo "server {
+    listen 80;
+    server_name things.synenko.com;
+
+    root /var/www/things/frontend;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:8080/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        try_files $uri /index.html;
+    }
+}" >> /etc/nginx/sites-available/things
+
+sudo ln -s /etc/nginx/sites-available/things /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/default
+sudo nginx -t && sudo systemctl reload nginx
+
+#setup for automatic deployment
+sudo mkdir -p /var/www/things/frontend
+sudo chown -R $USER:$USER /var/www/things/frontend
+
+#ON WORKING LAPTOP's side
+ssh-keygen -t ed25519 -f things_deploy_key -N ""
+ssh-copy-id -i things_deploy_key.pub -p 22 andrey@things.synenko.com
+#cat things_deploy_key - put result on github->Settings->Secrets and variables->Actions->New repository secret, name SSH_PRIVATE_KEY
+
+#On server side
+sudo systemctl status things
+sudo touch /etc/systemd/system/things.service
+#paste in this file next
+sudo echo "[Unit]
+Description=things backend
+After=network.target postgresql.service
+
+[Service]
+User=andrey
+ExecStart=/usr/lib/jvm/jdk-26.0.2/bin/java -jar /opt/things/things.jar
+Restart=on-failure
+WorkingDirectory=/opt/things
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/things.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable things
+sudo mkdir -p /opt/things && sudo chown andrey:andrey /opt/things
+sudo visudo -f /etc/sudoers.d/things-deploy
+
+sudo EDITOR=nano visudo -f /etc/sudoers.d/things-deploy
+sudo apt install rsync
+
+sudo tee /etc/sudoers.d/things-deploy > /dev/null << 'EOF'
+andrey ALL=(ALL) NOPASSWD: /usr/bin/cp /tmp/things-deploy/Things-0.0.1-SNAPSHOT.jar /opt/things/things.jar, /usr/bin/rsync -a --delete /tmp/things-deploy/frontend/ /var/www/things/frontend/, /usr/bin/systemctl restart things
+EOF
+sudo chmod 440 /etc/sudoers.d/things-deploy
+sudo visudo -c
+
+sudo mkdir -p /opt/pdfbooks && sudo chown -R $USER:$USER /opt/pdfbooks
