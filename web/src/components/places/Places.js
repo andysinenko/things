@@ -7,6 +7,7 @@ import {fetchAllPlaces} from "./reducer/PlaceSlice";
 const Places = () => {
     const dispatch = useDispatch();
     const {places, loading, error} = useSelector(state => state.placeReducer);
+    // eslint-disable-next-line no-unused-vars
     const [treeData, setTreeData] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -19,7 +20,6 @@ const Places = () => {
         place: "",
         description: ""
     });
-    const [selectedBook, setSelectedBook] = useState(null);
 
     const openModal = (type, book = null) => {
         setIsModalOpen(true);

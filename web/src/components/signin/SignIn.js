@@ -8,7 +8,6 @@ import {useDispatch} from "react-redux";
 import {fetchUser} from "./reducer/UserSlice";
 
 const SignIn = () => {
-    const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -21,7 +20,6 @@ const SignIn = () => {
         setError("");
         try {
             const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate", {
-                email,
                 username,
                 password
             });

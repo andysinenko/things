@@ -26,7 +26,7 @@ const TreeNode = ({ node, onCrossClick, onAddChild}) => {
     return (
         <li className="tree-node">
             <div className="tree-node-header">
-                {node.level != 3 ?
+                {node.level !== 3 ?
                 (<button
                     className="tree-toggle-btn"
                     onClick={() => setExpanded(!expanded)}

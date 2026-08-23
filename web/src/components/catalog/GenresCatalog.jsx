@@ -5,7 +5,7 @@ import "./Catalog.css"
 
 
 const GenresCatalog = () => {
-    const { genres, loading, error } = useSelector(state => state.genresReducer);
+    const { genres} = useSelector(state => state.genresReducer);
     const dispatch = useDispatch();
     const [name, setName] = useState("");
     const [note, setNote] = useState("");

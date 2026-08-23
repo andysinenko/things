@@ -4,7 +4,7 @@ import "./Catalog.css"
 import {addSeries, deleteSeries, fetchSeries, updateSeries} from "../books/reducer/SeriesSlice";
 
 const SeriesCatalog = () => {
-    const { series, loading, error } = useSelector(state => state.seriesReducer);
+    const { series} = useSelector(state => state.seriesReducer);
     const dispatch = useDispatch();
 
     const [name, setName] = useState("");
