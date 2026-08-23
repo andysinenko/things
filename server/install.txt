@@ -74,19 +74,23 @@ ssh-copy-id -i things_deploy_key.pub -p 22 andrey@things.synenko.com
 #On server side
 sudo systemctl status things
 sudo touch /etc/systemd/system/things.service
-#paste in this file next
+#paste in this file next:
+
 sudo echo "[Unit]
-Description=things backend
-After=network.target postgresql.service
+           Description=things backend
+           After=network.target postgresql.service
 
-[Service]
-User=andrey
-ExecStart=/usr/lib/jvm/jdk-26.0.2/bin/java -jar /opt/things/things.jar
-Restart=on-failure
-WorkingDirectory=/opt/things
+           [Service]
+           User=andrey
+           ExecStart=/usr/lib/jvm/jdk-26.0.2/bin/java -Xms1g -Xmx1g -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/log/heapdump.hprof -XX:MaxMetaspaceSize=256m -jar /opt/things/things.jar
+           Restart=on-failure
+           WorkingDirectory=/opt/things
 
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/things.service
+           [Install]
+           WantedBy=multi-user.target" > /etc/systemd/system/things.service
+
+sudo mkdir -p /opt/log
+sudo chown andrey:andrey /opt/log
 
 sudo systemctl daemon-reload
 sudo systemctl enable things
