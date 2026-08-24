@@ -1,4 +1,4 @@
-export const API_URL = 'http://localhost:8080/api/v1'; //process.env.REACT_APP_API_URL;
+export const API_URL = 'http://localhost:8080/api/v1'; //process.env.VITE_API_URL;
 
 export const ENDPOINTS = {
     books: `${API_URL}/books`,
