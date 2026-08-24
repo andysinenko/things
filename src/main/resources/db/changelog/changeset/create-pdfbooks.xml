@@ -43,7 +43,7 @@
         <addDefaultValue schemaName="things"
                          tableName="pdfbooks_authors"
                          columnName="id"
-                         defaultValueSequenceNext="things.pdf_authors_sequence"/>
+                         defaultValueSequenceNext="pdf_authors_sequence"/>
     </changeSet>
 
 </databaseChangeLog>
