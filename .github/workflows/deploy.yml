@@ -101,3 +101,5 @@ jobs:
             sudo rsync -a --delete /tmp/things-deploy/frontend/ /var/www/things/frontend/
             sudo systemctl restart things
             rm -rf /tmp/things-deploy
+      - name: Finish
+        run: echo "А Андрюша молодец!"
