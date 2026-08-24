@@ -2,7 +2,7 @@ import React, {useState, useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../auth/AuthProvider";
-
+import {API_URL} from "../../config/api.jsx";
 import './SignIn.css';
 import {useDispatch} from "react-redux";
 import {fetchUser} from "./reducer/UserSlice";
@@ -19,7 +19,7 @@ const SignIn = () => {
         e.preventDefault();
         setError("");
         try {
-            const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate", {
+            const response = await axios.post(`${API_URL}/auth/authenticate`, {
                 username,
                 password
             });

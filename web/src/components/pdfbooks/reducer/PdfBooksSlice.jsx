@@ -86,7 +86,7 @@ export const uploadPdfBook = createAsyncThunk(
     "pdfbooks/uploadPdfBook",
     async (formData, {rejectWithValue}) => {
         try {
-            const response = await axios.post("http://localhost:8080/api/v1/pdfbooks/upload", formData);
+            const response = await axios.post(`${ENDPOINTS.pdfbooks}/upload`, formData);
             if (response.status === 200 || response.status === 201) {
                 console.log("Success on adding new pdfbook: ", response.status);
                 return response.data;
@@ -104,7 +104,7 @@ export const deletePdfBook = createAsyncThunk(
     "pdfbooks/deletePdfBook",
     async (id, {rejectWithValue}) => {
         try {
-            const resp = await axios.delete(`http://localhost:8080/api/v1/pdfbooks/${id}`);
+            const resp = await axios.delete(`${ENDPOINTS.pdfbooks}/${id}`);
             if (resp.status === 200 || resp.status === 204) {
                 console.log("Pdf book deleted:", resp.status);
                 return id;
@@ -121,7 +121,7 @@ export const updatePdfBook = createAsyncThunk(
     "pdfbooks/updatePdfBook",
     async ({id, book}, {rejectWithValue}) => {
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/pdfbooks/${id}`, book);
+            const response = await axios.put(`${ENDPOINTS.pdfbooks}/${id}`, book);
             if (response.status === 200) {
                 console.log("Success on updating pdfbook: ", response.status);
                 return response.data;
