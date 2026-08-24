@@ -102,4 +102,4 @@ jobs:
             sudo systemctl restart things
             rm -rf /tmp/things-deploy
       - name: Finish
-        run: echo "А Андрюша молодец!"
+        run: echo "А Андрюша молодец! 😎"

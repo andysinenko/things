@@ -73,7 +73,7 @@
 
     <!-- genre -->
     <changeSet author="Andrew Sinenko" id="idx-107">
-        <createIndex  schemaName="things" tableName="genre" indexName="idx_genre_name">
+        <createIndex  schemaName="things" tableName="genres" indexName="idx_genre_name">
             <column name="name"/>
         </createIndex>
     </changeSet>

@@ -17,7 +17,7 @@ sudo apt update
 sudo apt install -y postgresql postgresql-contrib
 sudo systemctl enable --now postgresql
 sudo systemctl status postgresql
-#postgres=# CREATE USER things_service WITH PASSWORD 'things123456';
+#postgres=# CREATE USER things_service WITH PASSWORD 'XXXXXXXXX';
 #postgres=# CREATE DATABASE things OWNER things_service;
 #postgres=# CREATE SCHEMA IF NOT EXISTS things;
 #postgres=# ALTER SCHEMA things OWNER TO things_service;
@@ -107,3 +107,39 @@ sudo chmod 440 /etc/sudoers.d/things-deploy
 sudo visudo -c
 
 sudo mkdir -p /opt/pdfbooks && sudo chown -R $USER:$USER /opt/pdfbooks
+
+#create tls certificate
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d things.synenko.com
+sudo systemctl reload nginx
+sudo certbot --nginx -d things.synenko.com
+#check for success
+curl -I https://things.synenko.com
+
+
+sudo mkdir -p /etc/things
+sudo tee /etc/things/things.env > /dev/null << 'EOF'
+POSTGRES_HOST=127.0.0.1
+POSTGRES_PORT=5432
+POSTGRES_DB=things
+POSTGRES_USER=XXXXXXXXX
+POSTGRES_PASSWORD=XXXXXXXXX
+EOF
+sudo chmod 600 /etc/things/things.env
+sudo chown andrey:andrey /etc/things/things.env
+
+sudo tee /etc/systemd/system/things.service > /dev/null << 'EOF'
+[Unit]
+Description=things backend
+After=network.target postgresql.service
+
+[Service]
+User=andrey
+EnvironmentFile=/etc/things/things.env
+ExecStart=/usr/lib/jvm/jdk-26.0.2/bin/java -Xms1g -Xmx1g -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/log/heapdump.hprof -XX:MaxMetaspaceSize=256m -jar /opt/things/things.jar
+Restart=on-failure
+WorkingDirectory=/opt/things
+
+[Install]
+WantedBy=multi-user.target
+EOF
