@@ -13,7 +13,7 @@
 
     <changeSet author="Andrew Sinenko" id="2-create-pdfbooks-table">
         <createTable tableName="pdf_books" schemaName="things">
-            <column name="id" type="BIGINT" defaultValueSequenceNext="things.pdf_books_sequence">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="pdf_books_sequence">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_pdf_books"/>
             </column>
             <column name="title" type="VARCHAR(512)"/>
