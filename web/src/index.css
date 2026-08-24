@@ -133,7 +133,6 @@ a {
 .thbtn-add:active {
   background: #111824;
 }
-
 /* Danger — "Delete book" */
 .thbtn-del {
   display: inline-flex;
