@@ -10,6 +10,7 @@ import brandsReducer from "../components/tools/reducer/BrandsSlice";
 import pdfAuthorsReducer from "../components/pdfbooks/reducer/PdfAuthorsSlice";
 import categoriesReducer from "../components/pdfbooks/reducer/CategoriesSlice";
 import pdfBooksReducer from "../components/pdfbooks/reducer/PdfBooksSlice";
+import authoritiesReducer from "../components/admin/reducer/AuthoritiesSlice";
 
 
 const rootReducer = combineReducers({
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     brandsReducer: brandsReducer,
     pdfAuthorsReducer: pdfAuthorsReducer,
     categoriesReducer: categoriesReducer,
-    pdfBooksReducer: pdfBooksReducer
+    pdfBooksReducer: pdfBooksReducer,
+    authoritiesReducer: authoritiesReducer
 });
 
 

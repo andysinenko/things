@@ -1,31 +1,31 @@
 package com.synenko.things.security.web;
 
+import com.synenko.things.security.model.service.ThingsUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.synenko.things.security.model.dto.AuthenticationRequest;
 import com.synenko.things.security.model.dto.AuthenticationResponse;
-import com.synenko.things.security.model.dto.AuthorityDto;
 import com.synenko.things.security.model.dto.UserDto;
-import com.synenko.things.security.model.repository.ThingsUserRepository;
 import com.synenko.things.security.model.service.AuthService;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class LoginController {
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    private final ThingsUserRepository userRepository;
+    private final ThingsUserService thingsUserService;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
 
@@ -37,18 +37,17 @@ public class LoginController {
 
     @PostMapping("/user")
     public UserDto getUserDetailsAfterLogin(Authentication authentication) {
-        return userRepository.findByUsername(authentication.getName())
-                .map(user -> UserDto.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .authorities(user.getAuthorities().stream()
-                                .map(a -> AuthorityDto.builder()
-                                        .id(a.getId())
-                                        .name(a.getName())
-                                        .build())
-                                .collect(Collectors.toList()))
-                        .build())
-                .orElseThrow();
+        return thingsUserService.getUserDetailsAfterLogin(authentication);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<UserDto>> getAllUsers(Authentication authentication) {
+        return ResponseEntity.ok(thingsUserService.getAllUsers(authentication));
+    }
+
+    @GetMapping("user/{id}")
+    public UserDto  getUserDetailsAfterLogout(Long id) {
+        return thingsUserService.findById(id);
     }
 
     @PostMapping("/refresh-token")
@@ -60,4 +59,6 @@ public class LoginController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
+
+
 }
