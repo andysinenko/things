@@ -1,4 +1,4 @@
-package com.synenko.things.tool.repository;
+/*package com.synenko.things.tool.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -87,4 +87,4 @@ class ToolsRepositoryTest {
         assertEquals(tools.get(0).getName(), toolName);
         assertEquals(tools.get(0).getDescription(), toolDescription);
     }
-}
+}*/

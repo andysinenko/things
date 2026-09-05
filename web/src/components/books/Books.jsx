@@ -151,18 +151,19 @@ export const Books = () => {
 
             {/* ── Table ── */}
             <section className="tableContainer">
-                <table className="table">
+                <div className="tableScrollArea">
+                    <table className="table">
                     <thead>
                     <tr>
                         <th onClick={() => dispatch(sortBooksById())}    style={{ cursor: "pointer" }}>ID</th>
-                        <th onClick={() => dispatch(sortBooksByTitle())}  style={{ cursor: "pointer" }}>Title</th>
-                        <th style={{ display: "none", color: "#9ca3af", width: "120px" }}>Volume</th>
-                        <th>Author</th>
-                        <th onClick={() => dispatch(sortBooksByGenre())}  style={{ cursor: "pointer" }}>Genre</th>
-                        <th>Series</th>
+                        <th onClick={() => dispatch(sortBooksByTitle())}  style={{ cursor: "pointer", width: "440px" }}>Title</th>
+                        <th style={{ display: "none", width: "120px" }}>Volume</th>
+                        <th style={{ width: "120px" }}>Author</th>
+                        <th onClick={() => dispatch(sortBooksByGenre())}  style={{ cursor: "pointer", width:"200px" }}>Genre</th>
+                        <th style={{ width: "120px" }}>Series</th>
                         <th style={{ cursor: "pointer", width: "60px" }}>Year</th>
-                        <th>Place</th>
-                        <th>Description</th>
+                        <th style={{width:"200px" }}>Place</th>
+                        <th style={{width:"200px" }}>Description</th>
                         <th style={{ textAlign: "center" }}>Actions</th>
                     </tr>
                     </thead>
@@ -170,22 +171,22 @@ export const Books = () => {
                     {books && books.length > 0 ? books.map((book) => (
                         <tr key={book.id}>
                             <td style={{ color: "#9ca3af" }}>{book.id}</td>
-                            <td style={{ fontWeight: 500 }}>{book.title}</td>
-                            <td style={{ display: "none", color: "#9ca3af", width: "120px" }}>{book.volume}</td>
-                            <td>
+                            <td style={{ fontWeight: 500, width: "440px" }}>{book.title}</td>
+                            <td style={{ display: "none", color: "#6b7280", width: "120px" }}>{book.volume}</td>
+                            <td style={{ color: "#6b7280", width: "120px" }}>
                                 {book.authors
                                     ? [...book.authors].sort((a, b) => a.name.localeCompare(b.name)).map(a => a.name).join(", ")
                                     : ""}
                             </td>
-                            <td><GenreBadge name={book.genre?.name} /></td>
-                            <td d="true" style={{color: "#6b7280" }}>{book.series?.name}</td>
+                            <td style={{width:"200px", color: "#6b7280"}}><GenreBadge name={book.genre?.name} /></td>
+                            <td d="true" style={{color: "#6b7280", width: "120px" }}>{book.series?.name}</td>
                             <td style={{ color: "#6b7280", width: "60px", whiteSpace: "nowrap" }}>{book.year}</td>
-                            <td style={{ color: "#6b7280" }}>
+                            <td style={{ color: "#6b7280", width:"200px" }}>
                                 {book.place?.parent?.name
                                     ? `${book.place.parent.parent.name} ·${book.place.parent.name} · ${book.place.name}`
                                     : book.place?.name}
                             </td>
-                            <td style={{ color: "#6b7280" }}>{book.description}</td>
+                            <td style={{ color: "#6b7280", width: "200px" }}>{book.description}</td>
                             <td>
                                 <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                                     <button
@@ -216,6 +217,7 @@ export const Books = () => {
                     )}
                     </tbody>
                 </table>
+                </div>
 
                 <Paginator
                     pageNumber={pageNumber}

@@ -180,13 +180,26 @@ a {
 }
 
 /* ─── Table container ───────────────────────────────────── */
-.tableContainer {
+/*.tableContainer {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: calc(100vh - 52px - 52px - 32px); /* навбар + тулбар + отступы */
+  max-height: calc(100vh - 52px - 52px - 32px);
   border: 1px solid #e8eaed;
   border-radius: 8px;
   background: #ffffff;
+}*/
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+}
+.tableScrollArea {
+  height: 700px;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 
 /* ─── Table ─────────────────────────────────────────────── */
@@ -200,7 +213,8 @@ a {
 
 .table th,
 .table td {
-  padding: 10px 12px;
+  /*padding: 10px 12px;*/
+  padding: 6px 8px;
   text-align: left;
   border-bottom: 1px solid #f0f1f3;
   transition: background-color 0.1s ease;

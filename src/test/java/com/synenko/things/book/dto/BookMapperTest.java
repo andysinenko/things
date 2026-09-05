@@ -44,7 +44,7 @@ class BookMapperTest {
         assertEquals(bookRequest.title(), book.getTitle());
         assertEquals(bookRequest.series(), book.getSeries().getId());
         assertEquals(bookRequest.place(), book.getPlace().getId());
-        assertEquals(bookRequest.year(), book.getYear());
+        assertTrue(bookRequest.year().equals(Year.from(book.getYear())));
         assertEquals(bookRequest.description(), book.getDescription());
         assertEquals(bookRequest.volume(), book.getVolumeNumber());
     }
@@ -70,7 +70,7 @@ class BookMapperTest {
         assertNotNull(bookDto);
         assertEquals(book.getId(), bookDto.id());
         assertEquals(book.getTitle(), bookDto.title());
-        assertEquals(book.getYear().toString(), bookDto.year());
+        assertEquals(Year.from(book.getYear()), bookDto.year());
         assertEquals(book.getDescription(), bookDto.description());
         assertEquals(book.getVolumeNumber(), bookDto.volume());
         assertEquals(1, book.getAuthors().size());
@@ -103,7 +103,7 @@ class BookMapperTest {
         assertNotNull(book.getGenre());
         assertNotNull(book.getSeries());
         assertNotNull(bookRequest.authors());
-        assertEquals(bookRequest.year(), book.getYear());
+        assertEquals(bookRequest.year(), Year.from(book.getYear()));
         assertEquals(bookRequest.description(), book.getDescription());
         assertEquals(bookRequest.volume(), book.getVolumeNumber());
     }
@@ -118,7 +118,7 @@ class BookMapperTest {
                 .series(null)
                 .authors(null)
                 .place(null)
-                .year(LocalDate.parse("2021"))
+                .year(LocalDate.parse("2021-01-01"))
                 .description("Description")
                 .volumeNumber("1")
                 .build();
@@ -134,7 +134,12 @@ class BookMapperTest {
         assertNull(bookResponse.series());
         assertNull(bookResponse.authors());
         assertNull(bookResponse.place());
-        assertEquals(book.getYear().toString(), bookResponse.year());
+
+        System.out.println(Year.from(book.getYear()));
+        System.out.println(bookResponse.year());
+
+        assertTrue(Year.from(book.getYear()).equals(bookResponse.year()));
+
         assertEquals(book.getDescription(), bookResponse.description());
         assertEquals(book.getVolumeNumber(), bookResponse.volume());
     }
