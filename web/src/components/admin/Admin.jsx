@@ -7,14 +7,7 @@ import {fetchAuthorities} from "./reducer/AuthoritiesSlice.jsx";
 
 export const Admin = () => {
     const dispatch = useDispatch();
-
-    const {users, loading, error} = useSelector(state => state.userReducer);
-    const {authorities} = useSelector(state => state.authoritiesReducer);
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalType, setModalType] = useState(null);
-
-    const [selectedUser, setSelectedUser] = useState({
+    const EMPTY_USER = {
         id: null,
         username: "",
         password: "",
@@ -22,8 +15,15 @@ export const Admin = () => {
         firstName: "",
         lastName: "",
         phoneNumber: "",
-        authorities: {}
-    });
+        authorities: []
+    };
+    const {users, loading, error} = useSelector(state => state.userReducer);
+    const {authorities} = useSelector(state => state.authoritiesReducer);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState(null);
+
+    const [selectedUser, setSelectedUser] = useState(EMPTY_USER);
 
     const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
 
@@ -56,7 +56,7 @@ export const Admin = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
-        setSelectedUser(null);
+        setSelectedUser(EMPTY_USER);
     };
 
     const handleSubmit = async (e) => {
@@ -76,16 +76,7 @@ export const Admin = () => {
     };
 
     const addUser = () => {
-        setSelectedUser({
-            id: null,
-            username: "",
-            password: "",
-            email: "",
-            firstName: "",
-            lastName: "",
-            phoneNumber: "",
-            authorities: {}
-        });
+        setSelectedUser(EMPTY_USER);
         openModal("add");
     };
 
@@ -104,7 +95,7 @@ export const Admin = () => {
             {/* ── Toolbar / Operations with users ── */}
             <nav className="th-buttons-toolbar" aria-label="Tools">
                 <button type="button" className="thbtn-add" onClick={addUser}>
-                    + Add tool
+                    + Add user
                 </button>
             </nav>
 
@@ -133,10 +124,13 @@ export const Admin = () => {
                             <td style={{ fontWeight: 500 }}>{user.username}</td>
                             <td style={{ color: "#6b7280" }}>{user.password}</td>
                             <td>{user.email}</td>
-                            <td>{user.firstname}</td>
+                            <td>{user.firstName}</td>
                             <td>{user.lastName}</td>
-                            <td>{user.phonenumber}</td>
-                            <td>{user.authority}</td>
+                            <td>{user.phoneNumber}</td>
+                            <td>{user.authorities
+                                ? [...user.authorities].sort((a, b) => a.name.localeCompare(b.name)).map(a => a.name).join(", ")
+                                : ""}
+                            </td>
                             <td>
                                 <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                                     <button
@@ -174,8 +168,8 @@ export const Admin = () => {
                 onClose={closeModal}
                 onSubmit={handleSubmit}
                 modalType = {modalType}
-                selectedTool={selectedUser}
-                setSelectedTool={setSelectedUser}
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
                 isTreeModalOpen={isTreeModalOpen}
                 setIsTreeModalOpen={setIsTreeModalOpen}
                 authorities={authorities} />

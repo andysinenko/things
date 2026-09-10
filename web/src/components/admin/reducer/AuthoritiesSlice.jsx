@@ -14,14 +14,17 @@ export const fetchAuthorities = createAsyncThunk(
     }
 );
 
-const AuthoritiesSlice = createSlice({
+const authoritiesSlice = createSlice({
     name: "authorities",
     initialState: {
         authorities: [],
         loading: false,
         error: null,
     },
-    reducers: {},
+    reducers: {
+        clearAuthorities: (state) => {
+            state.authorities = [];
+        },},
     extraReducers: (builder) => {
         builder
             .addCase(fetchAuthorities.pending,   (state) => {
@@ -38,4 +41,5 @@ const AuthoritiesSlice = createSlice({
             });
     },
 });
-export default AuthoritiesSlice.reducer;
+export const { clearAuthorities } = authoritiesSlice.actions;
+export default authoritiesSlice.reducer;

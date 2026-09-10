@@ -5,10 +5,13 @@ import org.springframework.stereotype.Repository;
 import com.synenko.things.security.model.entity.Authority;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
     Authority findByName(String name);
 
     List<Authority> findAllByNameIn(List<String> names);
+
+    List<Authority> findAllByOrderByNameAsc();
 }

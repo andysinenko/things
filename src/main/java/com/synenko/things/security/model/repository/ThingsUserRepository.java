@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ThingsUserRepository extends JpaRepository<ThingsUser, Long> {
     Optional<ThingsUser> findByUsername(String username);
-    Optional<ThingsUser> findByEmail(String email);
+
     List<ThingsUser> findAllByOrderByUsernameAsc();
 }

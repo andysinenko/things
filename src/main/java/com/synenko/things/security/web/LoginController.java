@@ -1,5 +1,7 @@
 package com.synenko.things.security.web;
 
+import com.synenko.things.security.model.dto.AuthorityDto;
+import com.synenko.things.security.model.service.AuthoritiesService;
 import com.synenko.things.security.model.service.ThingsUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +30,7 @@ public class LoginController {
     private final ThingsUserService thingsUserService;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
+    private final AuthoritiesService authoritiesService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody UserDto request) {
@@ -61,4 +64,8 @@ public class LoginController {
     }
 
 
+    @GetMapping("/authorities")
+    public ResponseEntity<List<AuthorityDto>> getAuthorities() {
+        return ResponseEntity.ok(authoritiesService.getAuthorities());
+    }
 }
