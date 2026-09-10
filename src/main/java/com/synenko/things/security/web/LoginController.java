@@ -38,21 +38,6 @@ public class LoginController {
         return ResponseEntity.ok(authService.register(request));
     }
 
-    @PostMapping("/user")
-    public UserDto getUserDetailsAfterLogin(Authentication authentication) {
-        return thingsUserService.getUserDetailsAfterLogin(authentication);
-    }
-
-    @GetMapping("/user")
-    public ResponseEntity<List<UserDto>> getAllUsers(Authentication authentication) {
-        return ResponseEntity.ok(thingsUserService.getAllUsers(authentication));
-    }
-
-    @GetMapping("user/{id}")
-    public UserDto  getUserDetailsAfterLogout(Long id) {
-        return thingsUserService.findById(id);
-    }
-
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         authService.refreshToken(request, response);
@@ -61,11 +46,5 @@ public class LoginController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
-    }
-
-
-    @GetMapping("/authorities")
-    public ResponseEntity<List<AuthorityDto>> getAuthorities() {
-        return ResponseEntity.ok(authoritiesService.getAuthorities());
     }
 }

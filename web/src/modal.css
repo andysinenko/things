@@ -222,3 +222,26 @@
 .modal-btn-primary:active {
     background: #111824;
 }
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #2563eb;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.modal-field-checkbox {
+    display: flex;
+    align-items: flex-start;
+}

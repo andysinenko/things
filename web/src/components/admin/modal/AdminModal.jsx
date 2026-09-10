@@ -22,6 +22,11 @@ const AdminModal = ({
         setSelectedUser((prev) => ({...prev, [name]: value}));
     };
 
+    const handleCheckboxChange = (e) => {
+        const {name, checked} = e.target;
+        setSelectedUser((prev) => ({...prev, [name]: checked}));
+    };
+
     useEffect(() => {
         if (isOpen) {
             dispatch(fetchAuthorities());
@@ -51,7 +56,7 @@ const AdminModal = ({
                         <input
                             className="modal-input"
                             type="text"
-                            name="title"
+                            name="username"
                             value={selectedUser.username}
                             onChange={handleChange}
                             placeholder="Username"
@@ -91,7 +96,7 @@ const AdminModal = ({
                         <input
                             className="modal-input"
                             type="text"
-                            name="firstname"
+                            name="firstName"
                             value={selectedUser.firstName}
                             onChange={handleChange}
                             placeholder="First name"
@@ -107,7 +112,7 @@ const AdminModal = ({
                         <input
                             className="modal-input"
                             type="text"
-                            name="lastname"
+                            name="lastName"
                             value={selectedUser.lastName}
                             onChange={handleChange}
                             placeholder="Last name"
@@ -119,10 +124,10 @@ const AdminModal = ({
                         <input
                             className="modal-input"
                             type="text"
-                            name="phonenumber"
+                            name="phoneNumber"
                             value={selectedUser.phoneNumber}
                             onChange={handleChange}
-                            placeholder="Last name"
+                            placeholder="Phone number"
                             maxLength="64"
                         />
                     </div>
@@ -142,6 +147,55 @@ const AdminModal = ({
                             <option key={a.id} value={a.id}>{a.name}</option>
                         ))}
                     </select>
+                </div>
+                <div className="modal-field-row">
+                    <div className="modal-field modal-field-checkbox">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                name="accountNonExpired"
+                                checked={!!selectedUser.accountNonExpired}
+                                onChange={handleCheckboxChange}
+                            />
+                            <span>Account non expired</span>
+                        </label>
+                    </div>
+                    <div className="modal-field modal-field-checkbox">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                name="accountNonLocked"
+                                checked={!!selectedUser.accountNonLocked}
+                                onChange={handleCheckboxChange}
+                            />
+                            <span>Account non locked</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div className="modal-field-row">
+                    <div className="modal-field modal-field-checkbox">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                name="credentialsNonExpired"
+                                checked={!!selectedUser.credentialsNonExpired}
+                                onChange={handleCheckboxChange}
+                            />
+                            <span>Credentials non expired</span>
+                        </label>
+                    </div>
+                    <div className="modal-field modal-field-checkbox">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                name="enabled"
+                                checked={!!selectedUser.enabled}
+                                onChange={handleCheckboxChange}
+                            />
+                            <span>Enabled</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 

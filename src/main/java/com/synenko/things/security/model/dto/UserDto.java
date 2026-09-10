@@ -35,13 +35,11 @@ public class UserDto implements Serializable {
 
     private String phoneNumber;
 
-    private boolean isAccountNonExpired;
+    private boolean accountNonExpired;
 
-    private boolean isAccountNonLocked;
+    private boolean accountNonLocked;
 
-    private boolean isCredentialsNonExpired;
+    private boolean credentialsNonExpired;
 
-    private boolean isEnabled;
-
-    private Date createDate;
+    private boolean enabled;
 }

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import {fetchAllUsers } from "../signin/reducer/userSlice";
+import {fetchAllUsers, updateUser} from "../signin/reducer/userSlice";
 import AdminModal from "./modal/AdminModal";
 import {fetchAuthorities} from "./reducer/AuthoritiesSlice.jsx";
 
@@ -15,6 +15,10 @@ export const Admin = () => {
         firstName: "",
         lastName: "",
         phoneNumber: "",
+        accountNonExpired: false,
+        accountNonLocked: false,
+        credentialsNonExpired: false,
+        enabled:	false,
         authorities: []
     };
     const {users, loading, error} = useSelector(state => state.userReducer);
@@ -67,7 +71,7 @@ export const Admin = () => {
             } else if (modalType === "delete") {
                 dispatch(deleteUser(selectedUser.id));
             } else if (modalType === "edit") {
-                dispatch(updateUser({ id: selectedUser.id, tool: selectedUser }));
+                dispatch(updateUser({ id: selectedUser.id, user: selectedUser }));
             }
             closeModal();
         } catch (error) {
@@ -81,6 +85,7 @@ export const Admin = () => {
     };
 
     const handleEditUser = (user) => {
+        console.log("USER for store:", user);
         setSelectedUser(user);
         openModal("edit");
     }
@@ -112,6 +117,10 @@ export const Admin = () => {
                         <th scope="col">LastName</th>
                         <th scope="col">PhoneNumber</th>
                         <th scope="col">Authority</th>
+                        <th scope="col">Account Non Expired</th>
+                        <th scope="col">Account Non Locked</th>
+                        <th scope="col">Credentials Non Expired</th>
+                        <th scope="col">Enabled</th>
                         <th style={{ textAlign: "center" }}>Actions</th>
                     </tr>
                     </thead>
@@ -130,6 +139,18 @@ export const Admin = () => {
                             <td>{user.authorities
                                 ? [...user.authorities].sort((a, b) => a.name.localeCompare(b.name)).map(a => a.name).join(", ")
                                 : ""}
+                            </td>
+                            <td style={{ color: user.accountNonExpired ? "darkgreen" : "tomato" }}>
+                                {user.accountNonExpired ? "Yes" : "No"}
+                            </td>
+                            <td style={{ color: user.accountNonLocked ? "darkgreen" : "tomato" }}>
+                                {user.accountNonLocked ? "Yes" : "No"}
+                            </td>
+                            <td style={{ color: user.credentialsNonExpired ? "darkgreen" : "tomato" }}>
+                                {user.credentialsNonExpired ? "Yes" : "No"}
+                            </td>
+                            <td style={{ color: user.enabled ? "darkgreen" : "tomato" }}>
+                                {user.enabled ? "Yes" : "No"}
                             </td>
                             <td>
                                 <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import {API_URL} from "../../../config/api.jsx";
+import {ENDPOINTS} from "../../../config/api.jsx";
 
 export const fetchAllUsers = createAsyncThunk(
     "user/fetchAllUsers",
     async (_, { rejectWithValue }) => {
-        const response = await axios.get(`${API_URL}/auth/user`);
+        const response = await axios.get(`${ENDPOINTS.users}`);
         return response.data;
     }
 );
@@ -13,7 +13,7 @@ export const fetchAllUsers = createAsyncThunk(
 export const fetchUser = createAsyncThunk(
     "user/fetchUser",
     async (_, { rejectWithValue }) => {
-        const response = await axios.post(`${API_URL}/auth/user`);
+        const response = await axios.get(`${ENDPOINTS.users}`);
         return response.data;
     }
 );
@@ -21,8 +21,22 @@ export const fetchUser = createAsyncThunk(
 export const fetchUserAuthorities = createAsyncThunk(
     "user/fetchAuthorities",
     async ({id}, { rejectWithValue }) => {
-        const response = await axios.get(`${API_URL}/auth/user/${id}/authorities`);
+        const response = await axios.get(`${ENDPOINTS.users}/${id}/authorities`);
         return response.data;
+    }
+);
+
+export const updateUser = createAsyncThunk(
+    "users/update",
+    async ({ id, user}, { dispatch, rejectWithValue }) => {
+        try {
+            console.log("RAW BODY GOING TO AXIOS:", JSON.stringify(user));
+            await axios.put(`${ENDPOINTS.users}/${id}`, user);
+            dispatch(fetchAllUsers());
+        } catch (err) {
+            console.log("AXIOS ERROR RESPONSE:", err.response?.data);
+            return rejectWithValue(err.message);
+        }
     }
 );
 
@@ -57,6 +71,13 @@ const userSlice = createSlice({
             .addCase(fetchAllUsers.fulfilled, (state, action) => {
                 state.loading = false;
                 state.users = action.payload;
+            })
+            .addCase(updateUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     },
 });
