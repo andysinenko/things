@@ -9,12 +9,12 @@ export const Admin = () => {
     const dispatch = useDispatch();
     const EMPTY_USER = {
         id: null,
-        username: "",
-        password: "",
-        email: "",
-        firstName: "",
-        lastName: "",
-        phoneNumber: "",
+        username: '',
+        password: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
         accountNonExpired: false,
         accountNonLocked: false,
         credentialsNonExpired: false,
@@ -30,11 +30,6 @@ export const Admin = () => {
     const [selectedUser, setSelectedUser] = useState(EMPTY_USER);
 
     const [isTreeModalOpen, setIsTreeModalOpen] = useState(false);
-
-    useEffect(() => {
-        dispatch(fetchAllUsers());
-        dispatch(fetchAuthorities());
-    }, [dispatch]);
 
     if (loading) return (
         <div className='root'>
@@ -52,12 +47,21 @@ export const Admin = () => {
             </div>
         </div>);
 
+    useEffect(() => {
+        dispatch(fetchAllUsers());
+        dispatch(fetchAuthorities());
+        console.log("RAW BODY AFTER do fetchAuthorities:", JSON.stringify(selectedUser));
+        console.log("users do fetchAllUsers:", JSON.stringify(users));
+    }, [dispatch]);
+
     const openModal = (modalType) => {
         setModalType(modalType);
         setIsModalOpen(true);
+        console.log("RAW BODY AFTER OPEN MODAL:", JSON.stringify(selectedUser));
     };
 
     const closeModal = () => {
+        console.log("RAW BODY BEFORE OPEN MODAL:", JSON.stringify(selectedUser));
         setIsModalOpen(false);
         setModalType(null);
         setSelectedUser(EMPTY_USER);
@@ -71,6 +75,7 @@ export const Admin = () => {
             } else if (modalType === "delete") {
                 dispatch(deleteUser(selectedUser.id));
             } else if (modalType === "edit") {
+                console.log("RAW BODY BEFORE TO AXIOS:", JSON.stringify(selectedUser));
                 dispatch(updateUser({ id: selectedUser.id, user: selectedUser }));
             }
             closeModal();
@@ -85,7 +90,7 @@ export const Admin = () => {
     };
 
     const handleEditUser = (user) => {
-        console.log("USER for store:", user);
+        console.log("RAW BODY handleEditUser:", JSON.stringify(selectedUser));
         setSelectedUser(user);
         openModal("edit");
     }
@@ -111,15 +116,14 @@ export const Admin = () => {
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Username</th>
-                        <th scope="col">Password</th>
-                        <th scope="col">Email</th>
+                        <th style={{ width: "250px" }} scope="col">Email</th>
                         <th scope="col">FirstName</th>
                         <th scope="col">LastName</th>
                         <th scope="col">PhoneNumber</th>
                         <th scope="col">Authority</th>
-                        <th scope="col">Account Non Expired</th>
-                        <th scope="col">Account Non Locked</th>
-                        <th scope="col">Credentials Non Expired</th>
+                        <th scope="col">Non Expired</th>
+                        <th scope="col">Non Locked</th>
+                        <th scope="col">Crds Non Expired</th>
                         <th scope="col">Enabled</th>
                         <th style={{ textAlign: "center" }}>Actions</th>
                     </tr>
@@ -131,7 +135,6 @@ export const Admin = () => {
                         <tr key={user.id}>
                             <td style={{ color: "#9ca3af" }}>{user.id}</td>
                             <td style={{ fontWeight: 500 }}>{user.username}</td>
-                            <td style={{ color: "#6b7280" }}>{user.password}</td>
                             <td>{user.email}</td>
                             <td>{user.firstName}</td>
                             <td>{user.lastName}</td>

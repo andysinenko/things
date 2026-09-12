@@ -19,6 +19,8 @@ import CatalogPage from "./components/catalog/CatalogPage";
 import AuthorsCatalog from "./components/catalog/AuthorsCatalog";
 import SeriesCatalog from "./components/catalog/SeriesCatalog";
 import GenresCatalog from "./components/catalog/GenresCatalog";
+import {RequireAdmin} from "./components/auth/RequireAdmin.jsx";
+import {RequireAuth} from "./components/auth/RequireAuth.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -41,7 +43,7 @@ root.render(
                                 <Route path="series" element={<SeriesCatalog/>}/>
                                 <Route path="genres" element={<GenresCatalog/>}/>
                             </Route>
-                            <Route path="/admin" element={<Admin/>} />
+                            <Route path="/admin" element={<RequireAuth><RequireAdmin><Admin/></RequireAdmin></RequireAuth>} />
                         </Route>
                         <Route path="/signin" element={<SignIn />} />
                     </Routes>

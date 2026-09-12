@@ -1,5 +1,6 @@
 package com.synenko.things.security.model.service;
 
+import com.synenko.things.security.model.dto.UserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.synenko.things.security.model.dto.AuthorityDto;
-import com.synenko.things.security.model.dto.UserDto;
 import com.synenko.things.security.model.entity.Authority;
 import com.synenko.things.security.model.entity.ThingsUser;
 import com.synenko.things.security.model.repository.AuthorityRepository;
@@ -72,11 +72,11 @@ class AuthServiceTest {
 
     @Test
     void register() {
-        UserDto userDto = UserDto.builder().username("test").password("test").email("test").firstName("test").lastName("test").phoneNumber("test").authorities(List.of(AuthorityDto.builder().id(2L).name("ROLE_USER").build())).build();
+        UserRequest userRequest = UserRequest.builder().username("test").password("test").email("test").firstName("test").lastName("test").phoneNumber("test").authorities(List.of(AuthorityDto.builder().id(2L).name("ROLE_USER").build())).build();
 
         when(userRepository.save(any(ThingsUser.class))).thenReturn(getUser());
 
-        var registredUser = authService.register(userDto);
+        var registredUser = authService.register(userRequest);
 
         var token = registredUser.getAccessToken();
         var parts = getTokenParts(token);

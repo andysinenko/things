@@ -2,7 +2,8 @@ package com.synenko.things.security.model.service;
 
 import com.synenko.things.common.exception.UserExistsException;
 import com.synenko.things.security.model.dto.AuthorityDto;
-import com.synenko.things.security.model.dto.UserDto;
+import com.synenko.things.security.model.dto.UserRequest;
+import com.synenko.things.security.model.dto.UserResponse;
 import com.synenko.things.security.model.dto.UserMapper;
 import com.synenko.things.security.model.entity.Authority;
 import com.synenko.things.security.model.entity.ThingsUser;
@@ -11,12 +12,14 @@ import com.synenko.things.security.model.repository.ThingsUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,102 +33,54 @@ public class ThingsUserService {
     private final AuthorityRepository authorityRepository;
 
 
-    public List<UserDto> getAllUsers(Authentication authentication) {
-        //todo add check for access rights by authentication.getName()
+    public List<UserResponse> getAllUsers(Authentication authentication) {
+        boolean isAdmin = authentication
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+        if (!isAdmin) {
+            throw new AccessDeniedException("Only ADMIN can list all users");
+        }
 
         return thingsUserRepository.findAllByOrderByUsernameAsc()
                 .stream()
-                .map(user -> UserDto.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .firstName(user.getFirstName())
-                        .lastName(user.getLastName())
-                        .password("********")
-                        .email(user.getEmail())
-                        .phoneNumber(user.getPhoneNumber())
-                        .accountNonExpired(user.isAccountNonExpired())
-                        .accountNonLocked(user.isAccountNonLocked())
-                        .credentialsNonExpired(user.isCredentialsNonExpired())
-                        .enabled(user.isEnabled())
-                        .authorities(user.getAuthorities().stream()
-                                .map(a -> AuthorityDto.builder()
-                                        .id(a.getId())
-                                        .name(a.getName())
-                                        .build())
-                                .collect(Collectors.toList()))
-                        .build()
-                ).toList();
+                .map(UserMapper::mapToDto)
+                .toList();
     }
 
-    public UserDto getUserDetailsAfterLogin(Authentication authentication) {
+    public UserResponse getUserDetailsAfterLogin(Authentication authentication) {
         return thingsUserRepository.findByUsername(authentication.getName())
-                .map(user -> UserDto.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .firstName(user.getFirstName())
-                        .lastName(user.getLastName())
-                        .password(user.getPassword())
-                        .email(user.getEmail())
-                        .phoneNumber(user.getPhoneNumber())
-                        .accountNonExpired(user.isAccountNonExpired())
-                        .accountNonLocked(user.isAccountNonLocked())
-                        .credentialsNonExpired(user.isCredentialsNonExpired())
-                        .enabled(user.isEnabled())
-                        .authorities(user.getAuthorities().stream()
-                                .map(a -> AuthorityDto.builder()
-                                        .id(a.getId())
-                                        .name(a.getName())
-                                        .build())
-                                .collect(Collectors.toList()))
-                        .build())
+                .map(UserMapper::mapToDto)
                 .orElseThrow(() -> new UserExistsException(authentication.getName()));
     }
 
-    public UserDto findById(Long id) {
-        return thingsUserRepository.findById(id)
-                .map(user -> UserDto.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .firstName(user.getFirstName())
-                        .lastName(user.getLastName())
-                        .password(user.getPassword())
-                        .email(user.getEmail())
-                        .phoneNumber(user.getPhoneNumber())
-                        .accountNonExpired(user.isAccountNonExpired())
-                        .accountNonLocked(user.isAccountNonLocked())
-                        .credentialsNonExpired(user.isCredentialsNonExpired())
-                        .enabled(user.isEnabled())
-                        .authorities(user.getAuthorities().stream()
-                                .map(e -> {
-                                    return AuthorityDto.builder()
-                                            .id(e.getId())
-                                            .name(e.getName())
-                                            .build();
-                                }).toList()
-                        ).build()
-                ).orElseThrow(() -> new UserExistsException(id));
+    public Optional<UserResponse> findById(Long id) {
+        return Optional.of(thingsUserRepository.findById(id)
+                .map(UserMapper::mapToDto
+                ).orElseThrow(() -> new UserExistsException(id)));
     }
+
     @Transactional
-    public UserDto updateUser(Long id, UserDto dto) {
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
         ThingsUser user = thingsUserRepository.findById(id)
                 .orElseThrow(() -> new UserExistsException("User not found with id: " + id));
 
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setPhoneNumber(dto.getPhoneNumber());
-        user.setAccountNonExpired(dto.isAccountNonExpired());
-        user.setAccountNonLocked(dto.isAccountNonLocked());
-        user.setCredentialsNonExpired(dto.isCredentialsNonExpired());
-        user.setEnabled(dto.isEnabled());
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setPhoneNumber(userRequest.getPhoneNumber());
+        user.setAccountNonExpired(userRequest.isAccountNonExpired());
+        user.setAccountNonLocked(userRequest.isAccountNonLocked());
+        user.setCredentialsNonExpired(userRequest.isCredentialsNonExpired());
+        user.setEnabled(userRequest.isEnabled());
 
-        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if (userRequest.getPassword() != null && !userRequest.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         }
 
-        if (dto.getAuthorities() != null) {
-            Set<Long> authorityIds = dto.getAuthorities().stream()
+        if (userRequest.getAuthorities() != null) {
+            Set<Long> authorityIds = userRequest.getAuthorities().stream()
                     .map(AuthorityDto::getId)
                     .collect(Collectors.toSet());
             List<Authority> authorities = authorityRepository.findAllById(authorityIds);
@@ -136,4 +91,9 @@ public class ThingsUserService {
         return UserMapper.mapToDto(saved);
     }
 
+    public UserResponse findByUsername(String username) {
+        var user = thingsUserRepository.findByUsername(username)
+                .orElseThrow(() -> new UserExistsException(username));
+        return UserMapper.mapToDto(user);
+    }
 }

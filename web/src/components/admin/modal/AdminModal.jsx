@@ -69,9 +69,9 @@ const AdminModal = ({
                             className="modal-input"
                             type="password"
                             name="password"
-                            value={selectedUser.password}
+                            autoComplete="new-password" //because of stupid firefox
+                            value={selectedUser.password ?? ''}
                             onChange={handleChange}
-                            placeholder="password"
                             maxLength="64"
                         />
                     </div>

@@ -1,6 +1,6 @@
 package com.synenko.things.security.web;
 
-import com.synenko.things.security.model.dto.AuthorityDto;
+import com.synenko.things.security.model.dto.UserRequest;
 import com.synenko.things.security.model.service.AuthoritiesService;
 import com.synenko.things.security.model.service.ThingsUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,16 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.synenko.things.security.model.dto.AuthenticationRequest;
 import com.synenko.things.security.model.dto.AuthenticationResponse;
-import com.synenko.things.security.model.dto.UserDto;
 import com.synenko.things.security.model.service.AuthService;
 
 import java.io.IOException;
-import java.util.List;
 
 
 @RestController
@@ -33,7 +30,7 @@ public class LoginController {
     private final AuthoritiesService authoritiesService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserDto request) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         return ResponseEntity.ok(authService.register(request));
     }

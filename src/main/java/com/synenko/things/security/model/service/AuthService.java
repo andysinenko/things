@@ -1,6 +1,7 @@
 package com.synenko.things.security.model.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.synenko.things.security.model.dto.*;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,10 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import com.synenko.things.common.exception.UserExistsException;
-import com.synenko.things.security.model.dto.AuthenticationRequest;
-import com.synenko.things.security.model.dto.AuthenticationResponse;
-import com.synenko.things.security.model.dto.AuthorityDto;
-import com.synenko.things.security.model.dto.UserDto;
 import com.synenko.things.security.model.entity.Authority;
 import com.synenko.things.security.model.entity.ThingsUser;
 import com.synenko.things.security.model.repository.AuthorityRepository;
@@ -71,30 +68,30 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthenticationResponse register(UserDto userDto) {
-        var userCheck = userRepository.findByUsername(userDto.getUsername());
+    public AuthenticationResponse register(UserRequest userRequest) {
+        var userCheck = userRepository.findByUsername(userRequest.getUsername());
 
         if (userCheck.isPresent()) {
             throw new UserExistsException(userCheck.get().getUsername());
         }
 
-        List<String> authList = userDto.getAuthorities()
+        List<String> authList = userRequest.getAuthorities()
                 .stream()
                 .map(AuthorityDto::getName)
                 .collect(Collectors.toList());
         List<Authority> authorities = authorityRepository.findAllByNameIn(authList);
 
         var user = ThingsUser.builder()
-                .firstName(userDto.getUsername())
-                .username(userDto.getUsername())
-                .lastName(userDto.getLastName())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword())
+                .firstName(userRequest.getUsername())
+                .username(userRequest.getUsername())
+                .lastName(userRequest.getLastName())
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
                 .authorities(authorities)
                 .isAccountNonExpired(true)
                 .isAccountNonLocked(true)
                 .isCredentialsNonExpired(true)
-                .phoneNumber(userDto.getPhoneNumber())
+                .phoneNumber(userRequest.getPhoneNumber())
                 .isEnabled(true)
                 .createDate(new Date())
                 .build();

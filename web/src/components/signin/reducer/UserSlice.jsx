@@ -13,7 +13,7 @@ export const fetchAllUsers = createAsyncThunk(
 export const fetchUser = createAsyncThunk(
     "user/fetchUser",
     async (_, { rejectWithValue }) => {
-        const response = await axios.get(`${ENDPOINTS.users}`);
+        const response = await axios.get(`${ENDPOINTS.users}/me`); // не /users
         return response.data;
     }
 );
@@ -45,7 +45,7 @@ const userSlice = createSlice({
     initialState: {
         user: {},
         users: [],
-        authorities: {},
+        authorities: [],
         loading: false,
         error: null,
     },

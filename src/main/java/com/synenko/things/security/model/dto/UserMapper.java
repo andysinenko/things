@@ -5,11 +5,10 @@ import com.synenko.things.security.model.entity.ThingsUser;
 import java.util.stream.Collectors;
 
 public class UserMapper {
-    public static UserDto mapToDto(ThingsUser user) {
-        return UserDto.builder()
+    public static UserResponse mapToDto(ThingsUser user) {
+        return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .password("********")
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
