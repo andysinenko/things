@@ -8,7 +8,8 @@
 html, body, #root {
   width: 100%;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;*/
+  font-family: 'PT Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #1a2332;
@@ -16,9 +17,9 @@ html, body, #root {
   -webkit-font-smoothing: antialiased;
 }
 
-code {
+/*code {
   font-family: "SF Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
-}
+}*/
 
 a {
   text-decoration: none;
@@ -370,4 +371,32 @@ a {
   font-size: 13px;
   padding: 0 4px;
   user-select: none;
+}
+
+@font-face {
+  font-family: 'PT Sans';
+  src: url('./assets/fonts/PTSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PT Sans';
+  src: url('./assets/fonts/PTSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PT Sans';
+  src: url('./assets/fonts/PTSans-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'PT Sans';
+  src: url('./assets/fonts/PTSans-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
 }
